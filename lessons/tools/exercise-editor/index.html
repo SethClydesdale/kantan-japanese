@@ -1,0 +1,3930 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#" class="lang-en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Exercise Editor | Kantan Japanese</title>
+    <meta name="title" content="Exercise Editor | Kantan Japanese">
+    <meta name="twitter:title" content="Exercise Editor | Kantan Japanese">
+    <meta property="og:title" content="Exercise Editor | Kantan Japanese">
+    <meta name="description" content="Edit or create exercises on Kantan Japanese.">
+    <meta property="og:description" content="Edit or create exercises on Kantan Japanese.">
+    <link rel="shortcut icon" type="image/x-icon" href="../../../resources/images/kantan.ico">
+
+    <meta name="keywords" content="japanese, exercises, quizzes, edit, create" lang="en">
+    <meta name="language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:site_name" content="sethclydesdale.github.io">
+    <meta property="og:url" content="https://sethclydesdale.github.io/kantan-japanese/lessons/tools/exercise-editor/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://sethclydesdale.github.io/kantan-japanese/resources/images/kantan-thumb.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@SethC1995">
+
+    <link rel="stylesheet" href="../../../resources/css/stylesheet.css">
+    <link rel="stylesheet" href="../../../resources/css/page-editor.css">
+    <link rel="stylesheet" href="../../../resources/javascript/lib/codemirror/codemirror.css">
+    
+    <style>
+      .settings-grid .full-width {
+        grid-column:span 2;
+      }
+      
+      #type-select-row {
+        display:flex;
+        gap:10px;
+      }
+      #pgType { flex:1; }
+      
+      /* hide written quiz buttons */
+      .left-panel.vocab .row-ROW3,
+      .left-panel.multi .row-ROW3 ~ .button,
+      .left-panel.vocab .row-ROW3 ~ .button,
+      .left-panel.chat .row-ROW3 ~ .button {
+        display:none;
+      }
+      
+      .left-panel.vocab .toolbar,
+      .left-panel.multi .toolbar, 
+      .left-panel.chat .toolbar {
+        min-height:110px;
+      }
+      
+      .left-panel:not(.chat) .button-emote {
+        display:none;
+      }
+      
+      .left-panel.chat .button-p,
+      .left-panel.chat .button-h3,
+      .left-panel.chat .button-h4,
+      .left-panel.chat .button-h4-2,
+      .left-panel.chat .button-hr,
+      .left-panel.chat .button-table,
+      .left-panel.chat .button-ol,
+      .left-panel.chat .button-ul,
+      .left-panel.chat .button-center,
+      .left-panel.chat .button-text-passage,
+      .left-panel.chat .button-vocab,
+      .left-panel.chat .button-br {
+        display:none;
+      }
+      
+      /* editor containers */
+      .ui-block {
+        flex:1;
+        display:flex;
+        flex-direction:column;
+        min-height:250px;
+      }
+      
+      /* vocab & multi UI */
+      .item-list {
+        list-style:none;
+        padding:6px;
+        margin:0;
+        flex:1;
+        overflow-y:auto;
+      }
+      
+      .item-row {
+        background:#F3F3F3;
+        border:2px solid #DDD;
+        border-radius:5px;
+        margin-bottom:10px;
+        padding:10px;
+        display:flex;
+        flex-direction:column;
+        align-items:stretch;
+        gap:5px;
+        width:100%;
+        box-sizing:border-box;
+      }
+      
+      .item-row:only-child .row-remove,
+      .kanji-example-row:only-child .row-remove,
+      .quiz-answer:only-child .row-remove,
+      .chat-top-item:only-child .row-remove,
+      .chat-branch-item:only-child .row-remove,
+      .chat-reply-row:only-child .row-remove {
+        display:none;
+      }
+      
+      .chat-top-item:not(:only-child) .row-remove,
+      .chat-branch-item:not(:only-child) .row-remove,
+      .chat-reply-row:not(:only-child) .row-remove {
+        display:inline-block;
+      }
+
+      .item-row:only-child .kanji-example-row:not(:only-child) .row-remove,
+      .item-row:only-child .quiz-answer:not(:only-child) .row-remove {
+        display:block;
+      }
+      
+      .input-group {
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        gap:5px;
+        width:100%;
+      }
+      
+      .input-group input[type="text"],
+      .input-group textarea {
+        flex:1 1 120px;
+        box-sizing:border-box;
+      }
+      
+      .input-group textarea {
+        resize:vertical;
+        min-height:40px;
+      }
+      
+      .v-sent {
+        width:100%;
+        padding:5px;
+        box-sizing:border-box;
+      }
+      
+      .quiz-answer {
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        gap:5px;
+        margin-top:5px;
+      }
+      
+      .quiz-answer input[type="text"] {
+        flex:1 1 150px;
+        padding:5px;
+        box-sizing:border-box;
+      }
+      
+      .answers-list {
+        margin-top:10px;
+        list-style-type:decimal;
+        padding-left:0;
+      }
+      
+      .button-group {
+        display:flex;
+        gap:5px;
+      }
+      
+      .button-group .button {
+        margin:0;
+        padding:5px 10px;
+      }
+      .button-group .button .fa { margin:0; }
+
+      .item-list::-webkit-scrollbar-track {
+        background:transparent;
+        border-radius:10px;
+      }
+      
+      /* vocab & kanji preset lists */
+      #vocab-preset-ui,
+      #kanji-preset-ui {
+        flex-direction:column;
+        flex:1;
+        height:100%;
+      }
+      
+      #preset-search,
+      #preset-settings,
+      #kanji-preset-search,
+      #kanji-preset-settings {
+        box-sizing:border-box;
+        width:100%;
+      }
+      
+      #preset-search,
+      #kanji-preset-search { margin-bottom:8px; }
+      
+      #preset-list,
+      #kanji-preset-list {
+        background:#FFF;
+        border:2px solid #CCC;
+        border-radius:10px;
+        box-sizing:border-box;
+        flex:1;
+        overflow-y:auto;
+      }
+      
+      #preset-list::-webkit-scrollbar-track,
+      #kanji-preset-list::-webkit-scrollbar-track {
+        border-radius:0 8px 8px 0;
+      }
+      
+      .preset-row {
+        border-bottom:2px solid #CCC;
+        padding:10px 6px;
+        cursor:pointer;
+      }
+      
+      .preset-row:hover {
+        background:#FFE;
+      }
+      
+      .preset-item-meaning {
+        color:#39C;
+        font-size:14px;
+      }
+      
+      .preset-row span,
+      .preset-row label,
+      .preset-row input {
+        pointer-events:none;
+      }
+      
+      #bundle-container {
+        flex:1 1 1.5%;
+        align-items:center;
+        gap:5px;
+        font-size:14px;
+      }
+      
+      /* chat styles */
+      .chat-row {
+        background:#F3F3F3;
+        border:2px solid #DDD;
+        border-radius:5px;
+        margin-bottom:10px;
+        padding:10px;
+        display:flex;
+        flex-direction:column;
+        gap:8px;
+        box-sizing:border-box;
+      }
+      
+      .chat-item-title {
+        font-size:18px;
+        font-weight:bold;
+        color:#FFF;
+        background:#39C;
+        border:2px solid #28B;
+        border-radius:4px 4px 0 0;
+        box-sizing:border-box;
+        padding:5px 10px;
+        margin:-11.5px -11.5px 8px -11.5px;
+      }
+
+      .chat-item-title .fa {
+        margin-right:5px;
+      }
+      
+      .dialogue-branch .chat-branch-toggle {
+        display:none;
+      }
+
+      .chat-row textarea,
+      .chat-row input[type="text"],
+      .chat-row input[type="number"],
+      .chat-row select {
+        width:100%;
+        box-sizing:border-box;
+      }
+
+      .chat-row textarea {
+        resize:vertical;
+        min-height:60px;
+      }
+
+      .chat-subsection {
+        border:1px solid #DDD;
+        background:#FFF;
+        border-radius:5px;
+        padding:8px;
+      }
+
+      .chat-subsection-title {
+        font-weight:bold;
+        margin-bottom:6px;
+        font-size:13px;
+      }
+
+      .chat-replies,
+      .chat-branch-list {
+        list-style:none;
+        padding:0;
+        margin:0;
+      }
+
+      .chat-reply-row {
+        display:flex;
+        flex-direction:column;
+        gap:6px;
+        margin-bottom:8px;
+        padding:8px;
+        border:1px solid #DDD;
+        border-radius:5px;
+        background:#FAFAFA;
+      }
+
+      .chat-inline {
+        display:flex;
+        gap:6px;
+        flex-wrap:wrap;
+        align-items:flex-start;
+      }
+      
+      .chat-inline.tight,
+      .chat-reply-meta {
+        background:#E8E8E8;
+        border:2px solid #CCC;
+        border-radius:6px;
+        padding:4px;
+      }
+
+      .chat-inline.tight .kantan_pseudo_checkbox,
+      .chat-reply-meta .kantan_pseudo_checkbox {
+        vertical-align:-6px;
+        margin-right:0;
+      }
+
+      .chat-inline.tight label,
+      .chat-reply-meta label {
+        margin-right:5px;
+      }
+
+      .chat-inline > label,
+      .chat-inline > div,
+      .chat-inline > input,
+      .chat-inline > select,
+      .chat-inline > textarea {
+        flex:1 1 180px;
+      }
+      
+      .chat-translation-field[hidden] {
+        display:none !important;
+      }
+
+      .chat-inline.chat-split-disabled > label.chat-primary-field {
+        flex:1 1 100%;
+        max-width:100%;
+      }
+
+      .chat-inline.chat-split-disabled > label.chat-translation-field {
+        display:none !important;
+      }
+
+      .chat-inline.tight > label,
+      .chat-inline.tight > div {
+        flex:0 1 auto;
+      }
+
+      .chat-inline.tight {
+        margin-bottom:5px;
+      }
+
+      .chat-row > .button-group,
+      .chat-reply-row .button-group,
+      .chat-branch-controls .button-group {
+        align-self:flex-start;
+      }
+
+      .chat-row label {
+        font-size:14px;
+      }
+
+      .chat-mode-block {
+        display:none;
+      }
+
+      .chat-mode-block.active {
+        display:block;
+      }
+      
+      .chat-mode-input_reply.active {
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+      }
+
+      .chat-mode-input_reply .chat-inline {
+        gap:10px;
+      }
+
+      .chat-row .button-group .button {
+        margin:0;
+      }
+
+      .chat-item-header {
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+        align-items:end;
+      }
+
+      .chat-item-index-wrap {
+        margin-left:auto;
+        flex:0 0 auto;
+      }
+
+      .chat-item-index-wrap input {
+        width:64px;
+        text-align:center;
+      }
+      
+      .chat-row.item-row {
+        position:relative;
+      }
+      
+      .chat-item-index-container {
+        position:absolute;
+        top:4px;
+        right:4px;
+      }
+
+      .chat-row.item-row .chat-item-index {
+        text-align:center;
+        width:35px;
+        height:25px;
+        padding:3px;
+        -moz-appearance:textfield;
+        border:none;
+      }
+
+      .chat-item-index::-webkit-inner-spin-button,
+      .chat-item-index::-webkit-outer-spin-button {
+        -webkit-appearance:none;
+        margin:0;
+      }
+      
+      .chat-item-index-container:before {
+        content:"\f292";
+        font-family:FontAwesomeWeb, FontAwesome;
+        font-weight:normal;
+        color:#FFF;
+        margin-right:3px;
+      }
+
+      .dialogue-branch .chat-item-index-container {
+        display:none;
+      }
+
+      .chat-item-header > label {
+        flex:0 1 220px;
+      }
+
+      .chat-item-header .chat-delay-label,
+      .chat-item-header .chat-score-condition-label {
+        flex:0 1 160px;
+      }
+
+      .chat-translation-map-note {
+        font-size:12px;
+        color:#666;
+        margin-top:-2px;
+      }
+
+      .chat-branch-wrap {
+        margin-top:6px;
+        border-top:1px dashed #CCC;
+        padding-top:8px;
+      }
+
+      .chat-branch-wrap[hidden] {
+        display:none !important;
+      }
+
+      .chat-branch-item > .chat-row {
+        margin-bottom:8px;
+      }
+
+      .chat-branch-controls {
+        display:flex;
+        flex-direction:column;
+        gap:6px;
+      }
+
+      .chat-branch-toggle {
+        display:flex;
+        align-items:center;
+        gap:6px;
+      }
+
+      .chat-reply-row .chat-branch-wrap .chat-subsection-title {
+        margin-bottom:8px;
+      }
+
+      #chat-list {
+        flex:1;
+        overflow-y:auto;
+      }
+      
+      .chat-toolbar-buttons {
+        display:flex;
+        gap:5px;
+        flex-wrap:wrap;
+        align-items:center;
+      }
+
+      .chat-toolbar-buttons .button {
+        margin:0;
+      }
+
+      .chat-reply-meta {
+        display:flex;
+        gap:10px;
+        flex-wrap:wrap;
+        align-items:center;
+      }
+
+      .chat-move-buttons {
+        display:flex;
+        gap:5px;
+      }
+
+      .chat-move-buttons .button {
+        margin:0;
+      }
+      
+      .chat-score-wrap[hidden] {
+        display:none !important;
+      }
+      
+      .chat-subsection-title {
+        font-size:18px;
+        font-weight:bold;
+        color:#FFF;
+        background:#39C;
+        border:2px solid #28B;
+        border-radius:4px 4px 0 0;
+        box-sizing:border-box;
+        padding:5px 10px;
+        margin:-8.5px -8.5px 8px -8.5px;
+      }
+
+      .chat-subsection.dialogue-branch {
+        border-left:5px solid #28B;
+      }
+
+      .dialogue-branch > .chat-subsection-title {
+        margin:-8.5px -8.5px 8px -12.5px;
+        border-left-width:5px;
+      }
+      
+      /* utility classes */
+      .mt-5 { margin-top:5px; }
+      .mt-10 { margin-top:10px; }
+      .mb-5 { margin-bottom:5px; }
+      .w-100 { width:100%; }
+      .k-strokes { flex:0 1 80px; }
+      .k-order { flex:0 1 120px; }
+      .example-words-header { font-weight:bold; margin-top:10px; font-size:14px; }
+      ul.example-words-list { list-style:none; padding:0; margin-top:5px; }
+      
+      /* responsiveness */
+      @media (max-width:900px) {
+        html, body {
+          height:auto;
+          overflow-y:auto;
+        }
+
+        .main-container {
+          display:flex;
+          flex-direction:column;
+          height:auto;
+          min-height:0;
+          overflow:visible;
+        }
+
+        .left-panel,
+        .right-panel {
+          width:100%;
+          max-width:100%;
+          flex:0 0 auto;
+          min-height:0;
+          overflow:visible;
+        }
+
+        .left-panel {
+          height:auto;
+          max-height:none;
+        }
+
+        .right-panel {
+          height:auto;
+          min-height:420px;
+        }
+
+        .ui-block {
+          flex:0 0 auto;
+          max-height:500px;
+        }
+
+        #preview {
+          width:100%;
+          min-height:600px;
+        }
+      }
+      
+      /* chat preview */
+      .preview-tabs {
+        display:flex;
+        gap:5px;
+        margin-bottom:10px;
+        text-align:center;
+      }
+
+      .preview-tabs .button.active {
+        background-color:#EB3;
+        border-color:#DA2;
+      }
+      
+      .preview-tabs .button.active:hover {
+        background-color:#DA2;
+        border-color:#C91;
+      }
+
+      .preview-tabs .button.active:focus, .preview-tabs .button.active:active {
+        background-color:#C91;
+        border-color:#B80;
+      }
+
+      #chat-preview {
+        height:100%;
+        overflow:auto;
+        background:#FFF;
+        border-top:1px solid #DDD;
+      }
+
+      .chat-preview-branch {
+        background:#F8FBFF;
+        border:2px solid #CCC;
+        border-left:3px solid #39C;
+        border-radius:6px;
+        padding:8px;
+      }
+
+      .chat-preview-branch-title {
+        font-size:16px;
+        font-weight:bold;
+        color:#FFF;
+        background:#39C;
+        border-radius:6px 6px 0px 0px;
+        margin-bottom:6px;
+        padding:6px 12px;;
+        margin-left:-9.5px;
+        margin-right:-9.5px;
+        margin-top:-9.5px;
+      }
+
+      .chat-preview-delay {
+        margin:8px 0;
+        text-align:center;
+        font-size:12px;
+        color:#777;
+      }
+
+      .chat-row.chat-editor-linked-highlight,
+      .chat-reply-row.chat-editor-linked-highlight,
+      .chat-preview-linked-highlight,
+      .chat-preview-branch-item.chat-preview-linked-highlight{
+        box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.5) !important;
+        transition:200ms;
+      }
+      
+      #chat-preview *, #chat-list * {
+        scroll-margin-top:30px;
+      }
+      
+      .chat-preview-branch-item {
+        position:relative;
+      }
+      
+      #chat-preview {
+        background:#FFF;
+        border-radius:10px;
+        width:100%;
+        flex:1;
+        position:relative;
+      }
+      
+      #chat-preview #kantan-chat {
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        margin:0;
+        width:auto;
+        border:2px solid #CCC;
+        border-radius:10px;
+      }
+      
+      .chat-preview-delay span {
+        font-weight:bold;
+        color:#FFF;
+        background:#39C;
+        border:2px solid #28B;
+        border-radius:10px;
+        display:inline-block;
+        padding:3px 6px;
+      }
+
+      .chat-preview-delay span:before {
+        content:"\f017";
+        font-family:FontAwesomeWeb, FontAwesome;
+        font-weight:normal;
+        font-size:18px;
+        vertical-align:-2px;
+        margin-right:4px;
+      }
+    </style>
+    <script src="../../../resources/javascript/head.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/codemirror.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/xml.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/javascript.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/css.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/htmlmixed.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/closetag.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/xml-fold.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/matchtags.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/active-line.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/overlay.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <h2>Exercise Editor</h2>
+    </header>
+
+    <div class="main-container loading">
+      <div class="left-panel" id="left-panel">
+        <div class="settings-grid">
+          <label>Exercise Type:<br>
+            <div id="type-select-row">
+              <select id="pgType">
+                <option value="vocab">Vocabulary</option>
+                <option value="kanji">Kanji</option>
+                <option value="multi">Multiple Choice</option>
+                <option value="written">Written</option>
+                <option value="chat">Kantan Chat</option>
+              </select>
+              <div id="bundle-container" style="display:none;">
+                <input type="checkbox" id="bundle-cb" onchange="updatePreview()">
+                <label id="bundle-text" for="bundle-cb">Bundle</label>
+              </div>
+            </div>
+          </label>
+          <label id="vocab-mode-container">Vocab Mode:<br>
+            <select id="vocabMode">
+              <option value="manual">Manual</option>
+              <option value="preset">Preset</option>
+            </select>
+          </label>
+          
+          <label id="kanji-mode-container" style="display:none;">Kanji Mode:<br>
+            <select id="kanjiMode">
+              <option value="manual-meaning">Meanings (Manual)</option>
+              <option value="manual-reading">Readings (Manual)</option>
+              <option value="manual-stroke">Stroke Order (Manual)</option>
+              <option value="preset-meaning">Meanings (Preset)</option>
+              <option value="preset-reading">Readings (Preset)</option>
+              <option value="preset-stroke">Stroke Order (Preset)</option>
+            </select>
+          </label>
+          <div class="settings-info">
+            <label>Title:<br><input type="text" id="pgTitle" value="EXERCISE TITLE"></label>
+            <label>Description:<br><input type="text" id="pgDesc" placeholder="Leave blank for default description"></label>
+            <label>Authors:<br><input type="text" id="pgAuthor" placeholder="Kan-tan"></label>
+          </div>
+        </div>
+
+        <div class="toolbar panel" id="toolbar"></div>
+        
+        <!-- VOCABULARY EDITOR -->
+        <div id="vocab-ui" class="ui-block">
+          <ul class="item-list" id="vocab-list"></ul>
+          <div id="vocab-preset-ui" style="display:none;">
+            <input type="text" id="preset-search" placeholder="Search vocab..." oninput="filterPresets()">
+            <div id="preset-list"></div>
+            <div class="center mt-5">
+              <button class="button" onclick="selectAllPresets('vocab')"><i class="fa">&#xf046;</i>Select All</button>
+              <button class="button" onclick="clearAllPresets('vocab')"><i class="fa">&#xf096;</i>Clear All</button>
+            </div>
+            <label class="mt-5">Quizlet Settings:<br>
+              <input type="text" id="preset-settings" placeholder='forceKana: true, maxMeanings: 3' oninput="updatePreview()">
+            </label>
+          </div>
+        </div>
+        
+        <!-- KANJI EDITOR -->
+        <div id="kanji-ui" class="ui-block" style="display:none;">
+          <ul class="item-list" id="kanji-list"></ul>
+          <div id="kanji-preset-ui" style="display:none;">
+            <input type="text" id="kanji-preset-search" placeholder="Search kanji..." oninput="filterKanjiPresets()">
+            <div id="kanji-preset-list"></div>
+            <div class="center mt-5">
+              <button class="button" onclick="selectAllPresets('kanji')"><i class="fa">&#xf046;</i>Select All</button>
+              <button class="button" onclick="clearAllPresets('kanji')"><i class="fa">&#xf096;</i>Clear All</button>
+            </div>
+            <label class="mt-5">Quizlet Settings:<br>
+              <input type="text" id="kanji-preset-settings" placeholder='hiraganaOnly: true' oninput="updatePreview()">
+            </label>
+          </div>
+        </div>
+
+        <!-- MULTIPLE CHOICE EDITOR -->
+        <div id="multi-ui" class="ui-block" style="display:none;">
+          <ul class="item-list" id="multi-list"></ul>
+        </div>
+
+        <!-- WRITTEN EDITOR -->
+        <div id="written-ui" class="ui-block" style="display:none;">
+          <textarea id="pgContent"></textarea>
+        </div>
+        
+        <!-- CHAT EDITOR -->
+        <div id="chat-ui" class="ui-block" style="display:none;">
+          <ul class="item-list" id="chat-list"></ul>
+        </div>
+
+        <div class="action-buttons">
+          <input type="file" id="load-file" accept=".html" style="display:none;">
+          <button class="button green" id="download-btn"><i class="fa">&#xf019;</i>Save</button>
+          <button class="button yellow" id="load-btn"><i class="fa">&#xf093;</i>Load</button>
+          <a class="button purple" href="../../../contribute/exercises/#submitting" target="_blank"><i class="fa github-icon">&#xf09b;</i>Submit</a>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <div id="preview-tabs" class="preview-tabs" style="display:none;" hidden>
+          <input type="checkbox" id="auto-scroll-preview" checked><label for="auto-scroll-preview">Auto-scroll</label>
+          <button class="button active" id="chat-preview-tab" type="button"><i class="fa">&#xf03a;</i>Chat Log</button>
+          <button class="button" id="exercise-preview-tab" type="button"><i class="fa">&#xf0e7;</i>Live Preview</button>
+        </div>
+
+        <button id="exit-fullscreen-btn" title="Exit Fullscreen" class="button red"><i class="fa">&#xf066;</i>Exit</button>
+        <iframe id="preview"></iframe>
+        <div id="chat-preview" hidden></div>
+        <div class="preview-controls">
+          <div><input type="checkbox" id="auto-reload-preview" checked><label for="auto-reload-preview">Auto-reload</label></div>
+          <button class="button" id="refresh-btn"><i class="fa">&#xf021;</i>Refresh</button>
+          <button class="button" id="fullscreen-btn"><i class="fa">&#xf065;</i>Fullscreen</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../../resources/javascript/all.js"></script>
+    <script src="../../../resources/javascript/data/lesson-list.js"></script>
+    <script src="../../../resources/javascript/kantan.js"></script>
+    <script src="../../../resources/javascript/data/vocab.js"></script>
+    <script src="../../../resources/javascript/data/kanji.js"></script>
+    <script src="../../../resources/javascript/page-editor.js"></script>
+    
+    <script>
+      var el = {
+        pgType: document.getElementById('pgType'),
+        vocabMode: document.getElementById('vocabMode'),
+        kanjiMode: document.getElementById('kanjiMode'),
+        pgTitle: document.getElementById('pgTitle'),
+        pgDesc: document.getElementById('pgDesc'),
+        pgAuthor: document.getElementById('pgAuthor'),
+        toolbar: document.getElementById('toolbar'),
+        textarea: document.getElementById('pgContent'),
+        leftPanel: document.getElementById('left-panel'),
+        vocabModeContainer: document.getElementById('vocab-mode-container'),
+        kanjiModeContainer: document.getElementById('kanji-mode-container'),
+        vocabUI: document.getElementById('vocab-ui'),
+        kanjiUI: document.getElementById('kanji-ui'),
+        multiUI: document.getElementById('multi-ui'),
+        writtenUI: document.getElementById('written-ui'),
+        chatUI: document.getElementById('chat-ui'),
+        bundleContainer: document.getElementById('bundle-container'),
+        bundleText: document.getElementById('bundle-text'),
+        bundleCheckbox: document.getElementById('bundle-cb'),
+        vocabList: document.getElementById('vocab-list'),
+        kanjiList: document.getElementById('kanji-list'),
+        multiList: document.getElementById('multi-list'),
+        chatList: document.getElementById('chat-list'),
+        vocabPresetUI: document.getElementById('vocab-preset-ui'),
+        kanjiPresetUI: document.getElementById('kanji-preset-ui'),
+        presetSettings: document.getElementById('preset-settings'),
+        kanjiPresetSettings: document.getElementById('kanji-preset-settings'),
+        autoReload: document.getElementById('auto-reload-preview'),
+        preview: document.getElementById('preview'),
+        refreshBtn: document.getElementById('refresh-btn'),
+        loadFile: document.getElementById('load-file'),
+        presetList: document.getElementById('preset-list'),
+        kanjiPresetList: document.getElementById('kanji-preset-list'),
+        presetSearch: document.getElementById('preset-search'),
+        kanjiPresetSearch: document.getElementById('kanji-preset-search'),
+        exercisePreviewTab: document.getElementById('exercise-preview-tab'),
+        chatPreviewTabs: document.getElementById('preview-tabs'),
+        chatPreviewTab: document.getElementById('chat-preview-tab'),
+        chatPreview: document.getElementById('chat-preview'),
+        autoScroll: document.getElementById('auto-scroll-preview')
+      };
+
+      // formatting buttons for the editor toolbar
+      var buttons = EDITOR_BASE_BUTTONS.concat(EDITOR_FORMAT_BUTTONS, [
+        { row : 'ROW3', label: 'problem set', insert: ['<div class="count-problems indent-block">\n  <div class="problem">\n    <div class="inner-problem">\n      {ANSWER1', '|ANSWER2|answer}。\n    </div>\n  </div>\n\n  \n  <div class="problem">\n    <div class="inner-problem">\n      {ANSWER1|ANSWER2|answer;hint:HINT1}。<br><br>\n      {ANSWER1|ANSWER2|answer;hint:HINT2;spoiler}。\n    </div>\n  </div>\n</div>'] },
+        { label: 'problem set (split)', insert: ['<div class="count-problems indent-block columns-2 clear">\n  <div>\n    <div class="problem">\n      <div class="inner-problem">\n        {ANSWER1', '|ANSWER2|answer}。\n      </div>\n    </div>\n  </div>\n  <div>\n    <div class="problem">\n      <div class="inner-problem">\n        {ANSWER1|ANSWER2|answer;hint:HINT1}。\n      </div>\n    </div>\n  </div>\n</div>'] },
+        { label: 'problem', insert: ['<div class="problem">\n    <div class="inner-problem">\n      {', 'ANSWER1|ANSWER2|answer;hint:HINT}。\n    </div>\n  </div>'] },
+        { label: 'example', insert: ['<div class="example-problem">\n  ', '\n</div>'] },
+        { label: 'desc', insert: ['<p class="sectionDesc"><i class="sectionArrow fa"></i>DESCRIPTION', '</p>'] },
+        { label: 'desc 2', insert: ['<p class="sectionDesc"><i class="sectionNumber"></i>DESCRIPTION', '</p>'] },
+        { label: 'answer', insert: '{ANSWER|HINT}' },
+        { label: 'answer 2', insert: '{ANSWER1|ANSWER2|answer;hint:HINT}' },
+        { label: 'answer 3', insert: '{これは例文ですよ|これはれいぶんですよ|[alts:{これ}は{例文}です{よ}。|コレ|れいぶん|]answer;hint:This is an example sentence}' },
+        { label: 'subs', insert: '%(ANSWER1/ANSWER2)' },
+        { label: 'alts', insert: '[alts:{SENT}{ENCE}|REPLACEMENT|REPLACEMENT2]' },
+        { label: 'underline field', insert: '{!UNDERLINE|WRONG|[A]CORRECT|WRONG|WRONG}' },
+        { label: 'multi field', insert: '{CORRECT|!MULTI:WRONG・CORRECT・WRONG|spacer:alpha}' },
+        { label: 'multi field 2', insert: '{CORRECT|!MULTI:CORRECT・WRONG|box:none;width:150}' },
+        { label: 'blank', insert: '<span class="ul-problem-color">　　</span>' },
+        { label: 'blank 2', insert: '<span class="sub-section inline nospacing blank">　　</span>' },
+        { label: 'item box', insert: ['<div class="sub-section inline item-box">　', '　</div><br><br>'] },
+        { label: 'grammar link', insert: '{!GRI|です|desu}' },
+        { label: 'image', insert: '{!IMG|bag.jpg}' },
+        { label: 'audio', insert: '<div id="static-audio">{!AUDIO|FILE_NAME}</div>' },
+        { label: 'transcript', insert: '<div id="script-FILE_NAME" class="chokai-script dialogue clear" style="display:none;">\n  <div class="sub-section text-passage">\n    <strong class="main-color">SPEECH TYPE</strong>\n    <div class="title reduced center">TITLE</div>\n    <div class="line">\n      <div class="name"></div>\n      <div class="text"></div>\n    </div>\n  </div>\n</div><br>' },
+        { label: 'play button', insert: '{!PLAY|FILE_NAME|TIMESTAMP}' },
+        { label: 'ban easy mode', insert: '<div class="no-easy-mode">Wrap problems in this tag or apply the "no-easy-mode" class to a parent to disable easy mode on problems.</div>' },
+        { label: 'ban answer checking', insert: '<div class="no-checking">Wrap problems in this tag or apply the "no-checking" class to a parent to disable answer checking on problems.</div>' }
+      ]);
+      
+      // initialize CodeMirror
+      var cmEditor = initCodeMirrorEditor(el.textarea);
+      
+      setupCodeMirrorOverlays(cmEditor);
+      buildCodeMirrorToolbar(el.toolbar, cmEditor, buttons);
+
+      cmEditor.on('change', updatePreview);
+      el.pgTitle.addEventListener('input', updatePreview);
+      el.pgDesc.addEventListener('input', updatePreview);
+      el.pgAuthor.addEventListener('input', updatePreview);
+      
+      window.activeEditorInput = null;
+
+      // track active input focus for inserting toolbar content into input fields
+      document.addEventListener('focusin', function(e) {
+        var target = e.target;
+        if ((target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') &&
+            target.type !== 'checkbox' &&
+            target.type !== 'radio' &&
+            target.id !== 'fa-search-box') {
+          window.activeEditorInput = target;
+        }
+      });
+      
+      // flag to prevent saving while loading data
+      var isInitializing = true,
+          isImporting = false;
+
+      // generic debounce function to improve performance
+      function debounce(func, wait) {
+        var timeout;
+        return function() {
+          var context = this, args = arguments;
+          clearTimeout(timeout);
+          timeout = setTimeout(function() {
+            func.apply(context, args);
+          }, wait);
+        };
+      }
+
+      // used for delaying preview update to improve performance with large loads of code
+      var saveState = debounce(function() {
+        if (isInitializing || isImporting) return; // prevent overwriting storage during page load/import
+        try {
+          var currentType = el.pgType.value,
+              kanjiMode = el.kanjiMode.value,
+              isBundledEditor = el.bundleCheckbox.checked && (currentType === 'written' || currentType === 'multi'),
+              checkedPresets = Array.from(document.querySelectorAll('.preset-cb:checked')).map(function(cb) { return cb.value; }),
+              checkedKanjiPresets = Array.from(document.querySelectorAll('.k-preset-cb:checked')).map(function(cb) { return cb.value; });
+
+          localStorage.setItem('KN_Editor_ExerciseType', sanitizeContent(currentType));
+          localStorage.setItem('KN_Editor_Title', sanitizeContent(el.pgTitle.value));
+          localStorage.setItem('KN_Editor_Desc', sanitizeContent(el.pgDesc.value));
+          localStorage.setItem('KN_Editor_Author', sanitizeContent(el.pgAuthor.value));
+          localStorage.setItem('KN_Editor_VocabMode', sanitizeContent(el.vocabMode.value));
+          localStorage.setItem('KN_Editor_VocabPresets', JSON.stringify(checkedPresets));
+          localStorage.setItem('KN_Editor_VocabPresetSettings', sanitizeContent(el.presetSettings.value));
+          localStorage.setItem('KN_Editor_KanjiMode', sanitizeContent(kanjiMode));
+          localStorage.setItem('KN_Editor_KanjiPresets', JSON.stringify(checkedKanjiPresets));
+          localStorage.setItem('KN_Editor_KanjiPresetSettings', sanitizeContent(el.kanjiPresetSettings.value));
+          localStorage.setItem('KN_Editor_AutoReload', el.autoReload.checked);
+          localStorage.setItem('KN_Editor_BundleQuiz', el.bundleCheckbox.checked);
+
+          if (currentType === 'vocab' && el.vocabMode.value !== 'preset') {
+            localStorage.setItem('KN_Editor_VocabData', sanitizeContent(JSON.stringify(getQuizletData('vocab'))));
+          }
+
+          if (currentType === 'kanji' && !kanjiMode.includes('preset')) {
+            if (kanjiMode.includes('meaning')) {
+              localStorage.setItem('KN_Editor_KanjiMeaningsData', sanitizeContent(JSON.stringify(getQuizletData('kanji'))));
+            } else if (kanjiMode.includes('reading')) {
+              localStorage.setItem('KN_Editor_KanjiReadingsData', sanitizeContent(JSON.stringify(getQuizletData('kanji'))));
+            } else if (kanjiMode.includes('stroke')) {
+              localStorage.setItem('KN_Editor_KanjiStrokeData', sanitizeContent(JSON.stringify(getQuizletData('kanji'))));
+            }
+          }
+
+          if (currentType === 'multi' || isBundledEditor) {
+            localStorage.setItem('KN_Editor_MultiData', sanitizeContent(JSON.stringify(getQuizletData('multi'))));
+          }
+
+          if (currentType === 'written' || isBundledEditor) {
+            localStorage.setItem('KN_Editor_WrittenData', sanitizeContent(cmEditor.getValue()));
+          }
+
+          if (currentType === 'chat') {
+            localStorage.setItem('KN_Editor_ChatData', sanitizeContent(JSON.stringify(getQuizletData('chat'))));
+          }
+          
+        } catch (e) {
+          console.warn("Failed to save data to local storage.", e);
+        }
+      }, 500);
+
+      // loads saved exercise data into the exercise editor
+      function loadState() {
+        try {
+          var savedType = localStorage.getItem('KN_Editor_ExerciseType'),
+              savedTitle = localStorage.getItem('KN_Editor_Title'),
+              savedDesc = localStorage.getItem('KN_Editor_Desc'),
+              savedAuthor = localStorage.getItem('KN_Editor_Author'),
+              autoReload = localStorage.getItem('KN_Editor_AutoReload'),
+              bundleQuiz = localStorage.getItem('KN_Editor_BundleQuiz'),
+              savedVocabMode = localStorage.getItem('KN_Editor_VocabMode'),
+              savedPresetSettings = localStorage.getItem('KN_Editor_VocabPresetSettings'),
+              savedPresets = localStorage.getItem('KN_Editor_VocabPresets');
+          
+          if (savedTitle !== null) el.pgTitle.value = savedTitle;
+          if (savedDesc !== null) el.pgDesc.value = savedDesc;
+          if (savedAuthor !== null) el.pgAuthor.value = savedAuthor;
+          if (autoReload !== null) el.autoReload.checked = (autoReload === 'true');
+          if (bundleQuiz !== null) el.bundleCheckbox.checked = (bundleQuiz === 'true');
+          if (savedVocabMode) el.vocabMode.value = savedVocabMode;
+          if (savedPresetSettings !== null) el.presetSettings.value = savedPresetSettings;
+          if (savedPresets) {
+            try {
+              var pArr = JSON.parse(savedPresets), cb;
+              pArr.forEach(function(val) {
+                cb = document.querySelector('.preset-cb[value="' + val + '"]');
+                if (cb) cb.checked = true;
+              });
+            } catch(e) {}
+          }
+
+          // load vocab
+          el.vocabList.innerHTML = '';
+          var vocabData = localStorage.getItem('KN_Editor_VocabData'),
+              vObj = vocabData ? JSON.parse(vocabData) : {},
+              key, kParts, vParts;
+          
+          if (Object.keys(vObj).length > 0) {
+            for (key in vObj) {
+              if (!Object.prototype.hasOwnProperty.call(vObj, key)) continue;
+              kParts = key.split('|');
+              vParts = vObj[key].split('|');
+              el.vocabList.appendChild(createVocabDOM(kParts[0], kParts[1], vParts[0], vParts[1]));
+            }
+          } else {
+            el.vocabList.appendChild(createVocabDOM('例', 'れい', 'example')); // default entry
+          }
+          
+          // load kanji mode and presets
+          var savedKanjiMode = localStorage.getItem('KN_Editor_KanjiMode'),
+              savedKanjiPresetSettings = localStorage.getItem('KN_Editor_KanjiPresetSettings'),
+              savedKanjiPresets = localStorage.getItem('KN_Editor_KanjiPresets');
+          
+          if (savedKanjiMode) el.kanjiMode.value = savedKanjiMode;
+          if (savedKanjiPresetSettings !== null) el.kanjiPresetSettings.value = savedKanjiPresetSettings;
+          if (savedKanjiPresets) {
+            try {
+              var pkArr = JSON.parse(savedKanjiPresets), cb;
+              pkArr.forEach(function(val) {
+                cb = document.querySelector('.k-preset-cb[value="' + val + '"]');
+                if (cb) cb.checked = true;
+              });
+            } catch(e) {}
+          }
+          
+          var kMode = el.kanjiMode.value,
+              kanjiData = kMode.includes('meaning') ? localStorage.getItem('KN_Editor_KanjiMeaningsData') :
+                          (kMode.includes('reading') ? localStorage.getItem('KN_Editor_KanjiReadingsData') :
+                           localStorage.getItem('KN_Editor_KanjiStrokeData')),
+              kObj = kanjiData ? JSON.parse(kanjiData) : null;
+          
+          el.kanjiList.innerHTML = '';
+          
+          if (kObj) {
+            if (Array.isArray(kObj) && kObj.length > 0) {
+              kObj.forEach(function(item) {
+                el.kanjiList.appendChild(createKanjiDOM(kMode, item.kanji, item.meaning, item.reading, item.strokes, item.order, item.example_words));
+              });
+            } else if (!Array.isArray(kObj) && Object.keys(kObj).length > 0) {
+              for (key in kObj) {
+                if (!Object.prototype.hasOwnProperty.call(kObj, key)) continue;
+                if (kMode.includes('reading')) {
+                  var kParts2 = key.split('|'),
+                      vParts2 = kObj[key].split('|');
+                  
+                  el.kanjiList.appendChild(createKanjiDOM(kMode, kParts2[0], null, vParts2[0] + '|' + (vParts2[1] || '')));
+                } else {
+                  el.kanjiList.appendChild(createKanjiDOM(kMode, key, kObj[key]));
+                }
+              }
+            } else {
+              el.kanjiList.appendChild(createKanjiDOM(kMode));
+            }
+          } else {
+            el.kanjiList.appendChild(createKanjiDOM(kMode));
+          }
+
+          // load multiple choice
+          var multiData = localStorage.getItem('KN_Editor_MultiData'),
+              mArr = multiData ? JSON.parse(multiData) : [];
+          
+          el.multiList.innerHTML = '';
+          
+          if (Array.isArray(mArr) && mArr.length > 0) {
+            mArr.forEach(function(q) {
+              el.multiList.appendChild(createMultiDOM(q.question, q.answers));
+            });
+          } else {
+            el.multiList.appendChild(createMultiDOM('QUESTION', ['AANSWER', 'WRONG ANSWER']));
+          }
+
+          // load written quiz
+          var writtenData = localStorage.getItem('KN_Editor_WrittenData'),
+              defaultWrittenHTML = '<p class="sectionDesc"><span class="sectionArrow fa">&#xf054;</span>DESCRIPTION</p>\n\n<div class="count-problems indent-block">\n  <div class="problem">{ANSWER|ANSWER2|answer;hint:HINT}。</div>\n</div>';
+          
+          if (writtenData !== null && writtenData.trim() !== '') {
+            cmEditor.setValue(writtenData);
+          } else {
+            cmEditor.setValue(defaultWrittenHTML);
+          }
+
+          // load chat quiz
+          var chatData = localStorage.getItem('KN_Editor_ChatData'),
+              cArr = chatData ? JSON.parse(chatData) : [];
+
+          el.chatList.innerHTML = '';
+
+          if (Array.isArray(cArr) && cArr.length > 0) {
+            cArr.forEach(function(item) {
+              el.chatList.appendChild(createTopLevelChatItem(item));
+            });
+          } else {
+            el.chatList.appendChild(createTopLevelChatItem({
+              message : "Hello, I'm Kan-tan!"
+            }));
+          }
+
+          updateChatItemIndexes();
+
+          // restore selected exercise type
+          if (savedType) {
+            el.pgType.value = savedType;
+          }
+          el.pgType.dispatchEvent(new Event('change'));
+        } catch (e) {
+          console.warn("Could not load from localStorage", e);
+        }
+      }
+      
+      // preview tab toggle
+      var activePreviewTab = el.pgType.value === 'chat' ? 'chat' : 'exercise';
+      function setPreviewTab(tab) {
+        activePreviewTab = tab;
+
+        el.exercisePreviewTab.classList.toggle('active', tab === 'exercise');
+        el.chatPreviewTab.classList.toggle('active', tab === 'chat');
+
+        el.preview.hidden = tab !== 'exercise';
+        el.chatPreview.hidden = tab !== 'chat';
+      }
+      el.exercisePreviewTab.addEventListener('click', function() {
+        setPreviewTab('exercise');
+      });
+
+      el.chatPreviewTab.addEventListener('click', function() {
+        if (el.pgType.value === 'chat') {
+          renderChatPreview(true);
+          setPreviewTab('chat');
+        }
+      });
+      setPreviewTab(el.pgType.value === 'chat' ? 'chat' : 'exercise');
+      
+
+      // exercise type switching
+      el.pgType.addEventListener('change', function() {
+        var type = this.value;
+        el.leftPanel.className = 'left-panel ' + type;
+        el.vocabModeContainer.style.display = type === 'vocab' ? 'block' : 'none';
+        el.kanjiModeContainer.style.display = type === 'kanji' ? 'block' : 'none';
+        el.vocabUI.style.display = type === 'vocab' ? 'flex' : 'none';
+        el.kanjiUI.style.display = type === 'kanji' ? 'flex' : 'none';
+        el.multiUI.style.display = type === 'multi' ? 'flex' : 'none';
+        el.writtenUI.style.display = type === 'written' ? 'flex' : 'none';
+        el.chatUI.style.display = type === 'chat' ? 'flex' : 'none';
+        
+        // reset active input to the first input of the newly shown panel
+        setTimeout(function() {
+          if (type === 'vocab') window.activeEditorInput = document.querySelector('#vocab-ui .v-word');
+          else if (type === 'multi') window.activeEditorInput = document.querySelector('#multi-ui .m-q');
+          else if (type === 'kanji') window.activeEditorInput = document.querySelector('#kanji-ui .k-kanji');
+          else if (type === 'chat') window.activeEditorInput = document.querySelector('#chat-ui .chat-message');
+          else window.activeEditorInput = null;
+        }, 50);
+
+        // hide toolbar for kanji or vocab preset mode
+        var isVocabPreset = el.vocabMode.value === 'preset';
+        el.toolbar.style.display = (type === 'kanji' || (type === 'vocab' && isVocabPreset)) ? 'none' : 'block';
+        
+        if (type === 'multi') {
+          el.bundleContainer.style.display = 'flex';
+          el.bundleText.textContent = 'Bundle with Written Quiz';
+        } else if (type === 'written') {
+          el.bundleContainer.style.display = 'flex';
+          el.bundleText.textContent = 'Bundle with Multiple Choice';
+        } else {
+          el.bundleContainer.style.display = 'none';
+        }
+        
+        // toggle full width on the exercise type parent for written and multiple choice
+        this.parentNode.parentNode.classList.toggle('full-width', type !== 'vocab' && type !== 'kanji');
+
+        if (type === 'written' && cmEditor) {
+          setTimeout(function() { cmEditor.refresh(); }, 10);
+        }
+        
+        // update previews
+        var isChatType = type === 'chat';
+        el.chatPreviewTabs.hidden = !isChatType;
+        el.chatPreviewTabs.style.display = isChatType ? 'inline-block' : 'none';
+
+        if (isChatType) {
+          setPreviewTab('chat');
+        } else {
+          setPreviewTab('exercise');
+        }
+        
+        updatePreview(true);
+      });
+
+      el.vocabMode.addEventListener('change', function() {
+        var isPreset = this.value === 'preset',
+            type = el.pgType.value;
+        
+        // hide/show vocab editors
+        el.vocabList.style.display = isPreset ? 'none' : 'block';
+        el.vocabPresetUI.style.display = isPreset ? 'flex' : 'none';
+        
+        // hide toolbar if switching to preset mode
+        el.toolbar.style.display = (type === 'kanji' || (type === 'vocab' && isPreset)) ? 'none' : 'block';
+        
+        updatePreview(true);
+      });
+      
+      el.kanjiMode.addEventListener('change', function() {
+        var mode = this.value,
+            isPreset = mode.indexOf('preset') === 0;
+        
+        el.kanjiList.style.display = isPreset ? 'none' : 'block';
+        el.kanjiPresetUI.style.display = isPreset ? 'flex' : 'none';
+        el.kanjiPresetSettings.parentElement.style.display = 'block';
+        
+        // re-render manual fields when switching modes
+        if (!isPreset) {
+          var kanjiData = mode.includes('meaning') ? localStorage.getItem('KN_Editor_KanjiMeaningsData') :
+                          (mode.includes('reading') ? localStorage.getItem('KN_Editor_KanjiReadingsData') :
+                           localStorage.getItem('KN_Editor_KanjiStrokeData')),
+              currentItems = kanjiData ? JSON.parse(kanjiData) : (mode.includes('stroke') ? [] : {});
+          
+          el.kanjiList.innerHTML = '';
+          
+          if (Array.isArray(currentItems) && currentItems.length > 0) {
+            currentItems.forEach(function(item) {
+              el.kanjiList.appendChild(createKanjiDOM(mode, item.kanji, item.meaning, item.reading, item.strokes, item.order, item.example_words));
+            });
+          } else if (!Array.isArray(currentItems) && Object.keys(currentItems).length > 0) {
+            for (var key in currentItems) {
+              if (!Object.prototype.hasOwnProperty.call(currentItems, key)) continue;
+              if (mode.includes('reading')) {
+                var kParts = key.split('|'),
+                    vParts = currentItems[key].split('|');
+                el.kanjiList.appendChild(createKanjiDOM(mode, kParts[0], null, vParts[0] + '|' + (vParts[1] || '')));
+              } else { 
+                el.kanjiList.appendChild(createKanjiDOM(mode, key, currentItems[key]));
+              }
+            }
+          } else {
+            el.kanjiList.appendChild(createKanjiDOM(mode));
+          }
+        }
+        updatePreview(true);
+      });
+      
+      
+      // chat helpers
+      function escapeAttribute(str) {
+        return escapeHTML(str).replace(/"/g, '&quot;');
+      }
+      
+      function pseudoCheckboxHTML() {
+        return '<span tabindex="0" class="kantan_pseudo_checkbox" onclick="if (this.parentNode.tagName != \'LABEL\') this.previousSibling.click();" onkeypress="event.key == \'Enter\' && this.previousSibling.click();"></span>';
+      }
+      
+      var chatTranslationFieldIdCounter = 0;
+
+      function getChatTranslationFieldId() {
+        chatTranslationFieldIdCounter++;
+        return 'chat-translation-field-' + chatTranslationFieldIdCounter;
+      }
+
+      function detectChatItemMode(item) {
+        if (!item || typeof item !== 'object') return 'message';
+        if (Object.prototype.hasOwnProperty.call(item, 'input_reply')) return 'input_reply';
+        if (Object.prototype.hasOwnProperty.call(item, 'image')) return 'image';
+        if (Object.prototype.hasOwnProperty.call(item, 'info')) return 'info';
+        if (Object.prototype.hasOwnProperty.call(item, 'reply')) return 'reply';
+        if (Object.prototype.hasOwnProperty.call(item, 'message')) return 'message';
+        if (Object.keys(item).length === 1 && Object.prototype.hasOwnProperty.call(item, 'delay')) return 'delay';
+        return 'message';
+      }
+      
+      function getChatItemMeta(mode) {
+        switch (mode) {
+          case 'reply':
+            return { title : 'Reply', icon : '&#xf112;' };
+          case 'info':
+            return { title : 'Info', icon : '&#xf129;' };
+          case 'image':
+            return { title : 'Image', icon : '&#xf03e;' };
+          case 'input_reply':
+            return { title : 'Input Reply', icon : '&#xf040;' };
+          case 'delay':
+            return { title : 'Delay', icon : '&#xf017;' };
+          default:
+            return { title : 'Message', icon : '&#xf27a;' };
+        }
+      }
+
+      function updateChatItemHeader(row, mode) {
+        if (!row) return;
+
+        var titleEl = row.querySelector('.chat-item-title'),
+            meta = getChatItemMeta(mode);
+
+        if (!titleEl) return;
+
+        titleEl.innerHTML = '<i class="fa">' + meta.icon + '</i>' + meta.title;
+      }
+
+      function normalizeReplyText(text) {
+        return (text || '').replace(/^〇/, '');
+      }
+
+      function isCorrectReplyText(text) {
+        return /^〇/.test(text || '');
+      }
+
+      function normalizeBranchItems(branchValue) {
+        if (!branchValue) return [];
+
+        if (Array.isArray(branchValue)) {
+          var looksLikeChatObjects = branchValue.every(function(item) {
+            return item && typeof item === 'object' && !Array.isArray(item);
+          });
+
+          return looksLikeChatObjects ? branchValue : [branchValue];
+        }
+
+        return [branchValue];
+      }
+
+      function hasScore(item) {
+        return item && item.score !== undefined && item.score !== null && item.score !== '';
+      }
+
+      function createChatBranchItemDOM(item) {
+        var li = document.createElement('li');
+        li.className = 'chat-branch-item';
+        li.appendChild(createChatDOM(item));
+        return li;
+      }
+
+      function createChatReplyDOM(replyText, translationText, branchItems, isCorrect) {
+        var li = document.createElement('li'),
+            branchHTML = '',
+            normalizedBranchItems = normalizeBranchItems(branchItems),
+            translationFieldId = getChatTranslationFieldId();
+
+        li.className = 'chat-reply-row';
+
+        if (normalizedBranchItems.length) {
+          normalizedBranchItems.forEach(function(item) {
+            branchHTML += createChatBranchItemDOM(item).outerHTML;
+          });
+        }
+
+        li.innerHTML = `
+          <div class="chat-inline ${translationText ? '' : 'chat-split-disabled'}">
+            <label class="chat-primary-field">Reply:
+              <input type="text" class="chat-reply-text" placeholder="Reply text" value="${escapeAttribute(normalizeReplyText(replyText || ''))}" oninput="updatePreview()">
+            </label>
+            <label id="${translationFieldId}" class="chat-translation-field" ${translationText ? '' : 'hidden'}>Translation:
+              <input type="text" class="chat-reply-translation" placeholder="Translation for this reply" value="${escapeAttribute(translationText || '')}" oninput="updatePreview()">
+            </label>
+          </div>
+
+          <div class="chat-reply-meta">
+            <label><input type="checkbox" class="chat-reply-correct kantan_input_hidden" ${isCorrect ? 'checked' : ''} onchange="updatePreview()">${pseudoCheckboxHTML()} Correct answer</label>
+            <label><input type="checkbox" class="chat-translation-enabled kantan_input_hidden" data-translation-target="${translationFieldId}" ${translationText ? 'checked' : ''} onchange="toggleTranslationInput(this); updatePreview()">${pseudoCheckboxHTML()} Translation</label>
+            <label class="chat-branch-toggle">
+              <input type="checkbox" class="chat-has-branch kantan_input_hidden" ${normalizedBranchItems.length ? 'checked' : ''} onchange="toggleReplyBranch(this); updatePreview()">
+              ${pseudoCheckboxHTML()}
+              Branching dialogue
+            </label>
+          </div>
+
+          <div class="chat-branch-wrap" ${normalizedBranchItems.length ? '' : 'hidden'}>
+            <div class="chat-subsection dialogue-branch">
+              <div class="chat-subsection-title"><i class="fa">&#xf0e8;</i> Branching Dialogue</div>
+              <div class="chat-branch-controls">
+                <ul class="chat-branch-list">${branchHTML}</ul>
+                <div class="button-group">
+                  <button class="button green" type="button" onclick="addBranchChatItem(this)"><i class="fa">&#xf067;</i> Add Branch Item</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-toolbar-buttons">
+            <button class="button green icon-only row-add" title="add reply" onclick="addChatReplyRow(this)"><i class="fa">&#xf067;</i></button>
+            <button class="button icon-only" title="move up" onclick="moveItemUp(this)"><i class="fa">&#xf062;</i></button>
+            <button class="button icon-only" title="move down" onclick="moveItemDown(this)"><i class="fa">&#xf063;</i></button>
+            <button class="button red icon-only row-remove" title="remove reply" onclick="removeRow(this)"><i class="fa">&#xf068;</i></button>
+          </div>
+        `;
+
+        return li;
+      }
+      
+      function createChatDOM(item) {
+        item = item || {};
+
+        var mode = detectChatItemMode(item),
+            li = document.createElement('div'),
+            repliesHTML = '',
+            replies = Array.isArray(item.reply) ? item.reply : [],
+            singleTranslation = Array.isArray(item.translation) ? '' : (item.translation || ''),
+            inputReply = item.input_reply || {},
+            inputPlaceholderValue = inputReply.placeholder != null ? String(inputReply.placeholder) : '',
+            scoreEnabled = hasScore(item),
+            scoreValue = scoreEnabled ? item.score : '',
+            messageTranslationFieldId = getChatTranslationFieldId();
+
+        if (replies.length) {
+          replies.forEach(function(replyItem, index) {
+            var replyText = '',
+                translationText = Array.isArray(item.translation) ? (item.translation[index] || '') : '',
+                branchItems = [],
+                isCorrect = false;
+
+            if (Array.isArray(replyItem)) {
+              replyText = replyItem[0] || '';
+              isCorrect = isCorrectReplyText(replyText);
+              branchItems = normalizeBranchItems(replyItem[1]);
+            } else {
+              replyText = replyItem || '';
+              isCorrect = isCorrectReplyText(replyText);
+            }
+
+            repliesHTML += createChatReplyDOM(replyText, translationText, branchItems, isCorrect).outerHTML;
+          });
+        } else if (mode === 'reply') {
+          repliesHTML = createChatReplyDOM('', '', [], false).outerHTML;
+        }
+
+        li.className = 'chat-row item-row';
+        li.innerHTML = `
+          <div class="chat-item-title"></div>
+
+          <div class="chat-item-header">
+            <label>Type:
+              <select class="chat-item-type" onchange="toggleChatItemMode(this); updatePreview()">
+                <option value="message" ${mode === 'message' ? 'selected' : ''}>Message</option>
+                <option value="reply" ${mode === 'reply' ? 'selected' : ''}>Reply</option>
+                <option value="info" ${mode === 'info' ? 'selected' : ''}>Info</option>
+                <option value="image" ${mode === 'image' ? 'selected' : ''}>Image</option>
+                <option value="input_reply" ${mode === 'input_reply' ? 'selected' : ''}>Input Reply</option>
+                <option value="delay" ${mode === 'delay' ? 'selected' : ''}>Delay</option>
+              </select>
+            </label>
+
+            <label class="chat-delay-label">Delay:
+              <input type="number" class="chat-delay" value="${item.delay != null ? escapeAttribute(item.delay) : ''}" placeholder="1000 (=1 second)" oninput="updatePreview()">
+            </label>
+
+            <label class="chat-score-condition-label chat-score-wrap" ${scoreEnabled ? '' : 'hidden'}>Score condition:
+              <input type="number" class="chat-score" value="${scoreValue !== '' ? escapeAttribute(scoreValue) : ''}" placeholder="0" oninput="updatePreview()">
+            </label>
+
+            <div class="chat-item-index-container"><input type="number" class="chat-item-index" min="1" value="1" onchange="changeChatItemIndex(this)"></div>
+          </div>
+
+          <div class="chat-mode-block chat-mode-message">
+            <div class="chat-inline tight">
+              <label><input type="checkbox" class="chat-new-list kantan_input_hidden" ${item.newList ? 'checked' : ''} onchange="updatePreview()">${pseudoCheckboxHTML()} Start new group</label>
+              <label><input type="checkbox" class="chat-score-enabled kantan_input_hidden" ${scoreEnabled ? 'checked' : ''} onchange="toggleScoreInput(this); updatePreview()">${pseudoCheckboxHTML()} Score condition</label>
+              <label><input type="checkbox" class="chat-translation-enabled kantan_input_hidden" data-translation-target="${messageTranslationFieldId}" ${singleTranslation ? 'checked' : ''} onchange="toggleTranslationInput(this); updatePreview()">${pseudoCheckboxHTML()} Translation</label>
+            </div>
+
+            <div class="chat-inline ${singleTranslation ? '' : 'chat-split-disabled'}">
+              <label class="chat-primary-field">Message:
+                <input type="text" class="chat-message" value="${escapeAttribute(item.message || '')}" placeholder="Message text" oninput="updatePreview()">
+              </label>
+
+              <label id="${messageTranslationFieldId}" class="chat-translation-field" ${singleTranslation ? '' : 'hidden'}>Translation:
+                <input type="text" class="chat-translation" value="${escapeAttribute(singleTranslation)}" placeholder="Translation for this message" oninput="updatePreview()">
+              </label>
+            </div>
+          </div>
+
+          <div class="chat-mode-block chat-mode-reply">
+            <div class="chat-inline tight">
+              <label><input type="checkbox" class="chat-is-problem kantan_input_hidden" ${item.problem ? 'checked' : ''} onchange="updatePreview()">${pseudoCheckboxHTML()} Graded reply</label>
+              <label><input type="checkbox" class="chat-score-enabled kantan_input_hidden" ${scoreEnabled ? 'checked' : ''} onchange="toggleScoreInput(this); updatePreview()">${pseudoCheckboxHTML()} Score condition</label>
+            </div>
+
+            <div class="chat-subsection">
+              <div class="chat-subsection-title"><i class="fa">&#xf0ca;</i> Reply Choices</div>
+              <ul class="chat-replies">${repliesHTML}</ul>
+            </div>
+          </div>
+
+          <div class="chat-mode-block chat-mode-info">
+            <label>Info:
+              <input type="text" class="chat-info" value="${escapeHTML(item.info || '')}" placeholder="Info text" oninput="updatePreview()">
+            </label>
+          </div>
+
+          <div class="chat-mode-block chat-mode-image">
+            <label>Image:
+              <input type="text" class="chat-image" value="${escapeAttribute(item.image || '')}" placeholder="bag.webp" oninput="updatePreview()">
+            </label>
+          </div>
+
+          <div class="chat-mode-block chat-mode-input_reply">
+            <label>Reply:
+              <input type="text" class="chat-input-response" value="${escapeAttribute(inputReply.response || '')}" placeholder="Reply text" oninput="updatePreview()">
+            </label>
+
+            <div class="chat-inline">
+              <label>Input ID:
+                <input type="text" class="chat-input-id" value="${escapeAttribute(inputReply.id || '')}" placeholder="ID for saving data" oninput="updatePreview()">
+              </label>
+              <label>Save Input:
+                <select class="chat-input-save" onchange="updatePreview()">
+                  <option value="false" ${inputReply.save ? '' : 'selected'}>false</option>
+                  <option value="true" ${inputReply.save ? 'selected' : ''}>true</option>
+                </select>
+              </label>
+              <label>Placeholder:
+                <input type="text" class="chat-input-placeholder" value="${escapeAttribute(inputPlaceholderValue)}" placeholder="Text like this" oninput="updatePreview()">
+              </label>
+            </div>
+
+            <div class="chat-inline">
+              <label>Info:
+                <input type="text" class="chat-input-info" value="${escapeAttribute(inputReply.info || '')}" placeholder="Input directions" oninput="updatePreview()">
+              </label>
+              <label>Error:
+                <input type="text" class="chat-input-error" value="${escapeAttribute(inputReply.error || '')}" placeholder="Error message for invalid input" oninput="updatePreview()">
+              </label>
+            </div>
+          </div>
+
+          <div class="chat-mode-block chat-mode-delay"></div>
+
+           <div class="chat-toolbar-buttons">
+             <button class="button green icon-only row-add" title="add chat item" onclick="addChatRow(this)"><i class="fa">&#xf067;</i></button>
+             <button class="button icon-only" title="move up" onclick="moveItemUp(this)"><i class="fa">&#xf062;</i></button>
+             <button class="button icon-only" title="move down" onclick="moveItemDown(this)"><i class="fa">&#xf063;</i></button>
+             <button class="button red icon-only row-remove" title="remove chat item" onclick="this.closest('.chat-branch-item') ? removeBranchItem(this) : removeRow(this)"><i class="fa">&#xf068;</i></button>
+           </div>
+        `;
+
+        toggleChatItemMode(li.querySelector('.chat-item-type'));
+        return li;
+      }
+      
+      function toggleChatItemMode(select) {
+        var row = select.closest('.chat-row'),
+            mode = select.value,
+            blocks = Array.from(row.children).filter(function(child) {
+              return child.classList && child.classList.contains('chat-mode-block');
+            });
+
+        updateChatItemHeader(row, mode);
+
+        blocks.forEach(function(block) {
+          block.classList.remove('active');
+        });
+
+        var activeBlock = getDirectChildByClass(row, 'chat-mode-' + mode);
+        if (activeBlock) {
+          activeBlock.classList.add('active');
+        }
+        
+        var scoreBox = getModeScoreCheckbox(row, mode),
+            scoreWrap = row.querySelector('.chat-item-header .chat-score-wrap');
+        if (scoreWrap) scoreWrap.hidden = !(scoreBox && scoreBox.checked);
+
+        if (mode === 'reply') {
+          var repliesList = activeBlock ? activeBlock.querySelector('.chat-replies') : null;
+          if (repliesList && !repliesList.children.length) {
+            repliesList.appendChild(createChatReplyDOM('', '', [], false));
+          }
+        }
+      }
+      
+      function getDirectChildByClass(parent, className) {
+        return Array.from(parent.children).find(function(child) {
+          return child.classList && child.classList.contains(className);
+        }) || null;
+      }
+
+      function toggleScoreInput(cb) {
+        var row = cb.closest('.chat-row');
+        if (!row) return;
+
+        ['message', 'reply'].forEach(function(mode) {
+          var box = getModeScoreCheckbox(row, mode);
+          if (box) box.checked = cb.checked;
+        });
+
+        var wrap = row.querySelector('.chat-item-header .chat-score-wrap');
+        if (!wrap) return;
+
+        wrap.hidden = !cb.checked;
+
+        if (!cb.checked) {
+          var input = wrap.querySelector('.chat-score');
+          if (input) input.value = '';
+        }
+      }
+      
+      function toggleTranslationInput(cb) {
+        var targetId = cb.getAttribute('data-translation-target'),
+            translationField = targetId ? document.getElementById(targetId) : null,
+            inlineRow = translationField ? translationField.parentNode : null;
+
+        if (!translationField) return;
+
+        translationField.hidden = !cb.checked;
+
+        if (inlineRow && inlineRow.classList) {
+          inlineRow.classList.toggle('chat-split-disabled', !cb.checked);
+        }
+      }
+
+      function toggleReplyBranch(cb) {
+        var row = cb.closest('.chat-reply-row'),
+            wrap = row.querySelector('.chat-branch-wrap'),
+            list = row.querySelector('.chat-branch-list');
+
+        if (cb.checked) {
+          wrap.hidden = false;
+          if (!list.children.length) {
+            list.appendChild(createChatBranchItemDOM({ message : '' }));
+          }
+        } else {
+          wrap.hidden = true;
+        }
+      }
+
+      function enableReplyBranch(btn) {
+        var row = btn.closest('.chat-reply-row'),
+            cb = row.querySelector('.chat-has-branch');
+
+        cb.checked = true;
+        toggleReplyBranch(cb);
+        updatePreview();
+      }
+
+      function addBranchChatItem(btn) {
+        var list = btn.closest('.chat-branch-controls').querySelector('.chat-branch-list');
+        list.appendChild(createChatBranchItemDOM({ message : '' }));
+        updatePreview();
+      }
+
+      function getMovableItem(btn) {
+        var replyRow = btn.closest('.chat-reply-row');
+        if (replyRow) return replyRow;
+
+        var branchItem = btn.closest('.chat-branch-item');
+        if (branchItem) return branchItem;
+
+        var topItem = btn.closest('.chat-top-item');
+        if (topItem) return topItem;
+
+        return btn.closest('.question-row, .quiz-answer, .kanji-example-row, .item-row');
+      }
+
+      function moveItemUp(btn) {
+        var item = getMovableItem(btn);
+        if (!item || !item.previousElementSibling) return;
+
+        item.parentNode.insertBefore(item, item.previousElementSibling);
+
+        if (item.classList.contains('chat-top-item')) {
+          updateChatItemIndexes();
+        }
+
+        updatePreview();
+      }
+
+      function moveItemDown(btn) {
+        var item = getMovableItem(btn);
+        if (!item || !item.nextElementSibling) return;
+
+        item.parentNode.insertBefore(item.nextElementSibling, item);
+
+        if (item.classList.contains('chat-top-item')) {
+          updateChatItemIndexes();
+        }
+
+        updatePreview();
+      }
+
+      function createTopLevelChatItem(item) {
+        var wrapper = document.createElement('li');
+        wrapper.className = 'chat-top-item';
+        wrapper.appendChild(createChatDOM(item));
+        return wrapper;
+      }
+
+      function updateChatItemIndexes() {
+        Array.from(el.chatList.children).forEach(function(item, index) {
+          if (!item.classList.contains('chat-top-item')) return;
+
+          var input = item.querySelector('.chat-item-index');
+          if (input) input.value = index + 1;
+        });
+      }
+
+      function scrollChatItemIntoView(item) {
+        if (!item) return;
+
+        item.scrollIntoView({
+          behavior: 'instant',
+          block: 'nearest'
+        });
+      }
+
+      function focusChatItemIndexInput(item) {
+        if (!item) return;
+
+        var input = item.querySelector('.chat-item-index');
+        if (!input) return;
+
+        input.focus({ preventScroll: true });
+        if (typeof input.select === 'function') {
+          input.select();
+        }
+      }
+
+      function moveChatItemToIndex(fromIndex, toIndex) {
+        var items = Array.from(el.chatList.children).filter(function(item) {
+          return item.classList.contains('chat-top-item');
+        });
+
+        if (fromIndex === toIndex) return null;
+        if (fromIndex < 0 || toIndex < 0 || fromIndex >= items.length || toIndex >= items.length) return null;
+
+        var movingItem = items[fromIndex],
+            targetItem = items[toIndex];
+
+        if (!movingItem || !targetItem) return null;
+
+        if (fromIndex < toIndex) {
+          el.chatList.insertBefore(movingItem, targetItem.nextSibling);
+        } else {
+          el.chatList.insertBefore(movingItem, targetItem);
+        }
+
+        return movingItem;
+      }
+
+      function changeChatItemIndex(input) {
+        var item = input.closest('.chat-top-item');
+        if (!item) return;
+
+        var items = Array.from(el.chatList.children).filter(function(row) {
+              return row.classList.contains('chat-top-item');
+            }),
+            oldIndex = items.indexOf(item),
+            newIndex = parseInt(input.value, 10) - 1,
+            movedItem;
+
+        if (oldIndex === -1) return;
+
+        if (isNaN(newIndex)) {
+          updateChatItemIndexes();
+          focusChatItemIndexInput(item);
+          return;
+        }
+
+        if (newIndex < 0) newIndex = 0;
+        if (newIndex >= items.length) newIndex = items.length - 1;
+
+        movedItem = moveChatItemToIndex(oldIndex, newIndex) || item;
+        updateChatItemIndexes();
+        scrollChatItemIntoView(movedItem);
+
+        setTimeout(function() {
+          focusChatItemIndexInput(movedItem);
+        }, 150);
+
+        updatePreview();
+      }
+
+      function addChatRow(btn) {
+        var row = createChatDOM(),
+            list = el.chatList;
+
+        if (btn) {
+          var branchList = btn.closest('.chat-branch-list');
+
+          if (branchList) {
+            var currentBranchItem = btn.closest('.chat-branch-item'),
+                branchItem = document.createElement('li');
+
+            branchItem.className = 'chat-branch-item';
+            branchItem.appendChild(row);
+            branchList.insertBefore(branchItem, currentBranchItem ? currentBranchItem.nextSibling : null);
+          } else {
+            var currentTopItem = btn.closest('.chat-top-item'),
+                wrapper = document.createElement('li');
+
+            wrapper.className = 'chat-top-item';
+            wrapper.appendChild(row);
+            list.insertBefore(wrapper, currentTopItem ? currentTopItem.nextSibling : null);
+            updateChatItemIndexes();
+          }
+        } else {
+          list.appendChild(createTopLevelChatItem());
+          updateChatItemIndexes();
+        }
+
+        updatePreview();
+      }
+
+      function addChatReplyRow(btn) {
+        var li = createChatReplyDOM('', '', [], false);
+        btn.closest('.chat-replies').insertBefore(li, btn.closest('.chat-reply-row').nextSibling);
+        updatePreview();
+      }
+      
+      
+      // row logic for vocab/multi-choice
+      function addVocabRow(btn) {
+        var li = btn ? btn.closest('.item-row').cloneNode(true) : createVocabDOM(),
+            list = el.vocabList;
+        
+        if (btn) li.querySelectorAll('input').forEach(function(i) { i.value = ''; });
+        btn ? list.insertBefore(li, btn.closest('.item-row').nextSibling) : list.appendChild(li);
+        
+        updatePreview();
+      }
+
+      function addMultiRow(btn) {
+        var li = btn ? btn.closest('.question-row').cloneNode(true) : createMultiDOM(),
+            list = el.multiList;
+        
+        if (btn) {
+          li.querySelectorAll('input, textarea').forEach(function(i) {
+            if (i.type === 'checkbox') i.checked = false;
+            else i.value = '';
+          });
+        }
+        btn ? list.insertBefore(li, btn.closest('.question-row').nextSibling) : list.appendChild(li);
+        
+        updatePreview();
+      }
+
+      function addAnswerRow(btn) {
+        var li = btn.closest('.quiz-answer').cloneNode(true);
+        
+        li.querySelectorAll('input').forEach(function(i) {
+          if (i.type === 'checkbox') i.checked = false;
+          else i.value = '';
+        });
+        btn.closest('.answers-list').insertBefore(li, btn.closest('.quiz-answer').nextSibling);
+        
+        updatePreview();
+      }
+      
+      function addKanjiRow(btn) {
+        var mode = el.kanjiMode.value,
+            li = btn ? btn.closest('.item-row').cloneNode(true) : createKanjiDOM(mode),
+            list = el.kanjiList;
+        
+        if (btn) {
+          li.querySelectorAll('input').forEach(function(i) { i.value = ''; });
+          var examples = li.querySelector('.example-words-list');
+          if (examples) {
+            examples.innerHTML = createKanjiExampleDOM('', '', '').outerHTML;
+          }
+        }
+        btn ? list.insertBefore(li, btn.closest('.item-row').nextSibling) : list.appendChild(li);
+        
+        updatePreview();
+      }
+      
+      function addKanjiExampleRow(btn) {
+        var li = btn ? btn.closest('.kanji-example-row').cloneNode(true) : createKanjiExampleDOM(),
+            list = btn.closest('.example-words-list');
+        
+        if (btn) li.querySelectorAll('input').forEach(function(i) { i.value = ''; });
+        btn ? list.insertBefore(li, btn.closest('.kanji-example-row').nextSibling) : list.appendChild(li);
+        
+        updatePreview();
+      }
+      
+      function removeRow(btn) {
+        var li = btn.closest('.quiz-answer') ||
+                 btn.closest('.kanji-example-row') ||
+                 btn.closest('.chat-reply-row') ||
+                 btn.closest('.chat-top-item') ||
+                 btn.closest('.item-row');
+
+        if (!li || !li.parentNode) return;
+
+        if (li.parentNode.children.length > 1) {
+          var wasTopLevelChatItem = li.classList.contains('chat-top-item');
+          li.parentNode.removeChild(li);
+
+          if (wasTopLevelChatItem) {
+            updateChatItemIndexes();
+          }
+
+          updatePreview();
+        }
+      }
+
+      function removeBranchItem(btn) {
+        var li = btn.closest('.chat-branch-item');
+        if (!li || !li.parentNode) return;
+
+        li.parentNode.removeChild(li);
+        updatePreview();
+      }
+      
+      function escapeHTML(str) {
+        return (str == null ? '' : str).toString()
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+      
+      function createKanjiExampleDOM(k, f, d) {
+        var li = document.createElement('li');
+        
+        li.className = 'kanji-example-row input-group mb-5';
+        li.innerHTML = `
+          <input type="text" placeholder="word/kanji" class="kx-kanji" value="${escapeHTML(k)}" oninput="updatePreview()">
+          <input type="text" placeholder="furigana (optional)" class="kx-furi" value="${escapeHTML(f)}" oninput="updatePreview()">
+          <input type="text" placeholder="definition/kana" class="kx-def" value="${escapeHTML(d)}" oninput="updatePreview()">
+          <div class="button-group">
+            <button class="button green row-add" title="add example" onclick="addKanjiExampleRow(this)"><i class="fa">&#xf067;</i></button>
+            <button class="button red row-remove" title="remove example" onclick="removeRow(this); updatePreview();"><i class="fa">&#xf068;</i></button>
+          </div>
+        `;
+        
+        return li;
+      }
+
+      function createKanjiDOM(mode, k, m, r, s, o, examples) {
+        var li = document.createElement('li'),
+            rParts = r ? r.split('|') : ['', ''],
+            html = '<div class="input-group">';
+        
+        li.className = 'item-row';
+        html += `<input type="text" placeholder="Kanji" class="k-kanji" value="${escapeHTML(k)}" oninput="updatePreview()">`;
+        
+        if (mode.includes('meaning') || mode.includes('stroke')) {
+          html += `<input type="text" placeholder="Meanings" class="k-mean" value="${escapeHTML(m)}" oninput="updatePreview()">`;
+        }
+        
+        html += `<div class="button-group">
+          <button class="button green row-add" title="add" onclick="addKanjiRow(this)"><i class="fa">&#xf067;</i></button>
+          <button class="button" title="move up" onclick="moveItemUp(this)"><i class="fa">&#xf062;</i></button>
+          <button class="button" title="move down" onclick="moveItemDown(this)"><i class="fa">&#xf063;</i></button>
+          <button class="button red row-remove" title="remove" onclick="removeRow(this)"><i class="fa">&#xf068;</i></button>
+        </div></div>`;
+        
+        if (mode.includes('reading') || mode.includes('stroke')) {
+          html += `<div class="input-group mt-5"><input type="text" placeholder="Onyomi" class="k-on" value="${escapeHTML(rParts[0])}" oninput="updatePreview()">`;
+          html += `<input type="text" placeholder="Kunyomi" class="k-kun" value="${escapeHTML(rParts[1])}" oninput="updatePreview()"></div>`;
+        }
+
+        if (mode.includes('stroke')) {
+          html += `<div class="input-group mt-5">`;
+          html += `<input type="number" placeholder="Strokes" class="k-strokes" value="${escapeHTML(s)}" oninput="updatePreview()">`;
+          html += `<input type="text" placeholder="Stroke order image or id (e.g. 0001)" class="k-order" value="${escapeHTML(o)}" oninput="updatePreview()">`;
+          html += `</div>`;
+          
+          html += `<div class="example-words-header">Example Words</div>`;
+          html += '<ul class="example-words-list">';
+          if (examples && examples.length > 0) {
+            examples.forEach(function(ex) {
+              for (var key in ex) {
+                if (!Object.prototype.hasOwnProperty.call(ex, key)) continue;
+                var kp = key.split('|');
+                html += createKanjiExampleDOM(kp[0], kp[1], ex[key]).outerHTML;
+              }
+            });
+          } else {
+            html += createKanjiExampleDOM('', '', '').outerHTML;
+          }
+          html += '</ul>';
+        }
+        
+        li.innerHTML = html;
+        return li;
+      }
+
+      function createVocabDOM(kWord, kFuri, def, sent) {
+        var li = document.createElement('li');
+        
+        li.className = 'item-row';
+        li.innerHTML = `
+          <div class="input-group">
+            <input type="text" placeholder="word/kanji" class="v-word" value="${escapeHTML(kWord)}" oninput="updatePreview()">
+            <input type="text" placeholder="furigana (optional)" class="v-furi" value="${escapeHTML(kFuri)}" oninput="updatePreview()">
+            <input type="text" placeholder="definition/kana" class="v-def" value="${escapeHTML(def)}" oninput="updatePreview()">
+            <div class="button-group">
+              <button class="button green row-add" title="add" onclick="addVocabRow(this)"><i class="fa">&#xf067;</i></button>
+              <button class="button" title="move up" onclick="moveItemUp(this)"><i class="fa">&#xf062;</i></button>
+              <button class="button" title="move down" onclick="moveItemDown(this)"><i class="fa">&#xf063;</i></button>
+              <button class="button red row-remove" title="remove" onclick="removeRow(this)"><i class="fa">&#xf068;</i></button>
+            </div>
+          </div>
+          <input type="text" placeholder="sentence (optional)" class="v-sent" value="${escapeHTML(sent)}" oninput="updatePreview()">
+        `;
+        
+        return li;
+      }
+
+      function createMultiDOM(qText, answersArray) {
+        var li = document.createElement('li'),
+            ansHTML = '';
+        
+        li.className = 'item-row question-row';
+        
+        if (answersArray && answersArray.length > 0) {
+          answersArray.forEach(function(a) {
+            var isCorrect = /^A/.test(a);
+            var text = a.replace(/^[A!]/, '');
+            ansHTML += `
+              <li class="quiz-answer">
+                <input type="checkbox" title="Correct answer" class="m-correct" ${isCorrect ? 'checked' : ''} onchange="updatePreview()">
+                <input type="text" placeholder="answer" class="m-ans" value="${escapeHTML(text)}" oninput="updatePreview()">
+                <div class="button-group">
+                  <button class="button green row-add" title="add" onclick="addAnswerRow(this)"><i class="fa">&#xf067;</i></button>
+                  <button class="button red row-remove" title="remove" onclick="removeRow(this)"><i class="fa">&#xf068;</i></button>
+                </div>
+              </li>`;
+          });
+        } else {
+          ansHTML = `
+            <li class="quiz-answer">
+              <input type="checkbox" title="Correct answer" class="m-correct" onchange="updatePreview()">
+              <input type="text" placeholder="answer" class="m-ans" oninput="updatePreview()">
+              <div class="button-group">
+                <button class="button green row-add" title="add" onclick="addAnswerRow(this)"><i class="fa">&#xf067;</i></button>
+                <button class="button red row-remove" title="remove" onclick="removeRow(this)"><i class="fa">&#xf068;</i></button>
+              </div>
+            </li>`;
+        }
+
+        li.innerHTML = `
+          <div class="input-group">
+            <textarea placeholder="question" class="m-q" oninput="updatePreview()">${escapeHTML(qText)}</textarea>
+            <div class="button-group">
+              <button class="button green row-add" title="add" onclick="addMultiRow(this)"><i class="fa">&#xf067;</i></button>
+              <button class="button" title="move up" onclick="moveItemUp(this)"><i class="fa">&#xf062;</i></button>
+              <button class="button" title="move down" onclick="moveItemDown(this)"><i class="fa">&#xf063;</i></button>
+              <button class="button red row-remove" title="remove" onclick="removeRow(this)"><i class="fa">&#xf068;</i></button>
+            </div>
+          </div>
+          <ol class="answers-list w-100">${ansHTML}</ol>
+        `;
+        
+        return li;
+      }
+
+      // data extraction
+      function parseMaybeNumber(value) {
+        if (value === '' || value == null) return null;
+        var n = parseInt(value, 10);
+        return isNaN(n) ? null : n;
+      }
+
+      function collectBranchChatItems(listEl) {
+        var items = [];
+        if (!listEl) return items;
+
+        Array.from(listEl.children).forEach(function(branchItem) {
+          if (!branchItem.classList || !branchItem.classList.contains('chat-branch-item')) return;
+
+          var row = null;
+          Array.from(branchItem.children).forEach(function(child) {
+            if (!row && child.classList && child.classList.contains('chat-row')) {
+              row = child;
+            }
+          });
+
+          if (!row) return;
+
+          var data = getChatRowData(row);
+          if (data && Object.keys(data).length) {
+            items.push(data);
+          }
+        });
+
+        return items;
+      }
+
+      function getChatReplyData(replyRow) {
+        var replyText = replyRow.querySelector('.chat-reply-text').value.trim(),
+            replyTranslation = replyRow.querySelector('.chat-reply-translation').value.trim(),
+            isCorrect = replyRow.querySelector('.chat-reply-correct').checked,
+            hasBranch = replyRow.querySelector('.chat-has-branch').checked,
+            branchWrap = replyRow.querySelector('.chat-branch-wrap'),
+            branchList = branchWrap ? branchWrap.querySelector('.chat-branch-list') : null,
+            branchItems = hasBranch && branchList ? collectBranchChatItems(branchList) : [],
+            sourceText,
+            replyValue = null;
+
+        if (!replyText) {
+          return null;
+        }
+
+        sourceText = (isCorrect ? '〇' : '') + replyText;
+
+        if (branchItems.length === 1) {
+          replyValue = [sourceText, branchItems[0]];
+        } else if (branchItems.length > 1) {
+          replyValue = [sourceText, branchItems];
+        } else {
+          replyValue = sourceText;
+        }
+
+        return {
+          value : replyValue,
+          translation : replyTranslation
+        };
+      }
+
+      function getModeScoreCheckbox(row, mode) {
+        var block = getDirectChildByClass(row, 'chat-mode-' + mode);
+        return block ? block.querySelector(':scope > .chat-inline .chat-score-enabled') : null;
+      }
+
+      function getEnabledScore(row) {
+        var mode = row.querySelector('.chat-item-type').value,
+            enabled = getModeScoreCheckbox(row, mode);
+        if (!enabled || !enabled.checked) return null;
+
+        var scoreInput = row.querySelector('.chat-item-header .chat-score');
+        return scoreInput ? parseMaybeNumber(scoreInput.value) : null;
+      }
+
+      function getDirectReplyRows(row) {
+        var replyBlock = Array.from(row.children).find(function(child) {
+          return child.classList && child.classList.contains('chat-mode-reply');
+        });
+
+        if (!replyBlock) return [];
+
+        var subsection = Array.from(replyBlock.children).find(function(child) {
+          return child.classList && child.classList.contains('chat-subsection');
+        });
+
+        if (!subsection) return [];
+
+        var repliesList = Array.from(subsection.children).find(function(child) {
+          return child.classList && child.classList.contains('chat-replies');
+        });
+
+        if (!repliesList) return [];
+
+        return Array.from(repliesList.children).filter(function(child) {
+          return child.classList && child.classList.contains('chat-reply-row');
+        });
+      }
+      
+      function getChatRowData(row) {
+        var data = {},
+            mode = row.querySelector('.chat-item-type').value,
+            delay = parseMaybeNumber(row.querySelector('.chat-delay').value),
+            score = getEnabledScore(row),
+            newListEl = row.querySelector('.chat-new-list'),
+            newList = newListEl ? newListEl.checked : false;
+
+        if (mode === 'delay') {
+          if (delay !== null) data.delay = delay;
+          return data;
+        }
+
+        if (delay !== null) data.delay = delay;
+
+        if (mode === 'message') {
+          var message = row.querySelector('.chat-message').value.trim(),
+              translation = row.querySelector('.chat-translation').value.trim();
+
+          if (message) data.message = message;
+          if (translation) data.translation = translation;
+          if (score !== null) data.score = score;
+          if (newList) data.newList = true;
+
+        } else if (mode === 'reply') {
+          var replies = [],
+              replyTranslations = [],
+              isProblem = row.querySelector('.chat-is-problem').checked;
+
+          getDirectReplyRows(row).forEach(function(replyRow) {
+            var replyData = getChatReplyData(replyRow);
+            if (!replyData) return;
+
+            replies.push(replyData.value);
+            replyTranslations.push(replyData.translation);
+          });
+
+          if (replies.length) data.reply = replies;
+          if (replyTranslations.some(function(text) { return text.trim() !== ''; })) {
+            data.translation = replyTranslations;
+          }
+          if (isProblem) data.problem = true;
+          if (score !== null) data.score = score;
+
+        } else if (mode === 'info') {
+          var info = row.querySelector('.chat-info').value.trim();
+          if (info) data.info = info;
+
+        } else if (mode === 'image') {
+          var image = row.querySelector('.chat-image').value.trim();
+          if (image) data.image = image;
+
+        } else if (mode === 'input_reply') {
+          var inputId = row.querySelector('.chat-input-id').value.trim(),
+              inputPlaceholder = row.querySelector('.chat-input-placeholder').value.trim(),
+              inputInfo = row.querySelector('.chat-input-info').value.trim(),
+              inputResponse = row.querySelector('.chat-input-response').value.trim(),
+              inputError = row.querySelector('.chat-input-error').value.trim(),
+              inputSave = row.querySelector('.chat-input-save').value === 'true';
+
+          data.input_reply = {};
+
+          if (inputId) data.input_reply.id = inputId;
+          if (inputSave) data.input_reply.save = true;
+          if (inputPlaceholder) data.input_reply.placeholder = inputPlaceholder;
+          if (inputInfo) data.input_reply.info = inputInfo;
+          if (inputResponse) data.input_reply.response = inputResponse;
+          if (inputError) data.input_reply.error = inputError;
+
+          if (!Object.keys(data.input_reply).length) {
+            delete data.input_reply;
+          }
+        }
+        
+        return data;
+      }
+
+      function getQuizletData(type) {
+        if (type === 'vocab') {
+          var data = {};
+          document.querySelectorAll('#vocab-list .item-row').forEach(function(row) {
+            var w = row.querySelector('.v-word').value.trim();
+            var f = row.querySelector('.v-furi').value.trim();
+            var d = row.querySelector('.v-def').value.trim();
+            var s = row.querySelector('.v-sent').value.trim();
+            if (w || d) {
+              data[w + (f ? '|' + f : '')] = d + (s ? '|' + s : '');
+            }
+          });
+
+          return data;
+
+        } else if (type === 'kanji') {
+          var mode = el.kanjiMode.value,
+              kdata = mode.includes('stroke') ? [] : {};
+
+          document.querySelectorAll('#kanji-list .item-row').forEach(function(row) {
+            var k = row.querySelector('.k-kanji') ? row.querySelector('.k-kanji').value.trim() : '',
+                m = row.querySelector('.k-mean') ? row.querySelector('.k-mean').value.trim() : '',
+                on = row.querySelector('.k-on') ? row.querySelector('.k-on').value.trim() : '',
+                kun = row.querySelector('.k-kun') ? row.querySelector('.k-kun').value.trim() : '',
+                r = on + (kun ? '|' + kun : '');
+
+            if (k) {
+              if (mode.includes('meaning')) {
+                kdata[k] = m;
+
+              } else if (mode.includes('reading')) {
+                kdata[k + (m ? '|' + m : '')] = r;
+
+              } else if (mode.includes('stroke')) {
+                var sElem = row.querySelector('.k-strokes'),
+                    oElem = row.querySelector('.k-order'),
+                    s = sElem ? sElem.value.trim() : '0',
+                    o = oElem ? oElem.value.trim() : '',
+                    exs = [];
+
+                row.querySelectorAll('.kanji-example-row').forEach(function(exRow) {
+                  var ek = exRow.querySelector('.kx-kanji').value.trim(),
+                      ef = exRow.querySelector('.kx-furi').value.trim(),
+                      ed = exRow.querySelector('.kx-def').value.trim();
+
+                  if (ek || ed) {
+                    var obj = {};
+                    obj[ek + (ef ? '|' + ef : '')] = ed;
+                    exs.push(obj);
+                  }
+                });
+
+                kdata.push({ kanji: k, meaning: m, reading: r, strokes: parseInt(s, 10) || 0, order: o, example_words: exs });
+              }
+            }
+          });
+
+          return kdata;
+
+        } else if (type === 'multi') {
+          var data2 = [];
+          document.querySelectorAll('#multi-list .question-row').forEach(function(row) {
+            var q = row.querySelector('.m-q').value.trim(),
+                ans = [];
+
+            row.querySelectorAll('.quiz-answer').forEach(function(arow) {
+              var c = arow.querySelector('.m-correct').checked,
+                  aText = arow.querySelector('.m-ans').value.trim();
+
+              if (aText) {
+                ans.push((c ? 'A' : '') + (!c && /^A/.test(aText) ? '!' : '') + aText);
+              }
+            });
+
+            if (q || ans.length > 0) data2.push({ question: q, answers: ans });
+          });
+
+          return data2;
+
+        } else if (type === 'written') {
+          return cmEditor.getValue();
+
+        } else if (type === 'chat') {
+          var data3 = [];
+          Array.from(el.chatList.children).forEach(function(itemEl) {
+            if (!itemEl.classList.contains('chat-top-item')) return;
+
+            var row = Array.from(itemEl.children).find(function(child) {
+              return child.classList && child.classList.contains('chat-row');
+            });
+
+            if (!row) return;
+
+            var item = getChatRowData(row);
+            if (Object.keys(item).length > 0) data3.push(item);
+          });
+          return data3;
+        }
+      }
+
+      function padContentForExport(html) {
+        if (!html) return "''";
+        var lines = html.split(/\r?\n/);
+        
+        return lines.map(function(line) {
+          var str = line.replace(/'/g, "\\'").replace(/<\/script>/gi, '<\\/script>')
+                        .replace(/\[alts:([^\|\]]+)\|([^\]]+)\]/g, "' + Kantan.getAlts('$1', '$2') + '");
+          
+          return "'" + str + "\\n'";
+        }).join('+\n        ');
+      }
+      
+      function escapeJSString(str) {
+        return String(str)
+          .replace(/\\/g, '\\\\')
+          .replace(/'/g, "\\'")
+          .replace(/\r/g, '\\r')
+          .replace(/\n/g, '\\n')
+          .replace(/<\/script>/gi, '<\\/script>');
+      }
+
+      function serializeChatValue(value, indent) {
+        indent = indent || 10;
+        var pad = ' '.repeat(indent),
+            childPad = ' '.repeat(indent + 2);
+
+        if (Array.isArray(value)) {
+          if (!value.length) return '[]';
+
+          return '[\n' + value.map(function(item) {
+            return childPad + serializeChatValue(item, indent + 2);
+          }).join(',\n') + '\n' + pad + ']';
+        }
+
+        if (value && typeof value === 'object') {
+          var keys = Object.keys(value);
+          if (!keys.length) return '{}';
+
+          return '{\n' + keys.map(function(key) {
+            return childPad + key + ' : ' + serializeChatValue(value[key], indent + 2);
+          }).join(',\n') + '\n' + pad + '}';
+        }
+
+        if (typeof value === 'number' || typeof value === 'boolean') {
+          return String(value);
+        }
+
+        if (value == null) {
+          return 'null';
+        }
+
+        return "'" + escapeJSString(value) + "'";
+      }
+
+      function serializeChatQuizlet(chatData) {
+        return '[\n' + chatData.map(function(item) {
+          return '        ' + serializeChatValue(item, 8);
+        }).join(',\n        \n') + '\n      ]';
+      }
+      
+      // HTML Generator
+      function generateHTML(forPreview) {
+        var type = sanitizeContent(el.pgType.value),
+            title = sanitizeContent(el.pgTitle.value) || 'Exercise',
+            desc = sanitizeContent(el.pgDesc.value),
+            author = sanitizeContent(el.pgAuthor.value),
+            isBundled = el.bundleCheckbox.checked && (type === 'multi' || type === 'written'),
+            quizletData = getQuizletData(type),
+            quizletStr = '', metaDesc, infoDesc, generateQuizOpts, kMode;
+        
+        if (isBundled) {
+          metaDesc = desc || "Solve the problems by choosing the correct answers and completing the written sections.";
+          infoDesc = desc ? "'" + desc.replace(/'/g, "\\'") + "'" : "Kantan.lang.std_multi";
+          
+          var multiData = getQuizletData('multi'),
+              writtenData = getQuizletData('written'),
+              multiStr = JSON.stringify(multiData, null, 8).replace(/\n/g, '\n      '),
+              writtenStr = padContentForExport(writtenData);
+          
+          generateQuizOpts = `      format : 'practice',\n      type : ['fill', 'multi'],\n      info : ${infoDesc},\n\n      quizlet : [\n        ${writtenStr},\n        \n        ${multiStr}\n      ]`;
+
+          
+        } else if (type === 'vocab') {
+          metaDesc = desc || "Drag the English expression to the Japanese expression that has the same meaning.";
+          infoDesc = desc ? "'" + desc.replace(/'/g, "\\'") + "'" : "[Kantan.lang.vocab_multi, Kantan.lang.vocab_fill, Kantan.lang.std_drag, Kantan.lang.vocab_writing]";
+          
+          if (el.vocabMode.value === 'preset') {
+            var checked = Array.from(document.querySelectorAll('.preset-cb:checked')).map(function(cb) { return cb.value; }),
+                arrayStr = JSON.stringify(checked, null, 8).replace(/\n/g, '\n        '),
+                pSettings = el.presetSettings.value.trim(),
+                settingsObj = {};
+            
+            if (pSettings) {
+              try {
+                settingsObj = new Function("return {" + pSettings.replace(/^\{|\}$/g, '') + "};")();
+              } catch(e) { 
+                console.warn("Invalid settings format", e); 
+              }
+            }
+            var settingsStr = Object.keys(settingsObj).length > 0 ? ', ' + JSON.stringify(settingsObj, null, 8).replace(/\n/g, '\n      ') : '';
+            
+            quizletStr = 'Kantan.vocabQuizlet(\n        ' + arrayStr + settingsStr + '\n      )';
+            generateQuizOpts = `      format : 'vocab',\n      type : ['multi', 'vocab_fill', 'drag', 'writing'],\n      info : ${infoDesc},\n      \n      quizlet : ${quizletStr}`;
+            
+          } else {
+            quizletStr = JSON.stringify(quizletData, null, 8).replace(/\n/g, '\n      ');
+            generateQuizOpts = `      format : 'vocab',\n      type : ['multi', 'vocab_fill', 'drag', 'writing'],\n      info : ${infoDesc},\n      \n      quizlet : ${quizletStr}`;
+          }
+          
+        } else if (type === 'kanji') {
+          kMode = el.kanjiMode.value;
+          
+          if (kMode.indexOf('preset') === 0) {
+            var checkedKanji = Array.from(document.querySelectorAll('.k-preset-cb:checked')).map(function(cb) { return cb.value; }),
+                arrayStrKanji = JSON.stringify(checkedKanji, null, 8).replace(/\n/g, '\n        '),
+                pSettingsKanji = el.kanjiPresetSettings.value.trim(),
+                settingsObjKanji = {};
+            
+            if (pSettingsKanji) {
+              try {
+                settingsObjKanji = new Function("return {" + pSettingsKanji.replace(/^\{|\}$/g, '') + "};")();
+              } catch(e) {}
+            }
+            var settingsStrKanji = Object.keys(settingsObjKanji).length > 0 ? ', ' + JSON.stringify(settingsObjKanji, null, 8).replace(/\n/g, '\n      ') : '',
+                kType = kMode.includes('meaning') ? "'meanings'" : (kMode.includes('reading') ? "'readings'" : "'stroke'");
+            
+            quizletStr = 'Kantan.kanjiQuizlet(\n        ' + arrayStrKanji + ', ' + kType + settingsStrKanji + '\n      )';
+            
+          } else {
+            quizletStr = JSON.stringify(quizletData, null, 8).replace(/\n/g, '\n      ');
+          }
+
+          if (kMode.includes('meaning')) {
+            metaDesc = desc || "Match each kanji with their meanings.";
+            infoDesc = desc ? "'" + desc.replace(/'/g, "\\'") + "'" : "[Kantan.lang.kanji_meanings_multi, Kantan.lang.kanji_meanings_drag]";
+            generateQuizOpts = `      format : 'kanji',\n      type : ['multi', 'drag'],\n      info : ${infoDesc},\n      \n      meanings : true,\n      quizlet : ${quizletStr}`;
+            
+          } else if (kMode.includes('reading')) {
+            metaDesc = desc || "Match each kanji with their readings.";
+            infoDesc = desc ? "'" + desc.replace(/'/g, "\\'") + "'" : "[Kantan.lang.kanji_readings_multi, Kantan.lang.kanji_readings_drag]";
+            generateQuizOpts = `      format : 'kanji',\n      type : ['multi', 'drag'],\n      info : ${infoDesc},\n      \n      readings : true,\n      quizlet : ${quizletStr}`;
+            
+          } else if (kMode.includes('stroke')) {
+            metaDesc = desc || "Practice drawing each kanji by following the stroke order.";
+            infoDesc = desc ? "'" + desc.replace(/'/g, "\\'") + "'" : "[Kantan.lang.std_stroke_order, Kantan.lang.std_drawing]";
+            generateQuizOpts = `      format : 'stroke',\n      type : ['stroke', 'drawing'],\n      info : ${infoDesc},\n      \n      columns : 7,\n      quizlet : ${quizletStr}`;
+          }
+          
+        } else if (type === 'multi') {
+          metaDesc = desc || "Solve the problems by choosing the correct answers.";
+          infoDesc = desc ? "'" + desc.replace(/'/g, "\\'") + "'" : "Kantan.lang.std_multi";
+          quizletStr = JSON.stringify(quizletData, null, 8).replace(/\n/g, '\n      ');
+          generateQuizOpts = `      type : 'multi',\n      info : ${infoDesc},\n\n      quizlet : ${quizletStr}`;
+          
+        } else if (type === 'chat') {
+          metaDesc = desc || "Practice conversation with Kan-tan!";
+          infoDesc = desc ? "'" + desc.replace(/'/g, "\\'") + "'" : "Kantan.lang.chat";
+          quizletStr = serializeChatQuizlet(quizletData);
+          generateQuizOpts = `      type : 'chat',\n      info : ${infoDesc},\n\n      quizlet : ${quizletStr}`;
+          
+        } else {
+          metaDesc = desc || "Complete the following problems.";
+          infoDesc = desc ? "'" + desc.replace(/'/g, "\\'") + "'" : "Kantan.lang.std_written";
+          quizletStr = padContentForExport(quizletData);
+          generateQuizOpts = `      type : 'fill',\n      info : ${infoDesc},\n      \n      quizlet : \n        ${quizletStr}`;
+        }
+        
+        var templateParts = [
+          '<!DOCTYPE html>',
+          '<html lang="en" prefix="og: http://ogp.me/ns#" class="lang-en">',
+          '  <head>',
+          '    <meta charset="UTF-8">',
+          '    <title>' + title + ' | Kantan Japanese</title>',
+          '    <meta name="title" content="' + title + ' | Kantan Japanese">',
+          '    <meta name="twitter:title" content="' + title + ' | Kantan Japanese">',
+          '    <meta property="og:title" content="' + title + ' | Kantan Japanese">',
+          '    <meta name="description" content="' + metaDesc.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '">',
+          '    <meta property="og:description" content="' + metaDesc.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '">',
+          '    <link rel="shortcut icon" type="image/x-icon" href="../../../resources/images/kantan.ico">',
+          '',
+          '    <meta name="keywords" content="japanese, quizzes, exercises" lang="en">',
+          '    <meta name="language" content="en">',
+          '    <meta name="viewport" content="width=device-width, initial-scale=1">',
+          '',
+          '    <meta property="og:site_name" content="sethclydesdale.github.io">',
+          '    <meta property="og:url" content="https://sethclydesdale.github.io/kantan-japanese/{PATH_TO_PAGE}">',
+          '    <meta property="og:type" content="website">',
+          '    <meta property="og:image" content="https://sethclydesdale.github.io/kantan-japanese/resources/images/kantan-thumb.webp">',
+          '    <meta name="twitter:card" content="summary">',
+          '    <meta name="twitter:creator" content="@KantanJapanese">',
+          '',
+          '    <link rel="stylesheet" href="../../../resources/css/stylesheet.css">',
+          '    <script src="../../../resources/javascript/head.js"><\/script>',
+          '    <script src="../../../resources/javascript/ga.js" async><\/script>',
+          '  </head>',
+          '  <body>',
+          '    <header>',
+          '      <h1><a href="../../../" id="home-link">Kantan Japanese</a></h1>',
+          '    </header>',
+          '    <script src="../../../resources/javascript/all-top.js"><\/script>',
+          '    <div id="content">',
+          '      <div id="exercise" class="content-block">',
+          '        <div id="quiz-result"></div>',
+          '        <div id="quiz-zone" class="clear"></div>',
+          '        <div id="quiz-timer" class="center"></div>',
+          '      </div>',
+          '    </div>',
+          '    <footer class="clear">',
+          '      <ul class="footer-left">',
+          '        <li><a href="../../../" id="footer-home">Home</a></li>',
+          '        <li><a href="../../../privacy/">Privacy</a></li>',
+          '        <li><a href="../../../contact/">Contact</a></li>',
+          '        <li><a href="../../../help/">Help</a></li>',
+          '        <li><a href="../../../donate/">Donate</a></li>',
+          '      </ul>',
+          '      <ul class="footer-right">',
+          '        <li>Created by <a href="https://github.com/SethClydesdale">Seth Clydesdale</a> and the <a href="../../../about/">Kantan Community</a></li>',
+          '      </ul>',
+          '    </footer>',
+          '    <script src="../../../resources/javascript/lib/dragula.js"><\/script>',
+          '    <script src="../../../resources/javascript/lib/easytimer.js"><\/script>',
+          '    <script src="../../../resources/javascript/data/lesson-list.js"><\/script>',
+          '    <script src="../../../resources/javascript/kantan.js"><\/script>',
+          (type === 'vocab' ? '    <script src="../../../resources/javascript/data/vocab.js"><\/script>' :
+           type === 'kanji' ? '    <script src="../../../resources/javascript/data/kanji.js"><\/script>' +
+           (/stroke/.test(kMode) ?  '    <script src="../../../resources/javascript/lib/kanji-canvas.js"><\/script>' +
+                                    '    <script src="../../../resources/javascript/patterns/kanji.js"><\/script>' : '') : 
+          ''),
+          '    <script src="../../../resources/javascript/all.js"><\/script>',
+          '    <script src="../../../resources/javascript/data/profiles.js"><\/script>',
+          '    <script>Kantan.generateQuiz({' + (author ? '\n      authors : \'' + author.replace(/'/g, "\\'") + '\',' : '') + '\n' + 
+            sanitizeContent(generateQuizOpts) +
+          '\n    });<\/script>',
+          '  </body>',
+          '</html>'
+        ];
+        
+        return templateParts.join('\n');
+      }
+      
+      // preview updater
+      var previewTimeout;
+      function hardUpdatePreview(forced) {
+        var activeElement = document.activeElement,
+            winScrollX = window.scrollX || window.pageXOffset,
+            winScrollY = window.scrollY || window.pageYOffset,
+            lpScrollTop = el.leftPanel ? el.leftPanel.scrollTop : 0,
+            iframe = el.preview,
+            doc = iframe.contentWindow.document;
+        
+        doc.open();
+        
+        var previewHTML = generateHTML(true);
+        previewHTML = previewHTML.replace('</head>', previewStyles + '</head>')
+                                 .replace('</body>', previewScripts + '</body>')
+                                 .replace(/<script src="\.\.\/\.\.\/\.\.\/resources\/javascript\/ga\.js" async><\/script>/i, '');
+        
+        doc.write(previewHTML);
+        doc.close();
+        
+        if (el.pgType.value === 'chat' && forced) {
+          renderChatPreview(true);
+        }
+
+        var restoreFocus = function() {
+          if (activeElement && typeof activeElement.focus === 'function') {
+            if (activeElement.closest && activeElement.closest('.CodeMirror') && typeof cmEditor !== 'undefined') {
+              cmEditor.focus();
+            } else {
+              activeElement.focus({ preventScroll: true });
+            }
+            
+            window.scrollTo(winScrollX, winScrollY);
+            if (el.leftPanel) el.leftPanel.scrollTop = lpScrollTop;
+          }
+        };
+
+        restoreFocus();
+        window.setTimeout(restoreFocus, 100);
+      }
+
+      function updatePreview(force) {
+        if (!isImporting) {
+          saveState();
+        }
+        
+        if (el.pgType.value === 'chat' && !el.autoReload.checked && !force) return;
+        renderChatPreview(force);
+
+        if ((el.autoReload.checked || force === true) && !isImporting) {
+          clearTimeout(previewTimeout);
+          previewTimeout = setTimeout(hardUpdatePreview, (force === true ? 1 : 500));
+        }
+      }
+
+      el.refreshBtn.addEventListener('click', hardUpdatePreview);
+      el.autoReload.addEventListener('change', function() {
+        if (!isImporting) {
+          saveState();
+          if (this.checked) {
+            hardUpdatePreview(true);
+          }
+        }
+      });
+
+      
+      // saving and loading files
+      function handleFileLoad(file, html) {
+        if (!file) return;
+        
+        var loadFile = function(event) {
+          isImporting = true;
+
+          try {
+            var htmlString = html ? event : event.target.result,
+                parser = new DOMParser(),
+                doc = parser.parseFromString(htmlString, 'text/html'),
+                title = doc.title || '';
+
+            if (title.indexOf(' | Kantan Japanese') !== -1) {
+              title = title.replace(' | Kantan Japanese', '');
+            } else if (title.indexOf(' | Quartet Study Resources') !== -1) {
+              title = title.replace(' | Quartet Study Resources', '');
+            } else if (title.indexOf(' | Genki Study Resources') !== -1) {
+              title = title.replace(' | Genki Study Resources', '');
+            }
+            el.pgTitle.value = title;
+
+            var scriptContent = "",
+                scripts = doc.querySelectorAll('script:not([src])'),
+                i = 0, j = scripts.length;
+
+            for (; i < j; i++) {
+              if (scripts[i].textContent.includes('Kantan.generateQuiz') || scripts[i].textContent.includes('Genki.generateQuiz')) {
+                scriptContent = scripts[i].textContent;
+                break;
+              }
+            }
+
+            if (scriptContent) {
+              var loadedData = null,
+                  dummyWindow = {
+                    Kantan: {
+                      generateQuiz: function(d) { loadedData = d; },
+                      vocabQuizlet: function(arr, opts) {
+                        dummyWindow._presetArr = arr;
+                        dummyWindow._presetOpts = opts;
+                        return { isPreset: true };
+                      },
+                      kanjiQuizlet: function(arr, type, opts) {
+                        dummyWindow._kanjiPresetArr = arr;
+                        dummyWindow._kanjiPresetType = type;
+                        dummyWindow._kanjiPresetOpts = opts;
+                        return { isKanjiPreset: true };
+                      },
+                      lang: new Proxy({}, { get: function(t, p) { return "Kantan.lang." + p; } }),
+                      getAlts: function(a, b) { return "[alts:" + a + "|" + b + "]"; }
+                    }
+                  };
+
+              dummyWindow.Genki = dummyWindow.Kantan;
+
+              try {
+                var func = new Function('Kantan', 'Genki', scriptContent);
+                func(dummyWindow.Kantan, dummyWindow.Genki);
+              } catch(ex) { console.error("Error parsing quizlet", ex); }
+
+              if (loadedData) {
+                var descField = el.pgDesc;
+                if (loadedData.info) {
+                  var infoStr = Array.isArray(loadedData.info) ? loadedData.info.join('') : loadedData.info;
+                  if (infoStr.includes('Kantan.lang.') || infoStr.includes('Genki.lang.')) {
+                    descField.value = '';
+                  } else {
+                    descField.value = loadedData.info;
+                  }
+                } else {
+                  var metaDesc = doc.querySelector('meta[name="description"]'),
+                      descContent = metaDesc ? metaDesc.getAttribute('content') : '';
+
+                  if (descContent.includes("Drag the English expression") || 
+                      descContent.includes("Solve the problems") || 
+                      descContent.includes("Complete the following") ||
+                      descContent.includes("Match each kanji") ||
+                      descContent.includes("Practice drawing each kanji")) {
+                    descField.value = '';
+                  } else {
+                    descField.value = descContent;
+                  }
+                }
+
+                if (loadedData.authors) {
+                  el.pgAuthor.value = loadedData.authors;
+                }
+
+                if (loadedData.format === 'practice' && Array.isArray(loadedData.quizlet) && loadedData.quizlet.length === 2) {
+                  el.bundleCheckbox.checked = true;
+
+                  var isNewOrder = Array.isArray(loadedData.type) && loadedData.type[0] === 'fill',
+                      multiIdx = isNewOrder ? 1 : 0,
+                      writtenIdx = isNewOrder ? 0 : 1;
+
+                  el.multiList.innerHTML = '';
+                  loadedData.quizlet[multiIdx].forEach(function(q) {
+                    el.multiList.appendChild(createMultiDOM(q.question, q.answers));
+                  });
+
+                  var qStr = loadedData.quizlet[writtenIdx];
+                  if (typeof qStr === 'string' && qStr.split('\n').length < 3) {
+                    qStr = qStr.replace(/(<\/div>|<\/p>|<br>|<br\s*\/?>)/gi, '$1\n')
+                               .replace(/(<div class="problem">|<div class="count-problems|<p class="sectionDesc|<div class="sub-section)/gi, '\n$1')
+                               .replace(/\n{3,}/g, '\n\n')
+                               .trim();
+                  }
+                  cmEditor.setValue(qStr);
+
+                  // always open bundled exercises in a consistent editor mode
+                  el.pgType.value = 'written';
+
+                } else if (loadedData.format === 'vocab') {
+                  el.bundleCheckbox.checked = false;
+                  el.pgType.value = 'vocab';
+
+                  if (loadedData.quizlet && loadedData.quizlet.isPreset) {
+                    el.vocabMode.value = 'preset';
+                    var arr = dummyWindow._presetArr || [],
+                        opts = dummyWindow._presetOpts || {};
+
+                    document.querySelectorAll('.preset-cb').forEach(function(cb) { cb.checked = false; });
+                    arr.forEach(function(word) {
+                      var baseKey = word.replace(/^K|^H|M\[.*?\]$/g, ''),
+                          cb = document.querySelector('.preset-cb[value="' + baseKey + '"]');
+
+                      if (cb) cb.checked = true;
+                    });
+                    el.presetSettings.value = Object.keys(opts).length ? JSON.stringify(opts).slice(1, -1).trim() : '';
+
+                  } else {
+                    el.vocabList.innerHTML = '';
+                    el.vocabMode.value = 'manual';
+
+                    for (var key in loadedData.quizlet) {
+                      if (!Object.prototype.hasOwnProperty.call(loadedData.quizlet, key)) continue;
+                      var kParts = key.split('|'),
+                          vParts = loadedData.quizlet[key].split('|');
+                      el.vocabList.appendChild(createVocabDOM(kParts[0], kParts[1], vParts[0], vParts[1]));
+                    }
+                  }
+                  el.vocabMode.dispatchEvent(new Event('change'));
+
+                } else if (loadedData.format === 'kanji' || loadedData.format === 'stroke') {
+                  el.bundleCheckbox.checked = false;
+                  el.pgType.value = 'kanji';
+
+                  var isStroke = loadedData.format === 'stroke',
+                      isMeaning = loadedData.meanings,
+                      modeSuffix = isStroke ? 'stroke' : (isMeaning ? 'meaning' : 'reading');
+
+                  if (loadedData.quizlet && loadedData.quizlet.isKanjiPreset) {
+                    var arrKanji = dummyWindow._kanjiPresetArr || [],
+                        optsKanji = dummyWindow._kanjiPresetOpts || {};
+
+                    el.kanjiMode.value = 'preset-' + modeSuffix;
+                    document.querySelectorAll('.k-preset-cb').forEach(function(cb) { cb.checked = false; });
+
+                    arrKanji.forEach(function(word) {
+                      var cb = document.querySelector('.k-preset-cb[value="' + word + '"]');
+                      if (cb) cb.checked = true;
+                    });
+
+                    el.kanjiPresetSettings.value = Object.keys(optsKanji).length ? JSON.stringify(optsKanji).slice(1, -1).trim() : '';
+
+                  } else {
+                    el.kanjiMode.value = 'manual-' + modeSuffix;
+                    var kDataStr = sanitizeContent(JSON.stringify(loadedData.quizlet));
+
+                    if (isStroke) {
+                      localStorage.setItem('KN_Editor_KanjiStrokeData', kDataStr);
+                    } else if (isMeaning) {
+                      localStorage.setItem('KN_Editor_KanjiMeaningsData', kDataStr);
+                    } else {
+                      localStorage.setItem('KN_Editor_KanjiReadingsData', kDataStr);
+                    }
+                  }
+
+                  el.kanjiMode.dispatchEvent(new Event('change'));
+
+                } else if (loadedData.type === 'multi' || (Array.isArray(loadedData.type) && loadedData.type.includes('multi'))) {
+                  el.multiList.innerHTML = '';
+                  el.bundleCheckbox.checked = false;
+                  el.pgType.value = 'multi';
+                  loadedData.quizlet.forEach(function(q) {
+                    el.multiList.appendChild(createMultiDOM(q.question, q.answers));
+                  });
+
+                } else if (loadedData.type === 'chat') {
+                  el.chatList.innerHTML = '';
+                  el.bundleCheckbox.checked = false;
+                  el.pgType.value = 'chat';
+
+                  (loadedData.quizlet || []).forEach(function(item) {
+                    el.chatList.appendChild(createTopLevelChatItem(item));
+                  });
+
+                  if (!el.chatList.children.length) {
+                    el.chatList.appendChild(createTopLevelChatItem({ message : "Hello, I'm Kan-tan!", delay : 1000 }));
+                  }
+
+                  updateChatItemIndexes();
+
+                } else if (loadedData.type === 'fill' || (Array.isArray(loadedData.type) && loadedData.type.includes('fill'))) {
+                  el.bundleCheckbox.checked = false;
+                  el.pgType.value = 'written';
+
+                  var qStr2 = loadedData.quizlet;
+                  if (typeof qStr2 === 'string' && qStr2.split('\n').length < 3) {
+                    qStr2 = qStr2.replace(/(<\/div>|<\/p>|<br>|<br\s*\/?>)/gi, '$1\n')
+                                 .replace(/(<div class="problem">|<div class="count-problems|<p class="sectionDesc|<div class="sub-section)/gi, '\n$1')
+                                 .replace(/\n{3,}/g, '\n\n')
+                                 .trim();
+                  }
+                  cmEditor.setValue(qStr2);
+                }
+                el.pgType.dispatchEvent(new Event('change'));
+              }
+            }
+            el.loadFile.value = '';
+            CreateCustomInputs();
+            updateChatItemIndexes();
+          } finally {
+            isImporting = false;
+            updatePreview(true);
+          }
+        };
+        
+        if (html) {
+          loadFile(file);
+        } else {
+          var reader = new FileReader();
+          reader.onload = function(event) {
+            loadFile(event);
+          };
+          reader.readAsText(file);
+        }
+      }
+      
+      function normalizeImportedChatItem(item, preserveCombined) {
+        if (!item || typeof item !== 'object') return [item];
+
+        var cloned = JSON.parse(JSON.stringify(item));
+
+        if (Array.isArray(cloned.reply)) {
+          cloned.reply = cloned.reply.map(function(replyItem) {
+            if (Array.isArray(replyItem) && replyItem.length > 1) {
+              var branchValue = replyItem[1];
+
+              if (Array.isArray(branchValue)) {
+                branchValue = branchValue.map(function(branchItem) {
+                  return normalizeImportedChatItem(branchItem, true)[0];
+                });
+              } else if (branchValue && typeof branchValue === 'object') {
+                branchValue = normalizeImportedChatItem(branchValue, true)[0];
+              }
+
+              return [replyItem[0], branchValue];
+            }
+
+            return replyItem;
+          });
+        }
+
+        if (!preserveCombined && cloned.message && Array.isArray(cloned.reply)) {
+          var messageItem = Object.assign({}, cloned),
+              replyItem = {
+                reply : cloned.reply
+              };
+
+          delete messageItem.reply;
+
+          if (Array.isArray(cloned.translation)) {
+            replyItem.translation = cloned.translation;
+            delete messageItem.translation;
+          }
+
+          if (cloned.problem) {
+            replyItem.problem = true;
+            delete messageItem.problem;
+          }
+
+          if (cloned.score !== undefined) {
+            replyItem.score = cloned.score;
+            delete messageItem.score;
+          }
+
+          if (cloned.newList) {
+            replyItem.newList = true;
+            delete messageItem.newList;
+          }
+
+          return [messageItem, replyItem];
+        }
+
+        return [cloned];
+      }
+
+      setupFileActionButtons(generateHTML, handleFileLoad);
+      setupDragAndDrop(document.body, handleFileLoad);
+      
+      // final initialization
+      function populatePresets() {
+        if (typeof Kantan === 'undefined' || !Kantan.vocab) return;
+        
+        var html = '';
+        
+        for (var key in Kantan.vocab) {
+          if (!Object.prototype.hasOwnProperty.call(Kantan.vocab, key)) continue;
+          var v = Kantan.vocab[key],
+              display = (v.kanji && !v.often_kana ? '<ruby>' + v.kanji + '<rt>' + Kantan.cleanVocabKey(key) + '</rt></ruby>' : Kantan.cleanVocabKey(key)) + ' <span class="preset-item-meaning">(' + v.meaning.split(';')[0] + ')</span>';
+          html += '<div class="preset-row" onclick="this.firstChild.click();">' +
+              '<input type="checkbox" value="' + key + '" class="preset-cb" onchange="updatePreview()" id="' + key + '">' +
+              '<label for="' + key + '" class="preset-item" data-search="' + escapeHTML(display.toLowerCase().replace(/<.*?>/g, '')) + '">' + display + '</label>' +
+            '</div>';
+        }
+        el.presetList.innerHTML = html;
+      }
+      
+      function populateKanjiPresets() {
+        if (typeof Kantan === 'undefined' || !Kantan.kanji) return;
+        
+        var html = '';
+        
+        for (var key in Kantan.kanji) {
+          if (!Object.prototype.hasOwnProperty.call(Kantan.kanji, key)) continue;
+          var k = Kantan.kanji[key],
+              display = key + ' <span class="preset-item-meaning">(' + k.meaning + ')</span>';
+          html += '<div class="preset-row" onclick="this.firstChild.click();">' +
+              '<input type="checkbox" value="' + key + '" class="k-preset-cb" onchange="updatePreview()" id="k-' + key + '">' +
+              '<label for="k-' + key + '" class="preset-item" data-search="' + escapeHTML(display.toLowerCase().replace(/<.*?>/g, '')) + '">' + display + '</label>' +
+            '</div>';
+        }
+        el.kanjiPresetList.innerHTML = html;
+      }
+
+      function filterKanjiPresets() {
+        var q = el.kanjiPresetSearch.value.toLowerCase(),
+            items = el.kanjiPresetList.querySelectorAll('.preset-row');
+        
+        items.forEach(function(item) {
+          item.style.display = item.querySelector('.preset-item').getAttribute('data-search').indexOf(q) !== -1 ? 'block' : 'none';
+        });
+      }
+
+      function filterPresets() {
+        var q = el.presetSearch.value.toLowerCase(),
+            items = el.presetList.querySelectorAll('.preset-row');
+        
+        items.forEach(function(item) {
+          item.style.display = item.querySelector('.preset-item').getAttribute('data-search').indexOf(q) !== -1 ? 'block' : 'none';
+        });
+      }
+
+      function selectAllPresets(type) {
+        var selector = type === 'vocab' ? '.preset-cb' : '.k-preset-cb';
+        document.querySelectorAll(selector).forEach(function(cb) {
+          if (cb.parentNode.style.display !== 'none') cb.checked = true;
+        });
+        updatePreview();
+      }
+
+      function clearAllPresets(type) {
+        var selector = type === 'vocab' ? '.preset-cb' : '.k-preset-cb';
+        document.querySelectorAll(selector).forEach(function(cb) {
+          if (cb.parentNode.style.display !== 'none') cb.checked = false;
+        });
+        updatePreview();
+      }
+
+      populatePresets();
+      populateKanjiPresets();
+      loadState();
+      isInitializing = false;
+      
+      
+      // checks type in URL and changes the selected editor mode based on it
+      function applyTypeFromURL() {
+        var params = new URLSearchParams(window.location.search),
+            type = params.get('type');
+
+        if (!type) return false;
+
+        type = type.toLowerCase().trim();
+
+        switch (type) {
+          case 'vocab':
+            el.pgType.value = 'vocab';
+            el.vocabMode.value = 'manual';
+            break;
+          case 'vocab_preset':
+            el.pgType.value = 'vocab';
+            el.vocabMode.value = 'preset';
+            break;
+
+          case 'kanji':
+          case 'kanji_meanings':
+            el.pgType.value = 'kanji';
+            el.kanjiMode.value = 'manual-meaning';
+            break;
+          case 'kanji_readings':
+            el.pgType.value = 'kanji';
+            el.kanjiMode.value = 'manual-reading';
+            break;
+          case 'kanji_stroke':
+            el.pgType.value = 'kanji';
+            el.kanjiMode.value = 'manual-stroke';
+            break;
+          case 'kanji_meanings_preset':
+            el.pgType.value = 'kanji';
+            el.kanjiMode.value = 'preset-meaning';
+            break;
+          case 'kanji_readings_preset':
+            el.pgType.value = 'kanji';
+            el.kanjiMode.value = 'preset-reading';
+            break;
+          case 'kanji_stroke_preset':
+            el.pgType.value = 'kanji';
+            el.kanjiMode.value = 'preset-stroke';
+            break;
+
+          case 'multi':
+            el.pgType.value = 'multi';
+            break;
+          case 'written':
+            el.pgType.value = 'written';
+            break;
+          case 'chat':
+            el.pgType.value = 'chat';
+            break;
+
+          default:
+            return false;
+        }
+
+        return true;
+      }
+      applyTypeFromURL();
+      
+      // trigger changes after init to ensure the UI is in the correct state
+      el.kanjiMode.dispatchEvent(new Event('change'));
+      el.vocabMode.dispatchEvent(new Event('change'));
+      el.pgType.dispatchEvent(new Event('change'));
+      
+      // setup preview content
+      updatePreview(true);
+      
+      // setup fullscreen button
+      setupFullscreenLogic();
+
+      // setup custom inputs
+      CreateCustomInputs();
+      
+      // open page data from previously clicking the edit button on an exercise
+      if (localStorage.KN_Editor_TempPageData) {
+        handleFileLoad(localStorage.KN_Editor_TempPageData, true);
+        localStorage.removeItem('KN_Editor_TempPageData');
+      }
+      
+      // chat preview helpers
+      function escapeChatPreviewHTML(str) {
+        return escapeHTML(str || '');
+      }
+
+      function parseChatPreviewText(str) {
+        if (!str) return '';
+
+        var parsed = String(str)
+          .replace(/{NAME}/g, 'Classmate')
+          .replace(/:(.*?):/gmi, function (M, emote) {
+            return '<img class="emote" src="../../../resources/images/kanny/emotes/' + encodeURIComponent(emote.toLowerCase()) + '.webp" alt=":' + escapeHTML(emote) + ':">';
+          })
+          .replace(/<a /gi, '<a target="_blank" rel="noopener noreferrer" ');
+
+        return sanitizeChatPreviewHTML(cleanChatPreviewText(parsed));
+      }
+
+      function cleanChatPreviewText(str) {
+        return (str || '').replace(/^〇|\{FLAG:.*?\}/g, '');
+      }
+
+      // builds only the message rows for an item (no outer box), so rows can be combined into one group
+      function renderChatPreviewMessageRows(item) {
+        var content = '',
+            linkPath = item._editorNodePath || item._editorLinkPath || '',
+            linkAttrs = ' data-chat-link-path="' + escapeAttribute(linkPath) + '" data-chat-link-type="item"';
+
+        if (item.message) {
+          content += '<div class="message-row"' + linkAttrs + '><div class="message' + (item.translation ? ' chat-preview-translatable' : '') + '">' +
+            (item.translation ?
+              '<div class="translation-toggle"><a href="#" class="translation-toggler">Show translation</a></div>' : '') +
+            '<span class="message-original">' + parseChatPreviewText(item.message) + '</span>' +
+            (item.translation ? '<span class="message-translated" style="display:none;">' + parseChatPreviewText(item.translation) + '</span>' : '') +
+          '</div></div>';
+        }
+
+        if (item.image) {
+          content += '<div class="message-row"' + linkAttrs + '><div class="message-image"><img src="../../../resources/images/exercises/' + escapeAttribute(item.image) + '"></div></div>';
+        }
+
+        return content;
+      }
+
+      // wraps one or more message rows in a single group
+      function renderChatPreviewMessageGroup(item, rowsHTML) {
+        var name = item.name || 'Kan-tan',
+            avatar = item.avatar || '../../../resources/images/avatars/kan-tan.webp',
+            side = item.side || 'left';
+
+        return '<div class="message-box ' + side + '-side">' +
+          (side === 'left' ? '<div class="message-avatar"><img src="' + escapeAttribute(avatar) + '"></div>' : '') +
+          (side === 'left' ? '<div class="message-name">' + escapeChatPreviewHTML(name) + '</div>' : '') +
+          '<div class="message-list">' + rowsHTML + '</div>' +
+        '</div>';
+      }
+
+      function renderChatPreviewReply(item) {
+        var replies = Array.isArray(item.reply) ? item.reply : [],
+            replyLinkPaths = Array.isArray(item._replyEditorLinkPaths) ? item._replyEditorLinkPaths : [],
+            problem = item.problem ? ' answer-box' : '',
+            opts = '';
+
+        replies.forEach(function(reply, index) {
+          var text = Array.isArray(reply) ? reply[0] : reply,
+              cleanText = cleanChatPreviewText(text),
+              isCorrect = /^〇/.test(text || ''),
+              translation = Array.isArray(item.translation) ? item.translation[index] : '',
+              replyLinkPath = replyLinkPaths[index] || '';
+
+          opts += '<div class="reply-choice' + (translation ? ' chat-preview-translatable' : '') + '" tabindex="0" data-index="' + index + '" data-chat-link-path="' + escapeAttribute(replyLinkPath) + '" data-chat-link-type="reply"' +
+            (isCorrect ? ' data-answer="true"' : '') + '>' +
+            (translation ? '<div class="translation-toggle"><a href="#" class="translation-toggler">Show translation</a></div>' : '') +
+            '<span class="message-original">' + parseChatPreviewText(cleanText) + '</span>' +
+            (translation ? '<span class="message-translated" style="display:none;">' + parseChatPreviewText(translation) + '</span>' : '') +
+          '</div>';
+
+          if (Array.isArray(reply) && reply[1]) {
+            opts += '<div class="chat-preview-branch">' +
+              '<div class="chat-preview-branch-title"><i class="fa">&#xf0e8;</i> Branching Dialogue</div>' +
+              buildChatPreviewMessages(Array.isArray(reply[1]) ? reply[1] : [reply[1]]) +
+            '</div>';
+          }
+        });
+
+        return '<div class="message-box left-side" data-chat-link-path="' + escapeAttribute(item._editorLinkPath || '') + '" data-chat-link-type="item">' +
+          '<div class="reply-box' + problem + '">' +
+            '<div class="reply-title"></div>' +
+            opts +
+          '</div>' +
+        '</div>';
+      }
+
+      function renderChatPreviewInputReply(item) {
+        var reply = item.input_reply || {},
+            linkPath = item._editorNodePath || item._editorLinkPath || '';
+
+        return '<div class="message-box input-box left-side" data-chat-link-path="' + escapeAttribute(linkPath) + '" data-chat-link-type="item">' +
+          '<div class="reply-box">' +
+            '<div class="reply-title"></div>' +
+            '<div class="input-box-info">' + parseChatPreviewText(reply.info || '') + '</div>' +
+            '<div class="input-box-container">' +
+              '<input type="text" value="' + escapeAttribute(reply.placeholder || '') + '">' +
+              '<button class="button" type="button"><i class="fa">&#xf1d8;</i>Send</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }
+
+      function renderChatPreviewInfo(item) {
+        var info = item.info || '',
+            extraClass = /^\{RED\}/.test(info) ? ' info-red' :
+                         /^\{GREEN\}/.test(info) ? ' info-green' : '',
+            linkPath = item._editorNodePath || item._editorLinkPath || '';
+
+        return '<div class="chat-info' + extraClass + '" data-chat-link-path="' + escapeAttribute(linkPath) + '" data-chat-link-type="item">' +
+          parseChatPreviewText(info.replace(/^\{RED\}|^\{GREEN\}/g, '')) +
+        '</div>';
+      }
+
+      function renderChatPreviewDelay(item) {
+        var linkPath = item._editorNodePath || item._editorLinkPath || '';
+        return '<div class="chat-preview-delay" data-chat-link-path="' + escapeAttribute(linkPath) + '" data-chat-link-type="item"><span>Delay: ' + escapeChatPreviewHTML(String(item.delay || 0)) + 'ms</span></div>';
+      }
+
+      function renderChatPreviewItem(item) {
+        if (!item || typeof item !== 'object') return '';
+
+        if (item.message || item.image) return renderChatPreviewMessageGroup(item, renderChatPreviewMessageRows(item));
+        if (item.reply) return renderChatPreviewReply(item);
+        if (item.input_reply) return renderChatPreviewInputReply(item);
+        if (item.info) return renderChatPreviewInfo(item);
+        if (item.delay != null) return renderChatPreviewDelay(item);
+
+        return '';
+      }
+
+      function buildChatPreviewMessages(items) {
+        var html = '',
+            lastKey = '',
+            group = null; 
+
+        function flush() {
+          if (group) html += renderChatPreviewMessageGroup(group.item, group.rows);
+          group = null;
+        }
+
+        (items || []).forEach(function(item) {
+          if (!item || typeof item !== 'object') return;
+
+          if (item.newList) lastKey = '';
+
+          if (item.message || item.image) {
+            var key = (item.name || 'Kan-tan') + '|' + (item.side || 'left');
+
+            if (group && key === lastKey) {
+              group.rows += renderChatPreviewMessageRows(item);
+            }
+            else {
+              flush();
+              group = { item : item, rows : renderChatPreviewMessageRows(item) };
+              lastKey = key;
+            }
+            return;
+          }
+
+          flush();
+          html += renderChatPreviewItem(item);
+
+          // choice/input replies reset the grouping
+          if (item.reply || item.input_reply) lastKey = '';
+        });
+
+        flush();
+        return html;
+      }
+
+      function renderChatPreview(init) {
+        if (window.ChatRenderDelay) {
+          clearTimeout(window.ChatRenderDelay);
+          delete window.ChatRenderDelay;
+        }
+        
+        if (!window.ChatRenderDelay) {
+          window.ChatRenderDelay = setTimeout(function () {
+            if (!el.chatPreview) return;
+
+            if (el.pgType.value !== 'chat') {
+              el.chatPreview.innerHTML = '';
+              return;
+            }
+
+            var chatData = getLinkedChatPreviewData();
+
+            el.chatPreview.innerHTML =
+              '<div id="kantan-chat-container">' +
+                '<div id="kantan-chat" class="fullscreen">' +
+                  '<div id="kantan-chat-title">' +
+                    '<i class="fa">&#xf086;</i>かんたんChat ' +
+                  '</div>' +
+                  '<div id="kantan-chat-messages">' +
+                    buildChatPreviewMessages(chatData) +
+                  '</div>' +
+                '</div>' +
+              '</div>';
+            
+            if (el.autoScroll.checked) highlightLinkedPreviewElement(activeEditorLinkPath, activeEditorLinkType);
+            
+            delete window.ChatRenderDelay;
+          }, init ? 1 : 500);
+        }
+      }
+      
+      function sanitizeChatPreviewHTML(html) {
+        if (!html) return '';
+
+        var template = document.createElement('template');
+        template.innerHTML = String(html).replace(/<script/gi, '&lt;script');
+
+        var allowedTags = {
+          A: true,
+          B: true,
+          BR: true,
+          CODE: true,
+          EM: true,
+          I: true,
+          IMG: true,
+          RUBY: true,
+          RT: true,
+          RP: true,
+          SMALL: true,
+          SPAN: true,
+          STRONG: true,
+          SUB: true,
+          SUP: true,
+          U: true
+        };
+
+        var allowedAttrs = {
+          class: true,
+          href: true,
+          src: true,
+          target: true,
+          rel: true,
+          title: true,
+          alt: true
+        };
+
+        function cleanNode(node) {
+          if (node.nodeType === 1) {
+            var tagName = node.tagName.toUpperCase();
+
+            if (!allowedTags[tagName]) {
+              var text = document.createTextNode(node.textContent || '');
+              node.parentNode.replaceChild(text, node);
+              return;
+            }
+
+            Array.from(node.attributes).forEach(function(attr) {
+              var name = attr.name.toLowerCase(),
+                  value = attr.value || '';
+
+              if (!allowedAttrs[name] || /^on/i.test(name)) {
+                node.removeAttribute(attr.name);
+                return;
+              }
+
+              if ((name === 'href' || name === 'src') && /^\s*javascript:/i.test(value)) {
+                node.removeAttribute(attr.name);
+                return;
+              }
+            });
+
+            if (tagName === 'A') {
+              node.setAttribute('target', '_blank');
+              node.setAttribute('rel', 'noopener noreferrer');
+            }
+          }
+
+          Array.from(node.childNodes).forEach(cleanNode);
+        }
+
+        Array.from(template.content.childNodes).forEach(cleanNode);
+        return template.innerHTML;
+      }
+      
+      // chat editor preview linking
+      var activeEditorLinkPath = '',
+          activeEditorLinkType = '',
+          activePreviewLinkPath = '',
+          activePreviewLinkType = '';
+      
+      function clearLinkedHighlights() {
+        document.querySelectorAll('.chat-editor-linked-highlight').forEach(function(node) {
+          node.classList.remove('chat-editor-linked-highlight');
+        });
+
+        if (el.chatPreview) {
+          el.chatPreview.querySelectorAll('.chat-preview-linked-highlight').forEach(function(node) {
+            node.classList.remove('chat-preview-linked-highlight');
+          });
+        }
+      }
+
+      function getChatRowFromContainer(container) {
+        if (!container) return null;
+
+        return Array.from(container.children).find(function(child) {
+          return child.classList && child.classList.contains('chat-row');
+        }) || null;
+      }
+
+      function getTopLevelChatItems() {
+        return Array.from(el.chatList.children).filter(function(item) {
+          return item.classList && item.classList.contains('chat-top-item');
+        });
+      }
+
+      function getBranchItems(branchList) {
+        if (!branchList) return [];
+        return Array.from(branchList.children).filter(function(item) {
+          return item.classList && item.classList.contains('chat-branch-item');
+        });
+      }
+
+      function getReplyRows(row) {
+        return getDirectReplyRows(row);
+      }
+
+      function getTopLevelIndex(topItem) {
+        return getTopLevelChatItems().indexOf(topItem);
+      }
+
+      function getBranchIndex(branchItem) {
+        if (!branchItem || !branchItem.parentNode) return -1;
+        return getBranchItems(branchItem.parentNode).indexOf(branchItem);
+      }
+
+      function getReplyIndex(replyRow) {
+        if (!replyRow || !replyRow.parentNode) return -1;
+
+        return Array.from(replyRow.parentNode.children).filter(function(node) {
+          return node.classList && node.classList.contains('chat-reply-row');
+        }).indexOf(replyRow);
+      }
+
+      function getItemPathFromContainer(container) {
+        if (!container) return '';
+
+        var branchItem = container.closest('.chat-branch-item');
+        if (branchItem) {
+          var branchWrap = branchItem.closest('.chat-branch-wrap');
+          if (!branchWrap) return '';
+
+          var parentReplyRow = branchWrap.closest('.chat-reply-row');
+          if (!parentReplyRow) return '';
+
+          var parentReplyPath = getReplyPathFromReplyRow(parentReplyRow);
+          if (!parentReplyPath) return '';
+
+          var branchIndex = getBranchIndex(branchItem);
+          if (branchIndex === -1) return '';
+
+          return parentReplyPath + '-branch-' + branchIndex;
+        }
+
+        var topItem = container.closest('.chat-top-item');
+        if (topItem) {
+          var topIndex = getTopLevelIndex(topItem);
+          if (topIndex === -1) return '';
+          return 'item-' + topIndex;
+        }
+
+        return '';
+      }
+
+      function getReplyPathFromReplyRow(replyRow) {
+        if (!replyRow) return '';
+
+        var replyIndex = getReplyIndex(replyRow);
+        if (replyIndex === -1) return '';
+
+        var branchItem = replyRow.closest('.chat-branch-item');
+        if (branchItem) {
+          var parentItemPath = getItemPathFromContainer(branchItem);
+
+          if (!parentItemPath) return '';
+          return parentItemPath + '-reply-' + replyIndex;
+        }
+
+        var topItem = replyRow.closest('.chat-top-item');
+        if (topItem) {
+          var topPath = getItemPathFromContainer(topItem);
+          if (!topPath) return '';
+          return topPath + '-reply-' + replyIndex;
+        }
+
+        return '';
+      }
+
+
+      function getEditorLinkMetaFromTarget(target) {
+        var branchItem = target.closest('.chat-branch-item');
+
+        if (branchItem) {
+          var branchRow = getChatRowFromContainer(branchItem),
+              branchPath = getItemPathFromContainer(branchItem);
+          
+          return {
+            type: 'item',
+            path: branchPath ? branchPath + '-item-0' : '',
+            node: branchRow || branchItem
+          };
+        }
+
+        // check for a reply after ruling out branch items
+        var replyRow = target.closest('.chat-reply-row');
+        
+        if (replyRow) {
+          return {
+            type: 'reply',
+            path: getReplyPathFromReplyRow(replyRow),
+            node: replyRow
+          };
+        }
+
+        // top-level chat items
+        var row = target.closest('.chat-row');
+        
+        if (row && row.parentNode &&
+            row.parentNode.classList.contains('chat-top-item')) {
+          return {
+            type: 'item',
+            path: getItemPathFromContainer(row.parentNode),
+            node: row
+          };
+        }
+
+        var topItem = target.closest('.chat-top-item');
+
+        if (topItem) {
+          return {
+            type: 'item',
+            path: getItemPathFromContainer(topItem),
+            node: getChatRowFromContainer(topItem) || topItem
+          };
+        }
+
+        return null;
+      }
+
+
+      function attachBranchPaths(replyItem, branchList, baseReplyPath) {
+        if (!replyItem || !Array.isArray(replyItem) || !replyItem[1] || !branchList) return;
+
+        var branchItems = Array.isArray(replyItem[1]) ? replyItem[1] : [replyItem[1]],
+            branchDomItems = getBranchItems(branchList);
+
+        branchItems.forEach(function(branchItem, index) {
+          var branchDom = branchDomItems[index];
+          if (!branchItem || !branchDom) return;
+
+          var branchBasePath = baseReplyPath + '-branch-' + index;
+          branchItem._editorLinkPath = branchBasePath;
+          branchItem._editorLinkType = 'item';
+
+          var row = getChatRowFromContainer(branchDom);
+          if (!row) return;
+
+          // assign a unique path to the actual row content of this branch item
+          branchItem._editorNodePath = branchBasePath + '-item-0';
+
+          attachReplyPaths(branchItem, row, branchBasePath);
+        });
+      }
+
+      function attachReplyPaths(item, row, baseItemPath) {
+        if (!item || !item.reply || !row) return;
+
+        var replyRows = getReplyRows(row);
+        item._replyEditorLinkPaths = [];
+
+        replyRows.forEach(function(replyRow, index) {
+          var replyPath = baseItemPath + '-reply-' + index;
+          item._replyEditorLinkPaths[index] = replyPath;
+
+          var branchWrap = replyRow.querySelector('.chat-branch-wrap'),
+              branchList = branchWrap ? branchWrap.querySelector('.chat-branch-list') : null;
+
+          if (!branchList) return;
+          attachBranchPaths(item.reply[index], branchList, replyPath);
+        });
+      }
+
+      function getLinkedChatPreviewData() {
+        var data = [];
+
+        getTopLevelChatItems().forEach(function(itemEl, index) {
+          var row = getChatRowFromContainer(itemEl);
+          if (!row) return;
+
+          var item = getChatRowData(row),
+              itemPath = 'item-' + index;
+
+          if (Object.keys(item).length > 0) {
+            item._editorLinkPath = itemPath;
+            item._editorLinkType = 'item';
+            attachReplyPaths(item, row, itemPath);
+            data.push(item);
+          }
+        });
+
+        return data;
+      }
+
+      function getBestPreviewTarget(linkPath, linkType) {
+        if (!linkPath || !el.chatPreview) return null;
+        
+        var candidates = [linkPath];
+        if (linkType === 'item') {
+          candidates.push(/-item-0$/.test(linkPath) ? linkPath.replace(/-item-0$/, '') : linkPath + '-item-0');
+        }
+        for (var i = 0; i < candidates.length; i++) {
+          var selector = '[data-chat-link-path="' + candidates[i] + '"][data-chat-link-type="' + linkType + '"]',
+              matches = Array.from(el.chatPreview.querySelectorAll(selector));
+          if (matches.length) return matches[0];
+        }
+      }
+
+      function highlightLinkedPreviewElement(linkPath, linkType) {
+        var target = getBestPreviewTarget(linkPath, linkType);
+        if (!target) return;
+
+        activePreviewLinkPath = linkPath;
+        activePreviewLinkType = linkType;
+
+        clearLinkedHighlights();
+
+        target.scrollIntoView({
+          behavior: 'instant',
+          block: 'start'
+        });
+
+        target.classList.add('chat-preview-linked-highlight');
+      }
+
+      function findEditorNodeByPath(linkPath, linkType) {
+        if (!linkPath) return null;
+
+        if (linkType === 'reply') {
+          return Array.from(document.querySelectorAll('.chat-reply-row')).find(function(row) {
+            return getReplyPathFromReplyRow(row) === linkPath;
+          }) || null;
+        }
+
+        if (/-branch-\d+-item-0$/.test(linkPath)) {
+          var branchContainerPath = linkPath.replace(/-item-0$/, ''),
+              branchMatch = Array.from(document.querySelectorAll('.chat-branch-item')).find(function(item) {
+                return getItemPathFromContainer(item) === branchContainerPath;
+              });
+
+          if (branchMatch) {
+            return getChatRowFromContainer(branchMatch) || branchMatch;
+          }
+        }
+
+        var branchMatch = Array.from(document.querySelectorAll('.chat-branch-item')).find(function(item) {
+          return getItemPathFromContainer(item) === linkPath;
+        });
+
+        if (branchMatch) {
+          return getChatRowFromContainer(branchMatch) || branchMatch;
+        }
+
+        var topMatch = getTopLevelChatItems().find(function(item) {
+          return getItemPathFromContainer(item) === linkPath;
+        });
+
+        if (topMatch) {
+          return getChatRowFromContainer(topMatch) || topMatch;
+        }
+
+        return null;
+      }
+
+      function focusEditorNodeInput(target, linkType, suppressPreviewSync) {
+        if (!target) return;
+
+        var input = null;
+
+        if (linkType === 'reply') {
+          input = target.querySelector('.chat-reply-text');
+        } else {
+          var row = target.classList.contains('chat-row') ? target : getChatRowFromContainer(target);
+          if (!row) return;
+
+          var modeSelect = row.querySelector('.chat-item-type'),
+              mode = modeSelect ? modeSelect.value : '';
+
+          if (mode === 'message') input = row.querySelector('.chat-message');
+          else if (mode === 'info') input = row.querySelector('.chat-info');
+          else if (mode === 'delay') input = row.querySelector('.chat-delay');
+          else if (mode === 'image') input = row.querySelector('.chat-image');
+          else if (mode === 'input_reply') input = row.querySelector('.chat-input-response');
+          else input = row.querySelector('input[type="text"], input[type="number"], textarea, select');
+        }
+
+        if (!input) return;
+
+        if (suppressPreviewSync) {
+          input.setAttribute('data-suppress-preview-sync', 'true');
+        }
+
+        input.focus({ preventScroll: true });
+
+        if (suppressPreviewSync) {
+          setTimeout(function() {
+            input.removeAttribute('data-suppress-preview-sync');
+          }, 0);
+        }
+      }
+
+      function highlightLinkedEditorElement(linkPath, linkType) {
+        var target = findEditorNodeByPath(linkPath, linkType);
+        if (!target) return;
+
+        activeEditorLinkPath = linkPath;
+        activeEditorLinkType = linkType;
+
+        clearLinkedHighlights();
+
+        target.scrollIntoView({
+          behavior: 'instant',
+          block: 'start'
+        });
+
+        target.classList.add('chat-editor-linked-highlight');
+
+        focusEditorNodeInput(target, linkType, true);
+      }
+
+      document.addEventListener('click', function(e) {
+        if (!el.autoScroll.checked) return;
+        
+        if (window.EventClickDelay) {
+          clearTimeout(window.EventClickDelay);
+          delete window.EventClickDelay;
+        }
+        
+        if (!window.EventClickDelay) {
+          window.EventClickDelay = setTimeout(function() {
+            if (el.pgType.value !== 'chat') return;
+            if (e.target.hasAttribute('data-suppress-preview-sync')) return;
+
+            var meta = getEditorLinkMetaFromTarget(e.target);
+            if (!meta || !meta.path) return;
+            
+            activeEditorLinkPath = meta.path;
+            activeEditorLinkType = meta.type;
+            highlightLinkedPreviewElement(meta.path, meta.type);
+            
+            delete window.EventClickDelay;
+          }, 10);
+        }
+      });
+
+      // deprecated since this type of focus is handled in renderChatPreview now
+      /*document.addEventListener('input', function(e) {
+        if (!el.autoScroll.checked || !el.autoReload.checked) return;
+        
+        if (window.InputHighlightDelay) {
+          clearTimeout(window.InputHighlightDelay);
+          delete window.InputHighlightDelay;
+        }
+        
+        if (!window.InputHighlightDelay) {
+          window.InputHighlightDelay = setTimeout(function () {
+            if (el.pgType.value !== 'chat') return;
+            if (e.target.hasAttribute('data-suppress-preview-sync')) return;
+
+            var meta = getEditorLinkMetaFromTarget(e.target);
+            if (!meta || !meta.path) return;
+
+            activeEditorLinkPath = meta.path;
+            activeEditorLinkType = meta.type;
+            highlightLinkedPreviewElement(meta.path, meta.type);
+              
+            delete window.InputHighlightDelay;
+          }, 510);
+        }
+      });*/
+
+      document.addEventListener('click', function(e) {
+        // translation toggle
+        var toggle = e.target.closest('#chat-preview .translation-toggler');
+        if (toggle) {
+          var wrapper = toggle.closest('.chat-preview-translatable');
+          if (!wrapper) return;
+
+          var original = wrapper.querySelector('.message-original'),
+              translated = wrapper.querySelector('.message-translated');
+          
+          if (original || !translated) {
+            var showingTranslation = translated.style.display !== 'none';
+
+            if (showingTranslation) {
+              translated.style.display = 'none';
+              original.style.display = '';
+              toggle.innerText = 'Show translation';
+            } else {
+              translated.style.display = '';
+              original.style.display = 'none';
+              toggle.innerText = 'Show original';
+            }
+          }
+        }
+
+        // preview highlight
+        if (el.autoScroll.checked) {
+          var previewNode =
+            e.target.closest('#chat-preview .reply-choice[data-chat-link-path][data-chat-link-type]') ||
+            e.target.closest('#chat-preview .chat-info[data-chat-link-path][data-chat-link-type]') ||
+            e.target.closest('#chat-preview .chat-preview-delay[data-chat-link-path][data-chat-link-type]') ||
+            e.target.closest('#chat-preview .message-row[data-chat-link-path][data-chat-link-type]') ||
+            e.target.closest('#chat-preview .message-box[data-chat-link-path][data-chat-link-type]');
+
+          if (previewNode) {
+            activePreviewLinkPath = previewNode.getAttribute('data-chat-link-path');
+            activePreviewLinkType = previewNode.getAttribute('data-chat-link-type');
+
+            highlightLinkedEditorElement(activePreviewLinkPath, activePreviewLinkType);
+          }
+        }
+      });
+      
+      // handle auto-scroll state
+      var autoScrollCb = document.getElementById('auto-scroll-preview'),
+          savedAutoScroll = localStorage.getItem('KN_Editor_autoScroll');
+      
+      if (savedAutoScroll !== null) {
+        autoScrollCb.checked = savedAutoScroll === 'true';
+      }
+      
+      autoScrollCb.addEventListener('change', function() {
+        localStorage.setItem('KN_Editor_autoScroll', autoScrollCb.checked);
+        if (!autoScrollCb.checked) clearLinkedHighlights();
+      });
+      
+      setTimeout(function() {
+        if (el.pgType.value === 'chat') {
+          renderChatPreview(true);
+        }
+      }, 0);
+      
+      // finally, show page content
+      Kantan.stopLoading();
+    </script>
+  </body>
+</html>

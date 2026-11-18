@@ -1,0 +1,339 @@
+﻿<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#" class="lang-en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Let's Chat with Kan-tan: Greetings - Lesson 0 | Kantan Japanese</title>
+    <meta name="title" content="Let's Chat with Kan-tan: Greetings - Lesson 0 | Kantan Japanese">
+    <meta name="twitter:title" content="Let's Chat with Kan-tan: Greetings - Lesson 0 | Kantan Japanese">
+    <meta property="og:title" content="Let's Chat with Kan-tan: Greetings - Lesson 0 | Kantan Japanese">
+    <meta name="description" content="Practice conversation with Kan-tan!">
+    <meta property="og:description" content="Practice conversation with Kan-tan!">
+    <link rel="shortcut icon" type="image/x-icon" href="../../../resources/images/kantan.ico">
+
+    <meta name="keywords" content="japanese, quizzes, exercises" lang="en">
+    <meta name="language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:site_name" content="sethclydesdale.github.io">
+    <meta property="og:url" content="https://sethclydesdale.github.io/kantan-japanese/lessons/lesson-0/chat-3/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://sethclydesdale.github.io/kantan-japanese/resources/images/kantan-thumb.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@SethC1995">
+
+    <link rel="stylesheet" href="../../../resources/css/stylesheet.css">
+    <script src="../../../resources/javascript/head.js"></script>
+    <script src="../../../resources/javascript/ga.js" async></script>
+  </head>
+
+  <body>
+    
+    <header>
+      <h1><a href="../../../" id="home-link">Kantan Japanese</a></h1>
+      <a id="fork-me" title="View project on GitHub" target="_blank" href="https://github.com/SethClydesdale/kantan-japanese"></a>
+    </header>
+    
+
+    
+    <script src="../../../resources/javascript/all-top.js"></script>
+    <div id="content">
+      <div id="exercise" class="content-block">
+        <div id="quiz-result"></div>
+        <div id="quiz-zone" class="clear"></div>
+        <div id="quiz-timer" class="center"></div>
+      </div>
+    </div>
+    
+    <footer class="clear">
+      <ul class="footer-left">
+        <li><a href="../../../" id="footer-home">Home</a></li>
+        <li><a href="../../../privacy/">Privacy</a></li>
+        <li><a href="../../../contact/">Contact</a></li>
+        <li><a href="../../../help/">Help</a></li>
+        <li><a href="../../../donate/">Donate</a></li>
+      </ul>
+      
+      <ul class="footer-right">
+        <li>Created by <a href="https://github.com/SethClydesdale">Seth Clydesdale</a> and the <a href="../../../about/">Kantan Community</a></li>
+      </ul>
+    </footer>
+    
+    <script src="../../../resources/javascript/lib/dragula.js"></script>
+    <script src="../../../resources/javascript/lib/easytimer.js"></script>
+    <script src="../../../resources/javascript/data/lesson-list.js"></script>
+    <script src="../../../resources/javascript/kantan.js"></script>
+    <script src="../../../resources/javascript/all.js"></script>
+    <script src="../../../resources/javascript/data/profiles.js"></script>
+    <script>Kantan.generateQuiz({
+      authors : 'Kan-tan',
+      type : 'chat',
+      info : Kantan.lang.chat,
+
+      quizlet: [
+        {
+          info : "This is the beginning of your chat history with <b>Kan-tan</b>.",
+          delay : 1000
+        },
+        
+        /* // image example
+        {
+          message : "Look at my new backpack!"
+        },
+        
+        {
+          image : "bag.webp"
+        },*/
+        
+        { // available emotes: :=v=: :azoos: :clueless: :guilty: :hungry: :pout: :sad: :XD:
+          message : "Hello, I'm Kan-tan! :XD:"
+        },
+        
+        {
+          message : "What's your name?",
+        },
+        
+        {
+          input_reply : {
+            id : 'NAME',
+            save : true,
+            placeholder : '{NAME}',
+            info : 'Input a name for Kan-tan to call you by.',
+            response : 'My name is {NAME}.',
+            error : 'Your name cannot be blank.'
+          }
+        },
+        
+        {
+          message : "That's a lovely name!",
+        },
+        
+        {
+          message : "It\'s nice to meet you, {NAME}!"
+        },
+        
+        {
+          reply : ["It\'s nice to meet you, too."]
+        },
+
+        {
+          message : "Are you new here?"
+        },
+
+        {
+          reply : [
+            [
+              "Yeah, I transferred to this school recently.",
+              {
+                message : "Cool! So did I!!"
+              }
+            ],
+            
+            [
+              "Nah, I've been here for awhile.",
+              [
+                {
+                  message : "Oh?"
+                },
+                
+                {
+                  message : "Who's the principal, then?"
+                },
+                
+                {
+                  reply : ["I, uh...don't know... I lied."]
+                },
+                
+                {
+                  message : "I knew it!"
+                },
+                
+                {
+                  message : "Why would you lie, silly?"
+                },
+                
+                {
+                  message : "We got a little off track there lol"
+                }
+              ]
+            ]
+          ]
+        },
+
+        {
+          message : "What did you come here to study? I'm studying English."
+        },
+
+        {
+          reply : ["I'm studying Japanese."]
+        },
+
+        {
+          message : "Really? Japanese is my first language!"
+        },
+
+        {
+          message : "Would you like to practice it with me?"
+        },
+
+        {
+          reply : [
+            "Sure, why not?",
+            [
+              "Nah, I don't have time right now.",
+              [
+                {
+                  message : "Aww, c'mon it'll be fun!"
+                },
+                
+                {
+                  reply : ["Ok, fine..."]
+                }
+              ]
+            ]
+          ]
+        },
+
+        {
+          message : "Let's start with introductions! I'll go first!"
+        },
+
+        {
+          message : "はじめまして、カンたんです！",
+          translation : "Nice to meet you, I'm Kan-tan!"
+        },
+
+        {
+          message : "<ruby>猫<rt>ねこ</rt></ruby>とお<ruby>菓子<rt>かし</rt></ruby>が<ruby>大<rt>だい</rt></ruby><ruby>好<rt>す</rt></ruby>きです！",
+          translation : "I love cats and candy!"
+        },
+
+        {
+          message : "よろしくね！",
+          translation : "I look forward to chatting with you!"
+        },
+
+        {
+          message : "Okay, your turn!"
+        },
+
+        {
+          problem : true,
+          reply : [
+            "〇はじめまして、{NAME}です。",
+            [
+              "はじまりました、{NAME}です。",
+              [
+                {
+                  message : "That's close!"
+                },
+                
+                {
+                  message : "You want はじめまして (nice to meet you) though."
+                },
+                
+                {
+                  message : "はじまりました means \"it's begun\" lol"
+                }
+              ]
+            ]
+          ],
+          translation : [
+            "Nice to meet you, I'm {NAME}.",
+            "It has begun, I'm {NAME}."
+          ]
+        },
+
+        {
+          problem : true,
+          reply : [
+            [
+              "よろずやおねがいします。",
+              {
+                message : "Oh, for that one you want よろしく (well/good), not よろずや because that's a word for something called a \"handyman shop.\""
+              }
+            ],
+            "〇よろしくおねがいします。"
+          ],
+          translation : [
+            "Handyman shop please.",
+            "I look forward to talking with you."
+          ]
+        },
+
+        {
+          score : 2,
+          message : "わお！<ruby>日本語<rt>にほんご</rt></ruby>とっても<ruby>上手<rt>じょうず</rt></ruby>ですね！",
+          translation : "Wow! Your Japanese is really good!",
+          newList : true
+        },
+
+        {
+          score : 1,
+          message : "Your Japanese is pretty good!",
+          newList : true
+        },
+
+        {
+          score : 0,
+          message : "Your Japanese needs some work, but I can tell you're trying your best!!",
+          newList : true
+        },
+
+        {
+          message : "We'll have to practice again sometime, okay?"
+        },
+
+        {
+          message : "It's getting late, so I'm going to go feed the cats by the school before I head home."
+        },
+
+        {
+          message : "It was fun talking with you!",
+          newList : true
+        },
+
+        {
+          message : "See you tomorrow, {NAME}!"
+        },
+
+        {
+          problem : true,
+          reply : [
+            [
+              "さようなら！",
+              [
+                {
+                  message : "You know how to say goodbye!"
+                },
+                
+                {
+                  message : "But since we'll see each other tomorrow, you should say またあした (see you tomorrow) instead!"
+                },
+                
+                {
+                  message : "It's better to use さようなら when you don't plan to meet someone again for a long time."
+                }
+              ]
+            ],
+            "〇またあした！",
+            "〇またね！"
+          ],
+          translation : [
+            "Farewell!",
+            "See you tomorrow!",
+            "See ya!"
+          ]
+        },
+
+        {
+          message : "またあしたね！(・ω・)ﾉｼ",
+          translation : "See you tomorrow! (・ω・)ﾉｼ"
+        },
+        
+        {
+          delay : 1000
+        }
+      ]
+    });</script>
+  </body>
+</html>

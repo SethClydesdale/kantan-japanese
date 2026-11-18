@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#" class="lang-en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Reviews | Kantan Japanese</title>
+    <meta name="title" content="Reviews | Kantan Japanese">
+    <meta name="twitter:title" content="Reviews | Kantan Japanese">
+    <meta property="og:title" content="Reviews | Kantan Japanese">
+    <meta name="description" content="Review exercise content learned on Kantan Japanese.">
+    <meta property="og:description" content="Review exercise content learned on Kantan Japanese.">
+    <link rel="shortcut icon" type="image/x-icon" href="../resources/images/kantan.ico">
+
+    <meta name="keywords" content="SRS Review, Spaced Repetition System, Vocabulary, Kanji, Grammar" lang="en">
+    <meta name="language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:site_name" content="sethclydesdale.github.io">
+    <meta property="og:url" content="https://sethclydesdale.github.io/kantan-japanese/reviews/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://sethclydesdale.github.io/kantan-japanese/resources/images/kantan-thumb.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@SethC1995">
+
+    <link rel="stylesheet" href="../resources/css/stylesheet.css">
+    <script src="../resources/javascript/head.js"></script>
+    <script src="../resources/javascript/ga.js" async></script>
+  </head>
+
+  <body>
+    
+    <header>
+      <h1><a href="../" id="home-link">Kantan Japanese</a></h1>
+      <a id="fork-me" title="View project on GitHub" target="_blank" href="https://github.com/SethClydesdale/kantan-japanese"></a>
+    </header>
+    
+    <script src="../resources/javascript/all-top.js"></script>
+    <div id="content" class="loading">
+      <div class="content-block">
+        <h2 class="content-title" id="main">Reviews</h2>
+        <p>Here you can manage the reviews for the exercises you've done. If you have our Spaced Repetition System enabled, any exercises that you do on Kantan Japanese will show up here for review. You can also save or load your review data by using the buttons below the review list.</p>
+        
+        
+        <h3 class="section-title" id="review-list">Review List</h3>
+        <div id="srs-manager">
+          <div id="review-tabs">
+            <button id="tab-due" class="button active-tab" onclick="Kantan.switchReviewTab(this, 'due');">Due</button>
+            <button id="tab-upcoming" class="button" onclick="Kantan.switchReviewTab(this, 'upcoming');">Upcoming</button>
+            <button id="tab-mastered" class="button" onclick="Kantan.switchReviewTab(this, 'mastered');">Mastered</button>
+            <button id="tab-retired" class="button" onclick="Kantan.switchReviewTab(this, 'retired');">Retired</button>
+          </div>
+          <div id="review-lists" class="lesson-section-list">
+            <div id="reviews-due" style="display:block;" class="review-list"></div>
+            <div id="reviews-upcoming" class="review-list"></div>
+            <div id="reviews-mastered" class="review-list"></div>
+            <div id="reviews-retired" class="review-list"></div>
+          </div>
+        </div>
+        
+        <div class="center">
+          <a id="profile-data-save" class="button green" download="Kantan Profile Data.json" href="#"><i class="fa">&#xf019;</i><span class="en">Save</span><span class="ja">セーブする</span></a>
+          <button id="profile-data-load" class="button yellow" onclick="this.nextSibling.click();"><i class="fa">&#xf093;</i><span class="en">Load</span><span class="ja">ロードする</span></button><input id="load-data" class="hidden-input" type="file" accept=".json" onchange="KantanSettings.loadExerciseData(this, true);">
+          <button id="settings-view-exercise-data" class="button" onclick="KantanSettings.viewExerciseData(true);"><i class="fa">&#xf1c9;</i><span class="en">View Data</span><span class="ja">データを見る</span></button>
+        </div>
+        
+        
+        <h3 class="section-title" id="spreadsheets">About Our Spaced Repetition System</h3>
+        <p>Our <a href="https://en.wikipedia.org/wiki/Spaced_repetition" target="_blank">Spaced Repetition System</a> uses a modified version of the <a href="https://en.wikipedia.org/wiki/SuperMemo" target="_blank">SM-2 algorithm</a> that Anki uses. It functions in the following manner:</p>
+        <ul>
+          <li>Exercises done for the first time or reviews that have been failed (less than 60% score) are reviewed the next day.</li>
+          <li><b>Once a review date has been set, <span class="ul-color">it will not change</span></b> until the day of the review. So, if you want to retry an exercise immediately, you can do so without worrying about your next review date being altered.</li>
+          <li>For exercises that you don't want to review, click the "moon" button next to it to retire that exercise from any future reviews. Should you want to revive that exercise for review later on, you can retrieve it from the "retired" tab in the review list.</li>
+          <li>During reviews, the next review date is determined based on your score and problems solved. An additional "streak" parameter determines when the exercise is considered learned or "mastered."</li>
+          <ul>
+            <li>A score of <b>90-100%</b> or only getting 1 problem wrong with a score of 75% or higher <b class="t-green">increases</b> the streak by <b>1</b>.</li>
+            <li>A score of <b>80-89%</b> <b class="t-red">decreases</b> the streak by <b>1</b>.</li>
+            <li>A score of <b>70-79%</b> <b class="t-red">decreases</b> the streak by <b>2</b>.</li>
+            <li>A score of <b>60-69%</b> <b class="t-red">decreases</b> the streak by <b>3</b>.</li>
+            <li>A score less than <b>60%</b> <b class="t-red">resets</b> the streak and forces a next day review.</li>
+          </ul>
+          <li>Due reviews can be done whenever you like and do not need to be completed right away to maintain the streak. However, it <em>is</em> recommended to do them as soon as possible during early phases (e.g., Streak 0-2) to prevent forgetting newly learned information. In short, take it easy and only review when you have the time; don't force yourself.</li>
+        </ul>
+        
+        The higher your streak, the further out reviews will be. Reviews typically progress in the following manner should you consistenly pass with a score of 90% or higher.
+        <ul>
+          <li>Streak 0: 1 day</li>
+          <li>Streak 1: 6 days</li>
+          <li>Streak 2: 15 days</li>
+          <li>Streak 3: 38 days</li>
+          <li>Streak 4: 94 days</li>
+          <li>Streak 5: mastered; no longer reviewed</li>
+        </ul>
+        Please note that for Streak 1 or higher the days listed are approximate. We apply a bit of fuzz to ensure that reviews do not all end up on the same day should you review a large amount of exercises in one day. In addition to that, your score also plays a small role in determining how far out reviews are set, with reviews being further out for higher scores and much sooner for lower scores.
+        <br><br>
+      </div>
+    </div>
+    
+    <footer class="clear">
+      <ul class="footer-left">
+        <li><a href="../" id="footer-home">Home</a></li>
+        <li><a href="../privacy/">Privacy</a></li>
+        <li><a href="../contact/">Contact</a></li>
+        <li><a href="../help/">Help</a></li>
+        <li><a href="../donate/">Donate</a></li>
+      </ul>
+      
+      <ul class="footer-right">
+        <li>Created by <a href="https://github.com/SethClydesdale">Seth Clydesdale</a> and the <a href="../about/">Kantan Community</a></li>
+      </ul>
+    </footer>
+    
+    <script src="../resources/javascript/kantan.js"></script>
+    <script src="../resources/javascript/data/lesson-list.js"></script>
+    <script src="../resources/javascript/all.js"></script>
+    <script>
+      Kantan.initReviewList();
+      Kantan.stopLoading();
+    </script>
+  </body>
+</html>

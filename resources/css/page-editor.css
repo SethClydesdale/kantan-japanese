@@ -1,0 +1,167 @@
+body {
+  background:#F4F4F4;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  overflow:hidden;
+}
+
+header {
+  background:#39C;
+  border-bottom:3px solid #28B;
+  color:#FFF;
+  padding:5px;
+  text-align:center;
+}
+
+header h2 {
+  font-size:28px;
+  margin:0;
+}
+
+.button .fa.github-icon { font-size:20px; }
+
+.main-container {
+  display:flex;
+  flex:1;
+  overflow:hidden;
+}
+
+.left-panel, .right-panel {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:10px;
+  box-sizing:border-box;
+  min-height:0;
+}
+
+.left-panel {
+  background:#FAFAFA;
+  border-right:2px solid #CCC;
+  overflow-y:auto;
+}
+
+.right-panel {
+  background:#EAEAEA;
+}
+
+.settings-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.settings-grid input, .settings-grid select {
+  padding:5px;
+  width:100%;
+  box-sizing:border-box;
+}
+
+.settings-info {
+  display:flex;
+  gap:10px;
+  grid-column:1 / -1;
+}
+
+.settings-info > label {
+  flex:1;
+}
+
+.settings-info input {
+  width:100%;
+  box-sizing:border-box;
+}
+
+.toolbar {
+  width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  white-space:nowrap;
+  box-sizing:border-box;
+  margin-bottom:10px;
+  min-height:150px;
+}
+
+.toolbar::-webkit-scrollbar-track {
+  background:transparent;
+  border-radius:10px;
+}
+
+.CodeMirror {
+  flex:1;
+  height:auto;
+  min-height:250px;
+  border:2px solid #CCC;
+  border-radius:5px;
+  font-family:monospace;
+  font-size:14px;
+  box-sizing:border-box;
+}
+
+iframe {
+  background:#FFF;
+  border:2px solid #CCC;
+  border-radius:10px;
+  width:100%;
+  flex:1;
+}
+
+.preview-controls {
+  margin-top:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+}
+
+.action-buttons {
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.action-buttons button, .action-buttons a {
+  flex:1;
+  display:block;
+  text-align:center;
+  margin:0;
+}
+
+label { font-weight:bold; }
+
+/* custom syntax highlighting for inline variables in codemirror */
+.cm-inline-var { color:#909; }
+.dark-mode .cm-inline-var { color:#C6C; }
+.cm-alts-var { color:#009; }
+.dark-mode .cm-alts-var { color:#99F; }
+
+/* fullscreen preview styles */
+iframe.fullscreen, #chat-preview.fullscreen {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw !important;
+  height:100vh !important;
+  z-index:9998;
+  border:none;
+  border-radius:0;
+}
+#chat-preview.fullscreen #kantan-chat {
+  border-radius:0;
+}
+
+#exit-fullscreen-btn {
+  display:none;
+  position:fixed;
+  top:10px;
+  right:25px;
+  z-index:9999;
+  cursor:pointer;
+  box-shadow:0 2px 5px rgba(0,0,0,0.3);
+  opacity:0.5;
+}
+
+#exit-fullscreen-btn:hover { opacity:1; }

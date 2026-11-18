@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#" class="lang-en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Free Japanese Learning Resources | Kantan Japanese</title>
+    <meta name="title" content="Free Japanese Learning Resources | Kantan Japanese">
+    <meta name="twitter:title" content="Free Japanese Learning Resources | Kantan Japanese">
+    <meta property="og:title" content="Free Japanese Learning Resources | Kantan Japanese">
+    <meta name="description" content="Download Anki Decks, Spreadsheets, and other free materials for learning Japanese.">
+    <meta property="og:description" content="Download Anki Decks, Spreadsheets, and other free materials for learning Japanese.">
+    <link rel="shortcut icon" type="image/x-icon" href="../resources/images/kantan.ico">
+
+    <meta name="keywords" content="Anki, Decks, Cards, Excel Spreadsheets, Vocabulary, Kanji" lang="en">
+    <meta name="language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:site_name" content="sethclydesdale.github.io">
+    <meta property="og:url" content="https://sethclydesdale.github.io/kantan-japanese/anki-decks/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://sethclydesdale.github.io/kantan-japanese/resources/images/kantan-thumb.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@SethC1995">
+
+    <link rel="stylesheet" href="../resources/css/stylesheet.css">
+    <script src="../resources/javascript/head.js"></script>
+    <script src="../resources/javascript/ga.js" async></script>
+  </head>
+
+  <body>
+    
+    <header>
+      <h1><a href="../" id="home-link">Kantan Japanese</a></h1>
+      <a id="fork-me" title="View project on GitHub" target="_blank" href="https://github.com/SethClydesdale/kantan-japanese"></a>
+    </header>
+    
+    <script src="../resources/javascript/all-top.js"></script>
+    <div id="content">
+      <div class="content-block">
+        <h2 class="content-title" id="main">Free Japanese Learning Resources</h2>
+        <div class="clear">
+          <div class="page-intro-icon"><img src="../resources/images/kanny/kanny_paper.webp"></div><br>
+          
+          <p>Here you can find and download free learning resources for Japanese, such as <a href="https://apps.ankiweb.net/" target="_blank">Anki</a> decks or Excel spreadsheets for the vocabulary and kanji taught in Kantan Japanese's lessons. These files can be used for personal studies, as distribution materials for classrooms, etc. Click any of the buttons in the sections below to download the deck or sheet you want to use.</p>
+
+          <p>Happy studying!</p>
+        </div>
+        <br>
+        
+        <table class="table section-jump">
+          <tr class="table-head"><td></td></tr>
+          <tr>
+            <td>
+              <ul>
+                <li><a href="#anki-decks">Anki Decks</a></li>
+                <ul>
+                  <li><a href="#vocab-decks">Vocabulary</a></li>
+                  <li><a href="#kanji-decks">Kanji</a></li>
+                  <li><a href="#anki-import-help">How to Import the Decks</a></li>
+                </ul>
+                <li><a href="#spreadsheets">Spreadsheets</a></li>
+                <ul>
+                  <li><a href="#vocab-spreadsheets">Vocabulary</a></li>
+                  <li><a href="#kanji-spreadsheets">Kanji</a></li>
+                  <li><a href="#spreadsheet-help">How to Use the Spreadsheets</a></li>
+                </ul>
+              </ul>
+            </td>
+          </tr>
+        </table>
+        
+        
+        <h3 class="section-title" id="anki-decks"><i class="fa">&#xf005;</i> Anki Decks</h3>
+        <div class="columns-2 clear">
+          <div>
+            <div style="padding:5px;">
+              <h4 class="sub-title" id="vocab-decks">Vocabulary</h4>
+              <ul>
+                <li><button class="button small" onclick="Kantan.convertAnkiDeck('vocab', 'all');">All Vocabulary</button></li>
+                <li><button class="button small" onclick="Kantan.convertAnkiDeck('vocab', 0);">Lesson 0</button></li>
+                <li><em>More decks coming soon...</em></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div style="padding:5px;">
+            <h4 class="sub-title" id="kanji-decks">Kanji</h4>
+            <ul>
+                <li><button class="button small" onclick="Kantan.convertAnkiDeck('kanji', 'all');">All Kanji</button></li>
+                <li><button class="button small" onclick="Kantan.convertAnkiDeck('kanji', 0);">Lesson 0</button></li>
+              <li><em>More decks coming soon...</em></li>
+            </ul>
+          </div>
+        </div>
+        
+        <h4 id="anki-import-help" class="sub-title">How to Import the Decks</h4>
+        <p>Once you have your decks, open Anki and click "Import File" (or go to File > Import...) to import your decks OR just drag and drop them into the Anki window.</p>
+        <p>That's it, you're done! Now you're ready to drill the vocab or kanji for Kantan Japanese!</p>
+        <br><br>
+        
+        <h3 class="section-title" id="spreadsheets"><i class="fa">&#xf0ce;</i> Spreadsheets</h3>
+        <div class="columns-2 clear">
+          <div>
+            <div style="padding:5px;">
+              <h4 class="sub-title" id="vocab-spreadsheets">Vocabulary</h4>
+              <ul>
+                <li><button class="button small" onclick="Kantan.convertSpreadsheet('vocab', 'all');">All Vocabulary</button></li>
+                <li><button class="button small" onclick="Kantan.convertSpreadsheet('vocab', 0);">Lesson 0</button></li>
+                <li><em>More decks coming soon...</em></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div style="padding:5px;">
+            <h4 class="sub-title" id="kanji-spreadsheets">Kanji</h4>
+            <ul>
+                <li><button class="button small" onclick="Kantan.convertSpreadsheet('kanji', 'all');">All Kanji</button></li>
+                <li><button class="button small" onclick="Kantan.convertSpreadsheet('kanji', 0);">Lesson 0</button></li>
+              <li><em>More decks coming soon...</em></li>
+            </ul>
+          </div>
+        </div>
+        
+        <h4 id="spreadsheet-help" class="sub-title">How to Use the Spreadsheets</h4>
+        <p>The spreadsheets for our vocabulary and kanji can be used with:</p>
+        <ul>
+          <li><a href="https://www.libreoffice.org/" target="_blank">Libre Office</a> (free and open source)</li>
+          <li><a href="https://workspace.google.com/products/sheets/" target="_blank">Google Sheets</a> (free, requires account and online connection)</li>
+          <li>Microsoft Excel (paid)</li>
+        </ul>
+        <p>and any other spreadsheet software that is not listed here.</p>
+        
+        <h4 id="spreadsheet-help-google" class="sub-title">Using the Spreadsheets with Google Sheets</h4>
+        <p>For Google Sheets, the file needs to be converted for use with Google Sheets. To do this:</p>
+        <ol>
+          <li>Go to <a href="https://drive.google.com/drive/my-drive">Google Drive</a>.</li>
+          <li>Drag and drop the spreadsheet file into your drive.</li>
+          <li>Double click the uploaded sheet to open it in Google Sheets.</li>
+        </ol>
+        Once inside, you can view the contents, edit them, etc.
+        <br><br>
+      </div>
+    </div>
+    
+    <footer class="clear">
+      <ul class="footer-left">
+        <li><a href="../" id="footer-home">Home</a></li>
+        <li><a href="../privacy/">Privacy</a></li>
+        <li><a href="../contact/">Contact</a></li>
+        <li><a href="../help/">Help</a></li>
+        <li><a href="../donate/">Donate</a></li>
+      </ul>
+      
+      <ul class="footer-right">
+        <li>Created by <a href="https://github.com/SethClydesdale">Seth Clydesdale</a> and the <a href="../about/">Kantan Community</a></li>
+      </ul>
+    </footer>
+    
+    <script src="../resources/javascript/kantan.js"></script>
+    <script src="../resources/javascript/data/vocab.js"></script>
+    <script src="../resources/javascript/data/kanji.js"></script>
+    <script src="../resources/javascript/all.js"></script>
+    <!--Anki Deck Assets-->
+    <script src="../resources/javascript/lib/genanki.js"></script>
+    <script src="../resources/javascript/lib/filesaver.js"></script>
+    <script src="../resources/javascript/lib/jszip.js"></script>
+    <!--Spreadsheet Assets-->
+    <script src="../resources/javascript/lib/fflate.js"></script>
+    <script src="../resources/javascript/lib/excel-builder.iife.js"></script>
+  </body>
+</html>

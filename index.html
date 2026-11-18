@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#" class="lang-en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Kantan Japanese</title>
+    <meta name="title" content="Kantan Japanese">
+    <meta name="twitter:title" content="Kantan Japanese">
+    <meta property="og:title" content="Kantan Japanese">
+    <meta name="description" content="An easy way to learn and practice Japanese for free.">
+    <meta property="og:description" content="An easy way to learn and practice Japanese for free.">
+    <link rel="shortcut icon" type="image/x-icon" href="resources/images/kantan.ico">
+
+    <meta name="keywords" content="Japanese, Lessons, Exercises, Quizzes" lang="en">
+    <meta name="language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:site_name" content="sethclydesdale.github.io">
+    <meta property="og:url" content="https://sethclydesdale.github.io/kantan-japanese/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://sethclydesdale.github.io/kantan-japanese/resources/images/kantan-thumb.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@SethC1995">
+
+    <link rel="stylesheet" href="resources/css/stylesheet.css">
+    <script src="resources/javascript/head.js"></script>
+    <script src="resources/javascript/ga.js" async></script>
+  </head>
+
+  <body>
+
+    <header>
+      <h1><a href="./" id="home-link">Kantan Japanese</a></h1>
+      <a id="fork-me" title="View project on GitHub" target="_blank" href="https://github.com/SethClydesdale/kantan-japanese"></a>
+    </header>
+    <script src="resources/javascript/all-top.js"></script>
+    
+    <div id="content">
+      <div class="content-block">
+        <h2 class="content-title" id="main-intro"><span class="en">Welcome</span><span class="ja">ようこそ</span></h2>
+        <div id="intro-box" class="clear">
+          <div id="intro-bubble">
+            <p>Welcome to Kantan Japanese! I'm Kan-tan, the mascot of this website!</p>
+          
+            <p>If this is your first time here and you're interested in learning Japanese, I recommend checking out the Lessons section below and starting with Lesson 0 to get started!</p>
+
+            <p>If you have any questions about the website or your studies, feel free to reach out to us on <a href="https://www.reddit.com/r/KantanJapanese/">Reddit</a>!</p>
+
+            <p>Best of luck on your studies! I'm rooting for you!!</p>
+          </div>
+          <div id="intro-mascot"><img id="mascot" src="resources/images/kanny/kanny.webp"></div>
+        </div>
+        <br>
+        
+        <div class="link-blocks">
+          <a class="teal" href="lessons/"><span class="link-block-content"><i class="fa">&#xf19d;</i><span class="en">Lessons</span><span class="ja">レッスン</span></span></a>
+          <a class="green" href="learning-resources/"><span class="link-block-content"><i class="fa">&#xf15c;</i><span class="en">Resources</span><span class="ja">学習資料</span></span></a>
+          <a class="orange" href="lessons/references/bunpo-dic/"><span class="link-block-content"><i class="fa">&#xf02d;</i><span class="en">Grammar</span><span class="ja">文法</span></span></a>
+          <a class="red" href="lessons/references/kanji-dic/"><span class="link-block-content"><i>漢</i><span class="en">Kanji</span><span class="ja">漢字</span></span></a>
+        </div>
+      </div>
+      
+
+      
+      <div class="columns-2 clear">
+        <div class="content-block">
+          <h2 class="content-title" id="random-word">Random Word</h2>
+          <div id="random-word-content" class="random-word">
+            <div class="word-ja"><ruby>簡単<rt>かんたん</rt></ruby></div>
+            <hr>
+            <div class="word-en"><span class="spoiler">simple; easy; uncomplicated</span></div>
+          </div>
+          <div class="center"><button class="button" onclick="KN_RandomWord();"><i class="fa">&#xf074;</i><span class="en">Next Word</span><span class="ja">次の言葉</span></button></div>
+        </div>
+
+        <div class="content-block">
+          <h2 class="content-title" id="random-kanji">Random Kanji</h2>
+          <div id="random-kanji-content" class="random-word">
+            <div class="random-kanji">単</div>
+            <hr>
+            <div class="random-kanji-meaning"><span class="label"><span class="en">Meaning</span><span class="ja">意味</span>:</span> <span class="spoiler">simple; one; single; merely</span></div>
+            <div class="random-kanji-reading">
+              <span class="label"><span class="en">Onyomi</span><span class="ja">音読み</span>:</span> タン<br>
+              <span class="label"><span class="en">Kunyomi</span><span class="ja">訓読み</span>:</span> ひとえ
+            </div>
+            <div class="random-kanji-strokes"><span class="label"><span class="en">Strokes</span><span class="ja">画数</span>:</span>:</span> 9 <button class="button icon-only round" title="View stroke order"><i class="fa">&#xf002;</i></button></div>
+          </div>
+          <div class="center"><button class="button" onclick="KN_RandomKanji();"><i class="fa">&#xf074;</i><span class="en">Next Kanji</span><span class="ja">次の漢字</span></button></div>
+        </div>
+      </div>
+      
+      <div class="columns-2 clear">
+        <div class="content-block">
+          <h2 class="content-title" id="profile">Profile</h2>
+          <div id="profile-stats" class="columns-2 clear">
+            <div>
+              <h3 class="section-title">Statistics</h3>
+              <ul>
+                <li><span class="label">Days Studied:</span><span id="days-studied">0</span></li>
+                <li><span class="label">Grammar Learned:</span><span id="grammar-learned">0</span></li>
+                <li><span class="label">Passing Rate:</span><span id="passing-rate">0</span></li>
+              </ul>
+              <h3 class="main-color">Exercises</h3>
+              <ul>
+                <li><span class="label">Completed:</span><span id="exercises-completed">0</span></li>
+                <li><span class="label">Perfected:</span><span id="exercises-perfected">0</span></li>
+                <li><span class="label">Passed:</span><span id="exercises-passed">0</span></li>
+                <li><span class="label">Barely Passed:</span><span id="exercises-barely">0</span></li>
+                <li><span class="label">Failed:</span><span id="exercises-failed">0</span></li>
+              </ul>
+              <h3 class="main-color">Reading Material</h3>
+              <ul>
+                <li><span class="label">Read:</span><span id="articles-read">0</span></li>
+                <li><span class="label">Reading:</span><span id="articles-reading">0</span></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="section-title">Reviews</h3>
+              <ul>
+                <li><span class="label">Due:</span><span id="profile-reviews-due">0</span></li>
+                <li><span class="label">Upcoming:</span><span id="profile-reviews-upcoming">0</span></li>
+                <li><span class="label">Mastered:</span><span id="profile-reviews-mastered">0</span></li>
+                <li><span class="label">Retired:</span><span id="profile-reviews-retired">0</span></li>
+              </ul>
+              <a href="reviews/" class="button"><span class="en">Manage Reviews</span><span class="ja">復習のページへ</span></a>
+            </div>
+          </div>
+
+          <h4 class="center sub-title">Profile Data</h4>
+          <div class="center">
+            <a id="profile-data-save" class="button green" download="Kantan Profile Data.json" href="#"><i class="fa">&#xf019;</i><span class="en">Save</span><span class="ja">セーブする</span></a>
+            <button id="profile-data-load" class="button yellow" onclick="this.nextSibling.click();"><i class="fa">&#xf093;</i><span class="en">Load</span><span class="ja">ロードする</span></button><input id="load-data" class="hidden-input" type="file" accept=".json" onchange="KantanSettings.loadExerciseData(this, true);">
+            <button id="settings-view-exercise-data" class="button" onclick="KantanSettings.viewExerciseData(true);"><i class="fa">&#xf1c9;</i><span class="en">View Data</span><span class="ja">データを見る</span></button>
+          </div>
+        </div>
+
+        <div class="content-block">
+          <h2 class="content-title" id="notes">Notes</h2>
+          <div id="my-notes-container" class="loading">
+            <textarea id="my-notes"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="clear">
+      <ul class="footer-left">
+        <li><a href="./" id="footer-home">Home</a></li>
+        <li><a href="privacy/">Privacy</a></li>
+        <li><a href="contact/">Contact</a></li>
+        <li><a href="help/">Help</a></li>
+        <li><a href="donate/">Donate</a></li>
+      </ul>
+
+      <ul class="footer-right">
+        <li>Created by <a href="https://github.com/SethClydesdale">Seth Clydesdale</a> and the <a href="about/">Kantan Community</a></li>
+      </ul>
+    </footer>
+    
+    <script src="resources/javascript/all.js"></script>
+    <script src="resources/javascript/kantan.js"></script>
+    <script src="resources/javascript/data/lesson-list.js"></script>
+    <script src="resources/javascript/data/vocab.js"></script>
+    <script src="resources/javascript/data/kanji.js"></script>
+    <script src="resources/javascript/homepage.js"></script>
+    <script>Kantan.initNotes();</script>
+  </body>
+</html>

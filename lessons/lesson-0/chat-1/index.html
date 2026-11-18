@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#" class="lang-en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Let's Chat with Kan-tan: Hiragana - Lesson 0 | Kantan Japanese</title>
+    <meta name="title" content="Let's Chat with Kan-tan: Hiragana - Lesson 0 | Kantan Japanese">
+    <meta name="twitter:title" content="Let's Chat with Kan-tan: Hiragana - Lesson 0 | Kantan Japanese">
+    <meta property="og:title" content="Let's Chat with Kan-tan: Hiragana - Lesson 0 | Kantan Japanese">
+    <meta name="description" content="Practice what you learned about hiragana with Kan-tan!">
+    <meta property="og:description" content="Practice what you learned about hiragana with Kan-tan!">
+    <link rel="shortcut icon" type="image/x-icon" href="../../../resources/images/kantan.ico">
+
+    <meta name="keywords" content="japanese, quizzes, exercises" lang="en">
+    <meta name="language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:site_name" content="sethclydesdale.github.io">
+    <meta property="og:url" content="https://sethclydesdale.github.io/kantan-japanese/lessons/lesson-0/chat-3/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://sethclydesdale.github.io/kantan-japanese/resources/images/kantan-thumb.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@KantanJapanese">
+
+    <link rel="stylesheet" href="../../../resources/css/stylesheet.css">
+    <script src="../../../resources/javascript/head.js"></script>
+    <script src="../../../resources/javascript/ga.js" async></script>
+  </head>
+  <body>
+    <header>
+      <h1><a href="../../../" id="home-link">Kantan Japanese</a></h1>
+    </header>
+    <script src="../../../resources/javascript/all-top.js"></script>
+    <div id="content">
+      <div id="exercise" class="content-block">
+        <div id="quiz-result"></div>
+        <div id="quiz-zone" class="clear"></div>
+        <div id="quiz-timer" class="center"></div>
+      </div>
+    </div>
+    <footer class="clear">
+      <ul class="footer-left">
+        <li><a href="../../../" id="footer-home">Home</a></li>
+        <li><a href="../../../privacy/">Privacy</a></li>
+        <li><a href="../../../contact/">Contact</a></li>
+        <li><a href="../../../help/">Help</a></li>
+        <li><a href="../../../donate/">Donate</a></li>
+      </ul>
+      <ul class="footer-right">
+        <li>Created by <a href="https://github.com/SethClydesdale">Seth Clydesdale</a> and the <a href="../../../about/">Kantan Community</a></li>
+      </ul>
+    </footer>
+    <script src="../../../resources/javascript/lib/dragula.js"></script>
+    <script src="../../../resources/javascript/lib/easytimer.js"></script>
+    <script src="../../../resources/javascript/data/lesson-list.js"></script>
+    <script src="../../../resources/javascript/kantan.js"></script>
+
+    <script src="../../../resources/javascript/all.js"></script>
+    <script src="../../../resources/javascript/data/profiles.js"></script>
+    <script>Kantan.generateQuiz({
+      authors : 'Kan-tan',
+      type : 'chat',
+      info : 'Practice what you have learned about hiragana with Kan-tan!<br>It is recommended that you have learned about the <a href="../article-5/' + Kantan.local + '" target="_blank">46 Kana</a>, <a href="../article-6/' + Kantan.local + '" target="_blank">Dakuten and Handakuten</a>, <a href="../article-7/' + Kantan.local + '" target="_blank">Digraphs</a>, and the <a href="../article-8/' + Kantan.local + '" target="_blank">Small っ and Long Vowels</a> before doing this exercise.',
+
+      quizlet : [
+        {
+          delay : 1000,
+          info : 'This is the beginning of your chat history with <b>Kan-tan</b>.'
+        },
+        
+        {
+          message : 'Hello, I\'m Kan-tan! :XD:'
+        },
+        
+        {
+          message : 'What\'s your name?'
+        },
+        
+        {
+          input_reply : {
+            id : 'NAME',
+            save : true,
+            placeholder : '{NAME}',
+            info : 'Input a name for Kan-tan to call you by.',
+            response : 'My name is {NAME}.',
+            error : 'Your name cannot be blank.'
+          }
+        },
+        
+        {
+          message : 'That\'s a lovely name!'
+        },
+        
+        {
+          message : 'It\'s nice to meet you, {NAME}! :^^:'
+        },
+        
+        {
+          reply : [
+            'It\'s nice to meet you, too.'
+          ]
+        },
+        
+        {
+          message : 'Are you new here?'
+        },
+        
+        {
+          reply : [
+            'Yeah, I just started studying Japanese.'
+          ]
+        },
+        
+        {
+          message : 'Cool! Japanese is my first language!'
+        },
+        
+        {
+          message : 'What are you studying right now?'
+        },
+        
+        {
+          reply : [
+            'I\'m studying Hiragana at the moment.'
+          ]
+        },
+        
+        {
+          message : 'Ooh I heard that can be hard for beginners...'
+        },
+        
+        {
+          message : 'Would you like to practice it with me?'
+        },
+        
+        {
+          reply : [
+            'Sure, why not?',
+            [
+              'Nah, I don\'t have time right now.',
+              [
+                {
+                  message : 'Aww, c\'mon it\'ll be fun! :pout:'
+                },
+                {
+                  reply : [
+                    'Ok, fine...'
+                  ]
+                }
+              ]
+            ]
+          ]
+        },
+        
+        {
+          message : 'Yay! :XD:'
+        },
+        
+        {
+          message : 'I\'ll type out some words in Japanese'
+        },
+        
+        {
+          message : 'and you reply them back to me in romaji!'
+        },
+        
+        {
+          message : 'Then I\'ll let you know if you got them right or wrong! :^^:'
+        },
+        
+        {
+          delay : 2000,
+          message : 'You know what romaji is, right? :clueless:'
+        },
+        
+        {
+          reply : [
+            'Yeah, I know what romaji is.',
+            [
+              'No, I don\'t know what romaji is.',
+              [
+                {
+                  message : 'Romaji is basically just roman characters (what we\'re typing in now) that represent hiragana characters'
+                },
+                {
+                  delay : 2000,
+                  message : 'For example, あ is a, か is ka, し is shi, and so on...'
+                },
+                {
+                  message : 'We have a chart you can review <a href="../../lessons/lesson-0/hiragana-chart/">here</a> if you need a refresher before we start'
+                },
+                {
+                  delay : 2000
+                }
+              ]
+            ]
+          ]
+        },
+        
+        {
+          message : 'Okay, let\'s begin! :azoos:',
+          newList : true
+        },
+        
+        {
+          message : 'ねこ'
+        },
+        
+        {
+          reply : [
+            [
+              'reko',
+              [
+                {
+                  message : 'Close! It\'s neko!'
+                },
+                {
+                  message : 'れ (re) looks a lot like ね (ne), doesn\'t it?'
+                }
+              ]
+            ],
+            [
+              '〇neko',
+              {
+                message : 'Correct!'
+              }
+            ]
+          ],
+          problem : true
+        },
+        
+        {
+          message : 'ねこ means cat btw. It\'s one of my most favorite animals in the entire world! :XD:'
+        },
+        
+        {
+          delay : 2000,
+          message : 'Next up is おかし!',
+          newList : true
+        },
+        
+        {
+          reply : [
+            [
+              '〇okashi',
+              {
+                message : 'That\'s right~'
+              }
+            ],
+            [
+              'akashi',
+              [
+                {
+                  message : 'Almost! It\'s okashi with an o!'
+                },
+                {
+                  message : 'It\'s pretty easy to mix up あ (a) and お (o), isn\'t it?'
+                }
+              ]
+            ]
+          ],
+          problem : true
+        },
+        
+        {
+          message : 'おかし is a word used for sweets which I LOVE!'
+        },
+        
+        {
+          delay : 1500,
+          message : 'There\'s also another word for candy; あめ (ame), but that one is used more for hard candies. It can mean rain, too!'
+        },
+        
+        {
+          delay : 2500,
+          message : 'Mmm... now I want some candy :hungry:'
+        },
+        
+        {
+          delay : 2000
+        },
+        
+        {
+          message : 'Oh, sorry! I get carried away when it comes to candy lol',
+          newList : true
+        },
+        
+        {
+          message : 'Next one is だがしや！'
+        },
+        
+        {
+          reply : [
+            [
+              'takashiya',
+              [
+                {
+                  message : 'Sadly that\'s wrong :sad:'
+                },
+                {
+                  message : 'It\'s dagashiya!'
+                },
+                {
+                  delay : 1500,
+                  message : 'When た (ta) and か (ka) have those little quotation mark-looking thingies on them they turn into だ (da) and が (ga)'
+                },
+                {
+                  delay : 2000
+                }
+              ]
+            ],
+            [
+              '〇dagashiya',
+              {
+                message : 'You got it! :XD:'
+              }
+            ]
+          ],
+          problem : true
+        },
+        
+        {
+          message : 'A だがしや is a little store that sells cheap snacks, candy, and more!',
+          newList : true
+        },
+        
+        {
+          delay : 2000,
+          message : 'They\'re a lot of fun to look around and you can find tons of yummy snacks and candy to snack on or to gift to your friends! :hungry:'
+        },
+        
+        {
+          delay : 3000,
+          message : 'Hmm next up is...',
+          newList : true
+        },
+        
+        {
+          message : 'Umm...'
+        },
+        
+        {
+          message : 'にゃあ！ :XD:'
+        },
+        
+        {
+          reply : [
+            [
+              '〇nyaa',
+              {
+                message : 'You got it, nya~ :^^:'
+              }
+            ],
+            [
+              'niyaa',
+              [
+                {
+                  message : 'Wrong! It\'s nyaa! But you did get the long vowel right!'
+                },
+                {
+                  message : 'When ゃ (ya) is small like this it merges with the kana that comes before it to make a combined sound'
+                },
+                {
+                  delay : 2000,
+                  message : 'So に (ni) becomes にゃ (nya)!'
+                },
+                {
+                  message : 'Basically you shave off the last vowel when you combine a kana with the small や, ゆ, and よ!'
+                },
+                {
+                  delay : 2000
+                }
+              ]
+            ]
+          ],
+          problem : true
+        },
+        
+        {
+          message : 'にゃあ is the sound that cats make!',
+          newList : true
+        },
+        
+        {
+          message : 'I think in English they go moo, right? :clueless:'
+        },
+        
+        {
+          reply : [
+            'Uh, no. Cats go "meow" and cows go "moo."'
+          ]
+        },
+        
+        {
+          message : 'Oh... I-I knew that!'
+        },
+        
+        {
+          message : 'I just got them mixed up because I saw a cat with cow colored fur right now :guilty:'
+        },
+        
+        {
+          delay : 2000,
+          message : 'Okay, I\'ll make the next one tricky! :azoos:',
+          newList : true
+        },
+        
+        {
+          message : 'きゃっとにっぷ！'
+        },
+        
+        {
+          reply : [
+            [
+              'kyatsuto nitsupu',
+              [
+                {
+                  message : 'Almost! It\'s kyatto nippu!'
+                },
+                {
+                  delay : 1500,
+                  message : 'When the っ (tsu) is small like this, it doubles the beginning of the sound that comes immediately after and is not read as "tsu"'
+                },
+                {
+                  delay : 2000,
+                  message : 'So in this case ぷ (pu) becomes っぷ (ppu)'
+                }
+              ]
+            ],
+            [
+              '〇kyatto nippu',
+              {
+                message : 'I\'m surprised you got that!! :clueless:'
+              }
+            ]
+          ],
+          problem : true
+        },
+        
+        {
+          delay : 2000,
+          message : 'Not only that, but you got all the words that I sent you correct, too! Great job!!! :XD:',
+          score : 5
+        },
+        
+        {
+          delay : 2000,
+          message : 'きゃっとにっぷ, if you haven\'t already figured it out by saying it, means cat nip!',
+          newList : true
+        },
+        
+        {
+          delay : 2000,
+          message : 'I always carry some around in my backpack to give the local kitties when I see them'
+        },
+        
+        {
+          delay : 2000,
+          message : 'They\'re so cute when they start purring and rolling all around... :=v=:'
+        },
+        
+        {
+          reply : [
+            'You really love cats, huh?'
+          ]
+        },
+        
+        {
+          message : 'Of course!! They\'re such cute little balls of fur!'
+        },
+        
+        {
+          message : 'I could pet them ALLLLL day :=v=:'
+        },
+        
+        {
+          message : 'Anyway, that was fun!',
+          newList : true
+        },
+        
+        {
+          message : 'We\'ll stop here for today since it\'s almost time for me to feed the kitties.'
+        },
+        
+        {
+          delay : 2000,
+          message : 'Let me know when you learn Katakana and we can practice again like this!'
+        },
+        
+        {
+          delay : 2000,
+          message : 'See you later, {NAME}!',
+          newList : true
+        },
+        
+        {
+          reply : [
+            'See ya and thanks!'
+          ]
+        },
+        
+        {
+          message : 'You\'re welcome! :^^:'
+        },
+        
+        {
+          delay : 1000
+        }
+      ]
+    });</script>
+  </body>
+</html>

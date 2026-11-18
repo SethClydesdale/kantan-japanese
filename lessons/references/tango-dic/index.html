@@ -1,0 +1,637 @@
+﻿<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#" class="lang-en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Vocabulary Dictionary | Kantan Japanese</title>
+    <meta name="title" content="Vocabulary Dictionary | Kantan Japanese">
+    <meta name="twitter:title" content="Vocabulary Dictionary | Kantan Japanese">
+    <meta property="og:title" content="Vocabulary Dictionary | Kantan Japanese">
+    <meta name="description" content="Look up and practice words taught on Kantan Japanese.">
+    <meta property="og:description" content="Look up and practice words taught on Kantan Japanese.">
+    <link rel="shortcut icon" type="image/x-icon" href="../../../resources/images/kantan.ico">
+
+    <meta name="keywords" content="japanese, dictionary, quizzes, exercises" lang="en">
+    <meta name="language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:site_name" content="sethclydesdale.github.io">
+    <meta property="og:url" content="https://sethclydesdale.github.io/kantan-japanese/lessons/references/tango-dic/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://sethclydesdale.github.io/kantan-japanese/resources/images/kantan-thumb.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@SethC1995">
+
+    <link rel="stylesheet" href="../../../resources/css/stylesheet.css">
+    <script src="../../../resources/javascript/head.js"></script>
+    <script src="../../../resources/javascript/ga.js" async></script>
+  </head>
+
+  <body>
+    
+    <header>
+      <h1><a href="../../../" id="home-link">Kantan Japanese</a></h1>
+      <a id="fork-me" title="View project on GitHub" target="_blank" href="https://github.com/SethClydesdale/kantan-japanese"></a>
+    </header>
+
+
+    
+    <script src="../../../resources/javascript/all-top.js"></script>
+    <div id="content">
+      <div id="appendix-tool" class="content-block loading">
+        <h2 id="main-dict-title" class="content-title">Vocabulary Dictionary</h2>
+        <p>Welcome to the Vocabulary Dictionary! This page contains <span id="total-definitions"></span> words from Kantan Japanese's courses and various popular textbooks. It also allows you to practice a selected list of words in the exercise of your choice, so you can learn and memorize new words or focus on the ones you're having trouble with.</p>
+
+        <h2 id="practice-words"><span class="en">Practice</span><span class="ja">練習する</span></h2>
+        <p>To begin practicing, <strong>select 5 or more words</strong> by clicking the checkbox next to any word to add it to your study queue. You can also use the select all buttons to select a group of words. Once you have selected all the words you want, click the button below to begin.</p>
+        <div class="center">
+          <button class="button" onclick="Kantan.vocabJisho.launchExercise();"><i class="fa">&#xf040;</i> <span class="en">Study Selected Words</span><span class="ja">選択した言葉を勉強する</span></button><br><br>
+          <button class="button" onclick="Kantan.vocabJisho.manageWords();"><i class="fa">&#xf0ad;</i> <span class="en">Manage Selected Words</span><span class="ja">選択した言葉を見る</span></button>
+        </div><br>
+        
+        <div id="dictionary-top" style="margin-bottom:-50px;"></div>
+        <div class="dict-block">
+          <div id="japanese-english" class="clear">
+            <div class="columns-2 clear">
+              <div id="dict-index-ja">
+                <h2 id="quick-nav-ja"><span class="en">Dictionary Index</span><span class="ja">辞書索引</span></h2>
+                <p class="dict-desc">The Dictionary Index lets you quickly jump to a section, select/deselect all words, or show/hide all definitions.</p>
+                <div class="dictionary-index text-block clear">
+                  <ul>
+                    <li><a href="#section-あ">あ</a></li>
+                    <li><a href="#section-い">い</a></li>
+                    <li><a href="#section-う">う</a></li>
+                    <li><a href="#section-え">え</a></li>
+                    <li><a href="#section-お">お</a></li>
+                  </ul>
+                  <ul class="dict-index-split">
+                    <li><a href="#section-か">か</a></li>
+                    <li><a href="#section-き">き</a></li>
+                    <li><a href="#section-く">く</a></li>
+                    <li><a href="#section-け">け</a></li>
+                    <li><a href="#section-こ">こ</a></li>
+                  </ul>
+                  <ul class="dict-index-split">
+                    <li><a href="#section-さ">さ</a></li>
+                    <li><a href="#section-し">し</a></li>
+                    <li><a href="#section-す">す</a></li>
+                    <li><a href="#section-せ">せ</a></li>
+                    <li><a href="#section-そ">そ</a></li>
+                  </ul>
+                  <ul class="dict-index-split">
+                    <li><a href="#section-た">た</a></li>
+                    <li><a href="#section-ち">ち</a></li>
+                    <li><a href="#section-つ">つ</a></li>
+                    <li><a href="#section-て">て</a></li>
+                    <li><a href="#section-と">と</a></li>
+                  </ul>
+                  <ul class="dict-index-split">
+                    <li><a href="#section-な">な</a></li>
+                    <li><a href="#section-に">に</a></li>
+                    <li><a href="#section-ぬ">ぬ</a></li>
+                    <li><a href="#section-ね">ね</a></li>
+                    <li><a href="#section-の">の</a></li>
+                  </ul>
+                  <ul class="dict-index-split">
+                    <li><a href="#section-は">は</a></li>
+                    <li><a href="#section-ひ">ひ</a></li>
+                    <li><a href="#section-ふ">ふ</a></li>
+                    <li><a href="#section-へ">へ</a></li>
+                    <li><a href="#section-ほ">ほ</a></li>
+                  </ul>
+                  <ul class="dict-index-split">
+                    <li><a href="#section-ま">ま</a></li>
+                    <li><a href="#section-み">み</a></li>
+                    <li><a href="#section-む">む</a></li>
+                    <li><a href="#section-め">め</a></li>
+                    <li><a href="#section-も">も</a></li>
+                  </ul>
+                  <ul class="dict-index-split">
+                    <li><a href="#section-や">や</a></li>
+                    <li><a href="#section-ゆ">ゆ</a></li>
+                    <li><a href="#section-よ">よ</a></li>
+                  </ul>
+                  <ul class="dict-index-split">
+                    <li><a href="#section-ら">ら</a></li>
+                    <li><a href="#section-り">り</a></li>
+                    <li><a href="#section-る">る</a></li>
+                    <li><a href="#section-れ">れ</a></li>
+                    <li><a href="#section-ろ">ろ</a></li>
+                  </ul>
+                  <ul class="dict-index-split">
+                    <li><a href="#section-わ">わ</a></li>
+                    <li><a href="#section-を">を</a></li>
+                    <li><span class="dict-index-disabled">ん</span></li>
+                  </ul>
+                </div>
+
+                <div class="group-selectors center">
+                  <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true);"><span class="en">Select All Words</span><span class="ja">すべての言葉を選択する</span></button>
+                  <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false);"><span class="en">Deselect All Words</span><span class="ja">すべての言葉を選択解除する</span></button>
+                  <br>
+                  <button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this, true);"><span class="en">Show All Definitions</span><span class="ja">すべての言葉を表示する</span></button>
+                </div>
+              </div>
+
+              <div id="quick-search-ja">
+                <h2 id="dict-search-ja"><span class="en">Quick Search</span><span class="ja">クイックサーチ</span> <span id="dict-search-hits-ja"></span></h2>
+                <p class="dict-desc">Quick search helps you quickly find words you're looking for.</p>
+                <div class="dict-search-wrapper">
+                  <input class="dict-search" type="text" placeholder="探す…" oninput="Kantan.vocabJisho.search(this.value, 'ja')">
+                  <div class="group-selectors center" style="visibility:hidden;">
+                    <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'search_ja', true);" title="Select all search results"></button>
+                    <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'search_ja', true);" title="Deselect all search results"></button>
+                  </div>
+                  <ul id="dict-search-results-ja" class="dict-search-results"></ul>
+                </div>
+              </div>
+            </div><br><br>
+
+            <div class="dictionary-group">
+              <h2 id="section-あ" class="section-title">あ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show あ Definitions</span><span class="ja">「あ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'あ');" title="Select all words in group あ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'あ');" title="Deselect all words in group あ"></button>
+              </div>
+              <ul id="list-あ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-い" class="section-title">い</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show い Definitions</span><span class="ja">「い」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'い');" title="Select all words in group い"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'い');" title="Deselect all words in group い"></button>
+              </div>
+              <ul id="list-い" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-う" class="section-title">う</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show う Definitions</span><span class="ja">「う」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'う');" title="Select all words in group う"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'う');" title="Deselect all words in group う"></button>
+              </div>
+              <ul id="list-う" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-え" class="section-title">え</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show え Definitions</span><span class="ja">「え」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'え');" title="Select all words in group え"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'え');" title="Deselect all words in group え"></button>
+              </div>
+              <ul id="list-え" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-お" class="section-title">お</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show お Definitions</span><span class="ja">「お」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'お');" title="Select all words in group お"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'お');" title="Deselect all words in group お"></button>
+              </div>
+              <ul id="list-お" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-か" class="section-title">か</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show か Definitions</span><span class="ja">「か」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'か');" title="Select all words in group か"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'か');" title="Deselect all words in group か"></button>
+              </div>
+              <ul id="list-か" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-き" class="section-title">き</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show き Definitions</span><span class="ja">「き」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'き');" title="Select all words in group き"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'き');" title="Deselect all words in group き"></button>
+              </div>
+              <ul id="list-き" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-く" class="section-title">く</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show く Definitions</span><span class="ja">「く」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'く');" title="Select all words in group く"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'く');" title="Deselect all words in group く"></button>
+              </div>
+              <ul id="list-く" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-け" class="section-title">け</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show け Definitions</span><span class="ja">「け」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'け');" title="Select all words in group け"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'け');" title="Deselect all words in group け"></button>
+              </div>
+              <ul id="list-け" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-こ" class="section-title">こ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show こ Definitions</span><span class="ja">「こ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'こ');" title="Select all words in group こ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'こ');" title="Deselect all words in group こ"></button>
+              </div>
+              <ul id="list-こ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-さ" class="section-title">さ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show さ Definitions</span><span class="ja">「さ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'さ');" title="Select all words in group さ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'さ');" title="Deselect all words in group さ"></button>
+              </div>
+              <ul id="list-さ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-し" class="section-title">し</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show し Definitions</span><span class="ja">「し」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'し');" title="Select all words in group し"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'し');" title="Deselect all words in group し"></button>
+              </div>
+              <ul id="list-し" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-す" class="section-title">す</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show す Definitions</span><span class="ja">「す」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'す');" title="Select all words in group す"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'す');" title="Deselect all words in group す"></button>
+              </div>
+              <ul id="list-す" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-せ" class="section-title">せ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show せ Definitions</span><span class="ja">「せ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'せ');" title="Select all words in group せ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'せ');" title="Deselect all words in group せ"></button>
+              </div>
+              <ul id="list-せ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-そ" class="section-title">そ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show そ Definitions</span><span class="ja">「そ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'そ');" title="Select all words in group そ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'そ');" title="Deselect all words in group そ"></button>
+              </div>
+              <ul id="list-そ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-た" class="section-title">た</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show た Definitions</span><span class="ja">「た」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'た');" title="Select all words in group た"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'た');" title="Deselect all words in group た"></button>
+              </div>
+              <ul id="list-た" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-ち" class="section-title">ち</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show ち Definitions</span><span class="ja">「ち」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'ち');" title="Select all words in group ち"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'ち');" title="Deselect all words in group ち"></button>
+              </div>
+              <ul id="list-ち" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-つ" class="section-title">つ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show つ Definitions</span><span class="ja">「つ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'つ');" title="Select all words in group つ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'つ');" title="Deselect all words in group つ"></button>
+              </div>
+              <ul id="list-つ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-て" class="section-title">て</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show て Definitions</span><span class="ja">「て」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'て');" title="Select all words in group て"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'て');" title="Deselect all words in group て"></button>
+              </div>
+              <ul id="list-て" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-と" class="section-title">と</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show と Definitions</span><span class="ja">「と」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'と');" title="Select all words in group と"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'と');" title="Deselect all words in group と"></button>
+              </div>
+              <ul id="list-と" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-な" class="section-title">な</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show な Definitions</span><span class="ja">「な」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'な');" title="Select all words in group な"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'な');" title="Deselect all words in group な"></button>
+              </div>
+              <ul id="list-な" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-に" class="section-title">に</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show に Definitions</span><span class="ja">「に」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'に');" title="Select all words in group に"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'に');" title="Deselect all words in group に"></button>
+              </div>
+              <ul id="list-に" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-ぬ" class="section-title">ぬ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show ぬ Definitions</span><span class="ja">「ぬ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'ぬ');" title="Select all words in group ぬ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'ぬ');" title="Deselect all words in group ぬ"></button>
+              </div>
+              <ul id="list-ぬ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-ね" class="section-title">ね</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show ね Definitions</span><span class="ja">「ね」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'ね');" title="Select all words in group ね"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'ね');" title="Deselect all words in group ね"></button>
+              </div>
+              <ul id="list-ね" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-の" class="section-title">の</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show の Definitions</span><span class="ja">「の」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'の');" title="Select all words in group の"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'の');" title="Deselect all words in group の"></button>
+              </div>
+              <ul id="list-の" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-は" class="section-title">は</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show は Definitions</span><span class="ja">「は」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'は');" title="Select all words in group は"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'は');" title="Deselect all words in group は"></button>
+              </div>
+              <ul id="list-は" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-ひ" class="section-title">ひ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show ひ Definitions</span><span class="ja">「ひ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'ひ');" title="Select all words in group ひ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'ひ');" title="Deselect all words in group ひ"></button>
+              </div>
+              <ul id="list-ひ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-ふ" class="section-title">ふ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show ふ Definitions</span><span class="ja">「ふ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'ふ');" title="Select all words in group ふ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'ふ');" title="Deselect all words in group ふ"></button>
+              </div>
+              <ul id="list-ふ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-へ" class="section-title">へ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show へ Definitions</span><span class="ja">「へ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'へ');" title="Select all words in group へ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'へ');" title="Deselect all words in group へ"></button>
+              </div>
+              <ul id="list-へ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-ほ" class="section-title">ほ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show ほ Definitions</span><span class="ja">「ほ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'ほ');" title="Select all words in group ほ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'ほ');" title="Deselect all words in group ほ"></button>
+              </div>
+              <ul id="list-ほ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-ま" class="section-title">ま</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show ま Definitions</span><span class="ja">「ま」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'ま');" title="Select all words in group ま"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'ま');" title="Deselect all words in group ま"></button>
+              </div>
+              <ul id="list-ま" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-み" class="section-title">み</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show み Definitions</span><span class="ja">「み」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'み');" title="Select all words in group み"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'み');" title="Deselect all words in group み"></button>
+              </div>
+              <ul id="list-み" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-む" class="section-title">む</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show む Definitions</span><span class="ja">「む」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'む');" title="Select all words in group む"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'む');" title="Deselect all words in group む"></button>
+              </div>
+              <ul id="list-む" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-め" class="section-title">め</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show め Definitions</span><span class="ja">「め」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'め');" title="Select all words in group め"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'め');" title="Deselect all words in group め"></button>
+              </div>
+              <ul id="list-め" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-も" class="section-title">も</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show も Definitions</span><span class="ja">「も」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'も');" title="Select all words in group も"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'も');" title="Deselect all words in group も"></button>
+              </div>
+              <ul id="list-も" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-や" class="section-title">や</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show や Definitions</span><span class="ja">「や」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'や');" title="Select all words in group や"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'や');" title="Deselect all words in group や"></button>
+              </div>
+              <ul id="list-や" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-ゆ" class="section-title">ゆ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show ゆ Definitions</span><span class="ja">「ゆ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'ゆ');" title="Select all words in group ゆ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'ゆ');" title="Deselect all words in group ゆ"></button>
+              </div>
+              <ul id="list-ゆ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-よ" class="section-title">よ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show よ Definitions</span><span class="ja">「よ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'よ');" title="Select all words in group よ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'よ');" title="Deselect all words in group よ"></button>
+              </div>
+              <ul id="list-よ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-ら" class="section-title">ら</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show ら Definitions</span><span class="ja">「ら」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'ら');" title="Select all words in group ら"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'ら');" title="Deselect all words in group ら"></button>
+              </div>
+              <ul id="list-ら" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-り" class="section-title">り</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show り Definitions</span><span class="ja">「り」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'り');" title="Select all words in group り"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'り');" title="Deselect all words in group り"></button>
+              </div>
+              <ul id="list-り" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-る" class="section-title">る</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show る Definitions</span><span class="ja">「る」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'る');" title="Select all words in group る"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'る');" title="Deselect all words in group る"></button>
+              </div>
+              <ul id="list-る" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-れ" class="section-title">れ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show れ Definitions</span><span class="ja">「れ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'れ');" title="Select all words in group れ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'れ');" title="Deselect all words in group れ"></button>
+              </div>
+              <ul id="list-れ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-ろ" class="section-title">ろ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show ろ Definitions</span><span class="ja">「ろ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'ろ');" title="Select all words in group ろ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'ろ');" title="Deselect all words in group ろ"></button>
+              </div>
+              <ul id="list-ろ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-わ" class="section-title">わ</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show わ Definitions</span><span class="ja">「わ」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'わ');" title="Select all words in group わ"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'わ');" title="Deselect all words in group わ"></button>
+              </div>
+              <ul id="list-わ" class="word-list hidden"></ul>
+            </div>
+
+            <div class="dictionary-group">
+              <h2 id="section-を" class="section-title">を</h2>
+              <div class="center"><button class="button toggle-word-list" onclick="Kantan.vocabJisho.toggleList(this);"><span class="en">Show を Definitions</span><span class="ja">「を」の言葉を表示する</span></button></div>
+              <div class="group-selectors center hidden">
+                <button class="button select-all" onclick="Kantan.vocabJisho.selectAll(true, 'を');" title="Select all words in group を"></button>
+                <button class="button deselect-all" onclick="Kantan.vocabJisho.selectAll(false, 'を');" title="Deselect all words in group を"></button>
+              </div>
+              <ul id="list-を" class="word-list hidden"></ul>
+            </div>
+
+          </div>
+        </div>
+        
+      </div>
+      
+      <div id="exercise" class="content-block" style="display:none;">
+        <div id="quiz-result"></div>
+        <div id="quiz-zone" class="clear"></div>
+        <div id="quiz-timer" class="center"></div>
+      </div>
+    </div>
+    
+    <footer class="clear">
+      <ul class="footer-left">
+        <li><a href="../../../" id="footer-home">Home</a></li>
+        <li><a href="../../../privacy/">Privacy</a></li>
+        <li><a href="../../../contact/">Contact</a></li>
+        <li><a href="../../../help/">Help</a></li>
+        <li><a href="../../../donate/">Donate</a></li>
+      </ul>
+      
+      <ul class="footer-right">
+        <li>Created by <a href="https://github.com/SethClydesdale">Seth Clydesdale</a> and the <a href="../../../about/">Kantan Community</a></li>
+      </ul>
+    </footer>
+    
+    <script src="../../../resources/javascript/lib/dragula.js"></script>
+    <script src="../../../resources/javascript/lib/easytimer.js"></script>
+    <script src="../../../resources/javascript/data/lesson-list.js"></script>
+    <script src="../../../resources/javascript/kantan.js"></script>
+    <script src="../../../resources/javascript/data/vocab.js"></script>
+    <script src="../../../resources/javascript/tango-dic.js"></script>
+    <script src="../../../resources/javascript/all.js"></script>
+    <script>
+      // initialize dictionary
+      Kantan.vocabJisho.init();
+    </script>
+  </body>
+</html>

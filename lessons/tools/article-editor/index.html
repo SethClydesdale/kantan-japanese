@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#" class="lang-en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Article Editor | Kantan Japanese</title>
+    <meta name="title" content="Article Editor | Kantan Japanese">
+    <meta name="twitter:title" content="Article Editor | Kantan Japanese">
+    <meta property="og:title" content="Article Editor | Kantan Japanese">
+    <meta name="description" content="Edit or create articles on Kantan Japanese.">
+    <meta property="og:description" content="Edit or create articles on Kantan Japanese.">
+    <link rel="shortcut icon" type="image/x-icon" href="../../../resources/images/kantan.ico">
+
+    <meta name="keywords" content="japanese, articles, edit, create" lang="en">
+    <meta name="language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:site_name" content="sethclydesdale.github.io">
+    <meta property="og:url" content="https://sethclydesdale.github.io/kantan-japanese/lessons/tools/article-editor/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://sethclydesdale.github.io/kantan-japanese/resources/images/kantan-thumb.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@SethC1995">
+
+    <link rel="stylesheet" href="../../../resources/css/stylesheet.css">
+    <link rel="stylesheet" href="../../../resources/css/page-editor.css">
+    <link rel="stylesheet" href="../../../resources/javascript/lib/codemirror/codemirror.css">
+    
+    <script src="../../../resources/javascript/head.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/codemirror.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/xml.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/javascript.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/css.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/htmlmixed.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/closetag.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/xml-fold.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/matchtags.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/active-line.js"></script>
+    <script src="../../../resources/javascript/lib/codemirror/overlay.js"></script>
+    <style>
+      /* responsiveness */
+      @media (max-width:900px) {
+        html, body {
+          height:auto;
+          overflow-y:auto;
+        }
+
+        .main-container {
+          display:flex;
+          flex-direction:column;
+          height:auto;
+          min-height:0;
+          overflow:visible;
+        }
+
+        .left-panel,
+        .right-panel {
+          width:100%;
+          max-width:100%;
+          flex:0 0 auto;
+          min-height:0;
+          overflow:visible;
+        }
+
+        .left-panel {
+          height:auto;
+          max-height:none;
+        }
+
+        .right-panel {
+          height:auto;
+          min-height:420px;
+        }
+
+        .ui-block {
+          flex:0 0 auto;
+          max-height:500px;
+        }
+        
+        .CodeMirror { max-height:600px; }
+
+        #preview {
+          width:100%;
+          min-height:600px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h2>Article Editor</h2>
+    </header>
+
+    <div class="main-container loading">
+      <div class="left-panel">
+        <div class="settings-grid">
+          <label>Title:<br><input type="text" id="pgTitle" value="ARTICLE TITLE"></label>
+          <label>Description:<br><input type="text" id="pgDesc" value="SHORT SUMMARY OF ARTICLE"></label>
+          <div class="settings-info">
+            <label>Authors:<br><input type="text" id="pgAuthor" value="" placeholder="Kan-tan"></label>
+            <label>Published:<br><input type="text" id="pgPublished" value="" placeholder="MONTH/DAY/YEAR"></label>
+            <label>Revised:<br><input type="text" id="pgRevised" value="" placeholder="MONTH/DAY/YEAR"></label>
+          </div>
+        </div>
+        
+        <div class="toolbar panel" id="toolbar"></div>
+
+        <textarea id="pgContent"><p>START OF ARTICLE</p>
+<h4 id="jump-list" class="sub-title"></h4>
+<ol>
+  <li><a href="#section-1">Section 1</a></li>
+  <li><a href="#section-2">Section 2</a></li>
+  <ul>
+    <li><a href="#sub-section">Sub Section</a></li>
+  </ul>
+</ol>
+<br>
+
+<h3 id="section-1" class="section-title">Section 1</h3>
+<p>Paragraph with <b class="main-color">highlighted</b> text!</p>
+
+<div class="center">
+  <img class="lightbox" src="../../resources/images/articles/other/article-layout.webp"><br>
+  Cool image!
+</div>
+
+<p>Paragraph with <span class="ul-color">underlined</span> text!</p>
+<div class="example">
+  This box is used to highlight examples, such as the dialogue below!
+</div>
+
+<div class="columns-2-in">
+  <div class="example">
+    <div class="line">
+      <div class="name">セス</div>
+      <div class="text"><ruby>猫<rt>ねこ</rt></ruby>が<ruby>好<rt>す</rt></ruby>き？</div>
+    </div>
+    <div class="line">
+      <div class="name">カンたん</div>
+      <div class="text">うん、猫<ruby>大<rt>だい</rt></ruby>好き！</div>
+    </div>
+  </div>  
+
+  <div class="example">
+    <div class="line">
+      <div class="name">Seth</div>
+      <div class="text">You like cats?</div>
+    </div>
+    <div class="line">
+      <div class="name">Kan-tan</div>
+      <div class="text">Yeah, I love cats!</div>
+    </div>
+  </div>  
+</div>
+<br>
+
+<h3 id="section-2" class="section-title">Section 2</h3>
+<p>Paragraph with <em>emphasized</em> text!</p>
+
+<h4 id="sub-section" class="sub-title">Sub Section</h4>
+<p>Paragraph with <ruby>振り仮名<rt>ふりがな</rt></ruby></p>
+<hr>
+<p>Paragraph below a horizontal separator with <small>small text</small>!</p>
+        </textarea>
+
+        <div class="action-buttons">
+          <input type="file" id="load-file" accept=".html" style="display:none;">
+          <button class="button green" id="download-btn"><i class="fa">&#xf019;</i>Save</button>
+          <button class="button yellow" id="load-btn"><i class="fa">&#xf093;</i>Load</button>
+          <a class="button purple" href="../../../contribute/articles/#submitting" target="_blank"><i class="fa github-icon">&#xf09b;</i>Submit</a>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <button id="exit-fullscreen-btn" title="Exit Fullscreen" class="button red"><i class="fa">&#xf066;</i>Exit</button>
+        <iframe id="preview"></iframe>
+        <div class="preview-controls">
+          <input type="checkbox" id="auto-scroll-preview" checked><label for="auto-scroll-preview">Auto-scroll</label>
+          <button class="button" id="refresh-btn" title="Hard Refresh"><i class="fa">&#xf021;</i>Refresh</button>
+          <button class="button" id="fullscreen-btn"><i class="fa">&#xf065;</i>Fullscreen</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../../resources/javascript/all.js"></script>
+    <script src="../../../resources/javascript/data/lesson-list.js"></script>
+    <script src="../../../resources/javascript/kantan.js"></script>
+    <script src="../../../resources/javascript/page-editor.js"></script>
+    <script>
+      // formatting buttons for the editor toolbar
+      var buttons = EDITOR_BASE_BUTTONS.concat(EDITOR_FORMAT_BUTTONS, [
+        { row : 'ROW3', label: 'symbol', insert: ['<span class="symbol">', '</span>'] },
+        { label: 'example', insert: ['<div class="example">', '</div>'] },
+        { label: 'example 2', insert: ['<div class="example labeled" data-label="">', '</div>'] },
+        { label: 'example X/O', insert: '<div class="example">\n  <i class="fa t-red"><i class="fa">&#xf00d;</i></i>　<span class="ul-color" style="border-color:red;">WRONG</span>。<br>\n  <i class="fa t-green"><i class="fa">&#xf10c;</i></i>　<span class="ul-color" style="border-color:green;">CORRECT</span>。<br>\n  ENGLISH\n</div>' },
+        { label: 'culture note', insert: ['<div class="example labeled culture">', '</div>'] },
+        { label: 'dialogue', insert: '<div class="columns-2-in">\n  <div class="example">\n    <div class="line">\n      <div class="name"></div>\n      <div class="text">日本語</div>\n    </div>\n    <div class="line">\n      <div class="name"></div>\n      <div class="text"></div>\n    </div>\n  </div>  \n\n  <div class="example">\n    <div class="line">\n      <div class="name"></div>\n      <div class="text">English</div>\n    </div>\n    <div class="line">\n      <div class="name"></div>\n      <div class="text"></div>\n    </div>\n  </div>  \n</div>' },
+        { label: 'dialogue-AB', insert: '<div class="columns-2-in">\n  <div class="example AB">\n    <div class="line">\n      <div class="name">A</div>\n      <div class="text">日本語</div>\n    </div>\n    <div class="line">\n      <div class="name">B</div>\n      <div class="text"></div>\n    </div>\n  </div>  \n\n  <div class="example AB">\n    <div class="line">\n      <div class="name">A</div>\n      <div class="text">English</div>\n    </div>\n    <div class="line">\n      <div class="name">B</div>\n      <div class="text"></div>\n    </div>\n  </div>  \n</div>' },
+        { label: 'section list', insert: ['<table class="table section-jump">\n  <tr class="table-head"><td></td></tr>\n  <tr>\n    <td>\n      <ol>\n        <li><a href="#">', '</a></li>\n      </ol>\n    </td>\n  </tr>\n</table>'] },
+        { label: 'grammar box', insert: '<table class="table box-color alt-cell-color grammar-box">\n  <tbody><tr>\n    <td>GRAMMAR1</td>\n    <td>GRAMMAR2</td>\n  </tr>\n</tbody></table>' },
+      ]);
+
+      // initialize CodeMirror
+      var toolbar = document.getElementById('toolbar'),
+          textareaEl = document.getElementById('pgContent'),
+          cmEditor = initCodeMirrorEditor(textareaEl);
+      
+      setupCodeMirrorOverlays(cmEditor);
+      buildCodeMirrorToolbar(toolbar, cmEditor, buttons);
+
+      // backup and restore saved article data via localstorage
+      var fieldsToSave = ['pgTitle', 'pgDesc', 'pgAuthor', 'pgPublished', 'pgRevised', 'pgContent'];
+      
+      // used for delaying preview update to improve performance with large loads of code
+      function debounce(func, wait) {
+        var timeout;
+        return function() {
+          var context = this, args = arguments;
+          clearTimeout(timeout);
+          timeout = setTimeout(function() {
+            func.apply(context, args);
+          }, wait);
+        };
+      };
+
+      // restore saved data on load and apply event handlers
+      fieldsToSave.forEach(function(id) {
+        if (id === 'pgContent') {
+          var savedValue = localStorage.getItem('KN_Editor_' + id);
+          if (savedValue) {
+            cmEditor.setValue(savedValue);
+          }
+          // save article when typing in the editor
+          var saveContent = debounce(function() {
+            localStorage.setItem('KN_Editor_' + id, sanitizeContent(cmEditor.getValue()));
+          }, 500);
+          cmEditor.on('change', saveContent);
+        } else {
+          var el = document.getElementById(id),
+              savedValue = localStorage.getItem('KN_Editor_' + id);
+          
+          if (savedValue) {
+            el.value = savedValue;
+          }
+          
+          // save data on input
+          el.addEventListener('input', function() {
+            localStorage.setItem('KN_Editor_' + id, sanitizeContent(el.value));
+          });
+        }
+      });
+      
+      // gets the editor content and injects tracking attributes for preview syncing
+      function getPreviewContent() {
+        var rawContent = cmEditor.getValue(),
+            lines = rawContent.split('\n'),
+            i = 0, j = lines.length;
+        
+        for (; i < j; i++) {
+          // finds the first opening tag on the line and adds data-source-line="N"
+          // this allows us to track the cursor and highlight elements in the iframe preview
+          lines[i] = lines[i].replace(/<([a-zA-Z0-9]+)(?![^>]*data-source-line)([^>]*?)>/, '<$1 data-source-line="' + i + '"$2>');
+        }
+        
+        return sanitizeContent(lines.join('\n')).replace(/"\.\.\/\.\.\/([a-z]+\/)/gi, '"../../../$1');
+      }
+
+      // gets the padded editor content for exporting
+      function getExportContent() {
+        return padContentForExport(sanitizeContent(cmEditor.getValue()));
+      }
+
+      // template generator
+      function generateHTML(forPreview) {
+        var title = sanitizeContent(document.getElementById('pgTitle').value),
+            desc = sanitizeContent(document.getElementById('pgDesc').value),
+            author = sanitizeContent(document.getElementById('pgAuthor').value),
+            pubDate = sanitizeContent(document.getElementById('pgPublished').value),
+            revDateText = sanitizeContent(document.getElementById('pgRevised').value),
+            revDateHTML = revDateText ? '<span id="revision-date">' + revDateText + '</span>' : '<span id="revision-date"></span>',
+            // retrieve injected content for preview or clean content for export
+            content = forPreview ? getPreviewContent() : getExportContent(); 
+
+        var templateParts = [
+          '<!DOCTYPE html>',
+          '<html lang="en" prefix="og: http://ogp.me/ns#" class="lang-en">',
+          '  <head>',
+          '    <meta charset="UTF-8">',
+          '    <title>' + title + ' | Kantan Japanese</title>',
+          '    <meta name="title" content="' + title + ' | Kantan Japanese">',
+          '    <meta name="twitter:title" content="' + title + ' | Kantan Japanese">',
+          '    <meta property="og:title" content="' + title + ' | Kantan Japanese">',
+          '    <meta name="description" content="' + desc + '">',
+          '    <meta property="og:description" content="' + desc + '">',
+          '    <link rel="shortcut icon" type="image/x-icon" href="../../../resources/images/kantan.ico">',
+          '',
+          '    <meta name="keywords" content="japanese, quizzes, exercises" lang="en">',
+          '    <meta name="language" content="en">',
+          '    <meta name="viewport" content="width=device-width, initial-scale=1">',
+          '',
+          '    <meta property="og:site_name" content="sethclydesdale.github.io">',
+          '    <meta property="og:url" content="https://sethclydesdale.github.io/kantan-japanese/{PATH_TO_PAGE}">',
+          '    <meta property="og:type" content="website">',
+          '    <meta property="og:image" content="https://sethclydesdale.github.io/kantan-japanese/resources/images/kantan-thumb.webp">',
+          '    <meta name="twitter:card" content="summary">',
+          '    <meta name="twitter:creator" content="@KantanJapanese">',
+          '',
+          '    <link rel="stylesheet" href="../../../resources/css/stylesheet.css">',
+          '    <script src="../../../resources/javascript/head.js"><\/script>',
+          '    <script src="../../../resources/javascript/ga.js" async><\/script>',
+          '  </head>',
+          '',
+          '  <body>',
+          '    <header>',
+          '      <h1><a href="../../../" id="home-link">Kantan Japanese</a></h1>',
+          '      <a id="fork-me" title="View project on GitHub" target="_blank" href="https://github.com/SethClydesdale/kantan-japanese"></a>',
+          '    </header>',
+          '    ',
+          '    <script src="../../../resources/javascript/all-top.js"><\/script>',
+          '    <div id="content">',
+          '      <div class="content-block reading-material loading">',
+          '        <div id="quiz-result"></div>',
+          '        <div id="article-info" class="panel">',
+          '          <div id="author-list">' + author + '</div>',
+          '          <div id="publish-date">' + pubDate + revDateHTML + '</div>',
+          '        </div>',
+          '        <div id="article-content">\n' + content + '\n        </div>',
+          '        <div id="quiz-timer" class="center"></div>',
+          '      </div>',
+          '    </div>',
+          '    ',
+          '    <footer class="clear">',
+          '      <ul class="footer-left">',
+          '        <li><a href="../../../" id="footer-home">Home</a></li>',
+          '        <li><a href="../../../privacy/">Privacy</a></li>',
+          '        <li><a href="../../../contact/">Contact</a></li>',
+          '        <li><a href="../../../help/">Help</a></li>',
+          '        <li><a href="../../../donate/">Donate</a></li>',
+          '      </ul>',
+          '      <ul class="footer-right">',
+          '        <li>Created by <a href="https://github.com/SethClydesdale">Seth Clydesdale</a> and the <a href="../../../about/">Kantan Community</a></li>',
+          '      </ul>',
+          '    </footer>',
+          '    ',
+          '    <script src="../../../resources/javascript/data/lesson-list.js"><\/script>',
+          '    <script src="../../../resources/javascript/kantan.js"><\/script>',
+          '    <script src="../../../resources/javascript/all.js"><\/script>',
+          '    <script src="../../../resources/javascript/data/profiles.js"><\/script>',
+          '    <script>Kantan.initPage();<\/script>',
+          '  </body>',
+          '</html>'
+        ];
+        
+        return templateParts.join('\n');
+      }
+
+      // updates the preview
+      var isFirstLoad = true;
+      function hardUpdatePreview() {
+        var iframe = document.getElementById('preview'),
+            doc = iframe.contentWindow.document;
+        
+        doc.open();
+
+        // inject an event listener into the preview to prevent link navigation within the iframe
+        var previewHTML = generateHTML(true);
+        previewHTML = previewHTML.replace('</head>', previewStyles + '</head>')
+                                 .replace('</body>', previewScripts + '</body>')
+                                 .replace(/<script src="\.\.\/\.\.\/\.\.\/resources\/javascript\/ga\.js" async><\/script>/i, '')
+                                 .replace(/<script>Kantan\.initPage\(\);<\/script>/i, '<script>Kantan.initPage({ noReadState : true });<\/script>');
+
+        doc.write(previewHTML);
+        doc.close();
+
+        // sync preview clicks back to CodeMirror
+        doc.addEventListener('click', function(e) {
+          if (document.getElementById('auto-scroll-preview').checked) {
+            var target = e.target;
+
+            // search upwards from the clicked element to find the closest tagged element
+            while (target && target !== doc && target !== doc.body) {
+              if (target.hasAttribute && target.hasAttribute('data-source-line')) {
+                var line = parseInt(target.getAttribute('data-source-line'), 10);
+                if (!isNaN(line)) {
+                  // set cursor to the target line and focus the editor
+                  cmEditor.setCursor({line: line, ch: 0});
+                  cmEditor.focus();
+
+                  // scroll the editor to center the line in view
+                  var t = cmEditor.charCoords({line: line, ch: 0}, "local").top,
+                      halfHeight = cmEditor.getScrollerElement().offsetHeight / 2;
+
+                  cmEditor.scrollTo(null, t - halfHeight - 5);
+                }
+                break;
+              }
+              target = target.parentNode;
+            }
+          }
+        });
+        
+        // reapply highlight to the preview after giving the iframe a moment to render
+        setTimeout(function() {
+          CodeMirror.signal(cmEditor, 'cursorActivity', cmEditor);
+        }, 100);
+      }
+
+      // only updates part of the preview
+      function softUpdatePreview() {
+        var iframe = document.getElementById('preview'),
+            iframeDoc = iframe.contentWindow && iframe.contentWindow.document;
+
+        // if the iframe content doesn't exist, hard update it
+        if (!iframeDoc || !iframeDoc.getElementById('article-content')) {
+          hardUpdatePreview();
+          return;
+        }
+
+        // update only the parts from the editor
+        var titleEl = iframeDoc.getElementById('main-title'),
+            authorEl = iframeDoc.getElementById('author-list'),
+            publishDateEl = iframeDoc.getElementById('publish-date'),
+            articleContentEl = iframeDoc.getElementById('article-content');
+
+        if (titleEl) titleEl.textContent = document.getElementById('pgTitle').value;
+        if (authorEl) authorEl.textContent = document.getElementById('pgAuthor').value;
+        if (publishDateEl) {
+          var pubDate = document.getElementById('pgPublished').value,
+              revDateText = document.getElementById('pgRevised').value;
+          
+          publishDateEl.innerHTML = pubDate + (revDateText ? '<span id="revision-date">' + revDateText + '</span>' : '<span id="revision-date"></span>');
+        }
+
+        if (articleContentEl) {
+          // script for reformatting elements
+          var script = document.createElement('SCRIPT');
+          script.innerHTML = 'formatLocalLinks(); addSectionAnchors(); bindLightbox(); formatAuthorList();';
+          articleContentEl.innerHTML = getPreviewContent();
+          articleContentEl.appendChild(script);
+        }
+        
+        // parse word practice fields
+        Kantan.parse.wordPractice(iframeDoc);
+      }
+
+      // standard update method
+      function updatePreview() {
+        if (isFirstLoad) {
+          hardUpdatePreview();
+          isFirstLoad = false;
+        } else {
+          softUpdatePreview();
+        }
+      }
+      
+      // highlight the currently edited element in the preview
+      cmEditor.on('cursorActivity', function() {
+        var iframeDoc = document.getElementById('preview').contentWindow.document;
+        if (!iframeDoc || !iframeDoc.body) return;
+        
+        // remove existing highlights
+        var oldHighlights = iframeDoc.querySelectorAll('.editor-highlight');
+        for (var i = 0; i < oldHighlights.length; i++) {
+          oldHighlights[i].classList.remove('editor-highlight');
+        }
+
+        var cursor = cmEditor.getCursor(),
+            line = cursor.line,
+            targetNode;
+        
+        // search upwards from the current line to find the closest tagged element
+        for (; line >= 0; line--) {
+          targetNode = iframeDoc.querySelector('[data-source-line="' + line + '"]');
+          if (targetNode) break;
+        }
+
+        if (targetNode) {
+          targetNode.classList.add('editor-highlight');
+          if (document.getElementById('auto-scroll-preview').checked) {
+            targetNode.scrollIntoView({ behavior: 'instant', block: 'center' });
+          }
+        }
+      });
+
+      // handle auto-scroll state
+      var autoScrollCb = document.getElementById('auto-scroll-preview'),
+          savedAutoScroll = localStorage.getItem('KN_Editor_autoScroll');
+      
+      if (savedAutoScroll !== null) {
+        autoScrollCb.checked = savedAutoScroll === 'true';
+      }
+      
+      autoScrollCb.addEventListener('change', function() {
+        localStorage.setItem('KN_Editor_autoScroll', autoScrollCb.checked);
+      });
+
+      // trigger updatePreview when the CodeMirror content changes
+      var debouncedUpdatePreview = debounce(updatePreview, 500);
+      cmEditor.on('change', debouncedUpdatePreview);
+
+      // attach event listeners to settings inputs
+      for (var inputs = document.querySelectorAll('.settings-grid input'), i = 0, j = inputs.length; i < j; i++) {
+        inputs[i].addEventListener('input', debouncedUpdatePreview);
+      }
+      
+      // dedents HTML so it doesn't look messy in the editor
+      function normalizeWhitespace(html) {
+        if (!html) return '';
+        // remove empty lines at the very beginning and end
+        var lines = html.replace(/^\s*[\r\n]/, '').replace(/[\r\n]\s*$/, '').split(/\r?\n/),
+            minIndent = Infinity,
+            i = 0, j = lines.length, line, match, indent;
+        
+        // find the minimum indentation level for lines
+        for (; i < j; i++) {
+          line = lines[i];
+          if (line.trim().length > 0) {
+            match = line.match(/^[ \t]*/);
+            indent = match ? match[0].length : 0;
+            if (indent < minIndent) {
+              minIndent = indent;
+            }
+          }
+        }
+        
+        if (minIndent === Infinity || minIndent === 0) {
+          return lines.join('\n');
+        }
+        
+        // remove the minimum indentation from all lines
+        for (var normalized = [], i = 0, j = lines.length, line2; i < j; i++) {
+          line2 = lines[i];
+          normalized.push(line2.trim().length === 0 ? '' : line2.substring(minIndent));
+        }
+        
+        return normalized.join('\n');
+      }
+
+      // re-indents HTML by 10 spaces so the exported template source looks pretty
+      function padContentForExport(html) {
+        if (!html) return '';
+        var lines = html.split(/\r?\n/);
+        for (var i = 0; i < lines.length; i++) {
+          if (lines[i].trim().length > 0) {
+            lines[i] = '          ' + lines[i];
+          }
+        }
+        return lines.join('\n');
+      }
+
+      // loads files via button or drag/drop
+      function handleFileLoad(file) {
+        if (!file) return;
+
+        // ensure it's an HTML file
+        if (file.type !== 'text/html' && !/\.html?$/i.test(file.name)) {
+          alert('Error: Please provide a valid HTML file.');
+          return;
+        }
+
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          var htmlString = event.target.result,
+              parser = new DOMParser(),
+              doc = parser.parseFromString(htmlString, 'text/html'),
+              articleContent = doc.getElementById('article-content');
+
+          // check if file is supported
+          if (!articleContent) {
+            alert("Error: The selected file is not supported. Only article files from Kantan Japanese are supported for editing.");
+            document.getElementById('load-file').value = ''; // reset file input
+            return;
+          }
+
+          // extract title (strips ' | Kantan Japanese')
+          var title = doc.title || '';
+          if (title.indexOf(' | Kantan Japanese') !== -1) {
+            title = title.replace(' | Kantan Japanese', '');
+          }
+          document.getElementById('pgTitle').value = title;
+
+          // extract description
+          var metaDesc = doc.querySelector('meta[name="description"]');
+          document.getElementById('pgDesc').value = metaDesc ? metaDesc.getAttribute('content') : '';
+
+          // extract author
+          var authorList = doc.getElementById('author-list');
+          document.getElementById('pgAuthor').value = authorList ? authorList.textContent : '';
+
+          // extract publish and revision dates
+          var pubDateEl = doc.getElementById('publish-date');
+          if (pubDateEl) {
+            // clone to separate the text from the span
+            var clone = pubDateEl.cloneNode(true),
+                revDateSpan = clone.querySelector('#revision-date'),
+                revDateText = '';
+            
+            if (revDateSpan) {
+              revDateText = revDateSpan.textContent;
+              clone.removeChild(revDateSpan); // remove span from clone so only publish date remains
+            }
+            
+            // text trim
+            var pubText = clone.textContent || clone.innerText;
+            document.getElementById('pgPublished').value = pubText ? pubText.replace(/^\s+|\s+$/g, '') : '';
+            document.getElementById('pgRevised').value = revDateText;
+          }
+
+          // extract editor content
+          // normalizes whitespace so the editor isn't excessively indented
+          var innerCont = articleContent.innerHTML;
+          cmEditor.setValue(innerCont ? normalizeWhitespace(innerCont)
+            // convert font awesome/special characters back to hex entities
+            .replace(/[\uE000-\uF8FF]/g, function(match) {
+              return '&#x' + match.charCodeAt(0).toString(16) + ';';
+            })
+            // convert non-breaking spaces back to &nbsp;
+            .replace(/\u00A0/g, '&nbsp;')
+            // convert zero-width spaces back to their entity
+            .replace(/\u200B/g, '&#8203;') : ''
+          );
+
+          // save everything to localStorage
+          fieldsToSave.forEach(function(id) {
+            if (id === 'pgContent') {
+              localStorage.setItem('KN_Editor_' + id, cmEditor.getValue());
+            } else {
+              var el = document.getElementById(id);
+              localStorage.setItem('KN_Editor_' + id, el.value);
+            }
+          });
+
+          // trigger a hard reload of the preview
+          hardUpdatePreview();
+          document.getElementById('load-file').value = ''; // reset file input
+        };
+        reader.readAsText(file);
+      }
+      
+      setupFileActionButtons(generateHTML, handleFileLoad);
+      setupDragAndDrop(document.body, handleFileLoad);
+
+      // initial preview render
+      updatePreview();
+      
+      // setup fullscreen button
+      setupFullscreenLogic();
+      
+      // setup refresh button
+      document.getElementById('refresh-btn').addEventListener('click', hardUpdatePreview);
+
+      // setup custom inputs
+      CreateCustomInputs();
+      
+      // finally, show page content
+      Kantan.stopLoading();
+    </script>
+  </body>
+</html>

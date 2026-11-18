@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#" class="lang-en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Custom Multiple Choice Quiz | Kantan Japanese</title>
+    <meta name="title" content="Custom Multiple Choice Quiz | Kantan Japanese">
+    <meta name="twitter:title" content="Custom Multiple Choice Quiz | Kantan Japanese">
+    <meta property="og:title" content="Custom Multiple Choice Quiz | Kantan Japanese">
+    <meta name="description" content="Setup a custom multiple choice quiz to help test yourself.">
+    <meta property="og:description" content="Setup a custom multiple choice quiz to help test yourself.">
+    <link rel="shortcut icon" type="image/x-icon" href="../../../resources/images/kantan.ico">
+
+    <meta name="keywords" content="japanese, quizzes, exercises" lang="en">
+    <meta name="language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:site_name" content="sethclydesdale.github.io">
+    <meta property="og:url" content="https://sethclydesdale.github.io/kantan-japanese/lessons/tools/custom-quiz/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://sethclydesdale.github.io/kantan-japanese/resources/images/kantan-thumb.webp">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@SethC1995">
+
+    <link rel="stylesheet" href="../../../resources/css/stylesheet.css">
+    <script src="../../../resources/javascript/head.js"></script>
+    <script src="../../../resources/javascript/ga.js" async></script>
+  </head>
+
+  <body ondrop="Kantan.tools.dropFile(event);">
+    
+    <header>
+      <h1><a href="../../../" id="home-link">Kantan Japanese</a></h1>
+      <a id="fork-me" title="View project on GitHub" target="_blank" href="https://github.com/SethClydesdale/kantan-japanese"></a>
+    </header>
+
+
+    
+    <script src="../../../resources/javascript/all-top.js"></script>
+    <div id="content">
+      <div id="study-tool-editor" class="content-block loading">
+        <h2 id="custom-quiz" class="content-title">Custom Multiple Choice Quiz</h2>
+        <p>Welcome to the custom multiple choice quiz tool! Here you will be able to setup your own custom quiz for testing yourself on points you want to memorize or improve. Start setting up your quiz using the tools below, then once you're ready to test yourself, click the "Study" button to begin your quiz.</p>
+        
+        <h2 id="quiz-settings" class="section-title"><span class="en">Quiz Settings</span><span class="ja">テストの設定</span></h2>
+        <br>
+        <ol id="study-tool-ui">
+          <li class="item-row question-row">
+            <textarea placeholder="question" oninput="Kantan.tools.updateJSON();"></textarea>
+            <button class="button green row-add" title="add" onclick="Kantan.tools.addRow(this);"><i class="fa">&#xf067;</i></button>
+            <button class="button red row-remove" title="remove" onclick="Kantan.tools.removeRow(this);"><i class="fa">&#xf068;</i></button>
+            <ol>
+              <li class="quiz-answer">
+                <input type="checkbox" title="Correct answer" onchange="Kantan.tools.updateJSON();">
+                <input type="text" placeholder="answer" oninput="Kantan.tools.updateJSON();">
+                <button class="button green row-add" title="add" onclick="Kantan.tools.addRow(this);"><i class="fa">&#xf067;</i></button>
+                <button class="button red row-remove" title="remove" onclick="Kantan.tools.removeRow(this);"><i class="fa">&#xf068;</i></button>
+              </li>
+            </ol>
+          </li>
+        </ol>
+        
+        <h3 id="quiz-code" class="sub-title"><span class="en">Custom Quiz Code (JSON)</span><span class="ja">カスタム練習コード</span></h3>
+        <p>The custom quiz code is used to save your quiz. You can save this code to a text file for later, so you don't have to setup your quiz again. When you're ready to study once more, just load the file or drag and drop it into this textarea and click "study" to continue where you left off.</p>
+        
+        <div id="study-tool-code">
+          <textarea id="study-tool-json" oninput="Kantan.tools.updateUI();Kantan.tools.updateJSON();"></textarea>
+        </div>
+        
+        <ul id="study-tool-settings" class="clear">
+          <li><a id="downloadCode" class="button green" title="Save custom exercise" download="Custom Quiz.json"><span class="en">Save</span><span class="ja">セーブする</span></a></li>
+          <li><button id="loadCode" class="button yellow" title="Load custom exercise" onclick="this.nextSibling.click();"><span class="en">Load</span><span class="ja">ロードする</span></button><input id="study-tool-file" class="hidden-input" type="file" accept=".txt,.json" onchange="Kantan.tools.loadCode(this);"></li>
+          <li><input id="prettyCode" type="checkbox" onchange="Kantan.tools.settings.prettify(this);"><label for="prettyCode"><span class="en">Prettify</span><span class="ja">プリティファイ</span></label></li>
+          <li><input id="noStudyWarning" type="checkbox" onchange="Kantan.tools.settings.handleCheckbox(this);"><label for="noStudyWarning"><span class="en">Do not warn me</span><span class="ja">注意しないで</span></label></li>
+        </ul>
+        
+        <div class="center">
+          <button class="button" onclick="Kantan.tools.study();"><i class="fa">&#xf040;</i><span class="en">Study</span><span class="ja">勉強する</span></button>
+        </div><br>
+        
+        <h3 id="help-notes-and-tricks" class="section-title"><span class="en">Help, Notes, and Tips</span><span class="ja">ヒント</span></h3>
+        <p>
+          <strong>question</strong>: the question to be answered. If required, <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank">HTML</a> can be used for formatting questions.<br>
+          <strong>answer</strong>: the correct or incorrect answers to the question. Use the checkbox to mark an answer as the correct answer (multiple correct answers are allowed); leave incorrect answers unchecked.<br>
+          <strong>+</strong>: add question/answer<br>
+          <strong>-</strong>: remove a question/answer<br><br>
+          
+          <strong>Custom Quiz Code</strong>: If you're familiar with <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON" target="_blank">JSON</a>, you can edit the code, too. Here's a few tips:<br>
+          1. The syntax for a question is {"question":"{QUESTION}","answers":["{ANSWER1}","{ANSWER2}","{ETC..}"]}<br>
+          2. Correct answers should be prefixed with "A" (ex. "answers":["Aありがとう"]), incorrect answers are left as is.<br>
+          3. If an incorrect answer begins with "A", you can exclude it from being mistaken as a correct answer by prefixing it with "!" (ex. "answers":["!Arigatou"]).<br>
+          4. Please note that trailing commas will throw a syntax error, so simply delete the trailing comma and the list will be updated.
+        </p>
+      </div>
+      
+      <div id="exercise" class="content-block" style="display:none;">
+        <div id="quiz-result"></div>
+        <div id="quiz-zone" class="clear"></div>
+        <div id="quiz-timer" class="center"></div>
+      </div>
+    </div>
+    
+    <footer class="clear">
+      <ul class="footer-left">
+        <li><a href="../../../" id="footer-home">Home</a></li>
+        <li><a href="../../../privacy/">Privacy</a></li>
+        <li><a href="../../../contact/">Contact</a></li>
+        <li><a href="../../../help/">Help</a></li>
+        <li><a href="../../../donate/">Donate</a></li>
+      </ul>
+      
+      <ul class="footer-right">
+        <li>Created by <a href="https://github.com/SethClydesdale">Seth Clydesdale</a> and the <a href="../../../about/">Kantan Community</a></li>
+      </ul>
+    </footer>
+    
+    <script src="../../../resources/javascript/lib/dragula.js"></script>
+    <script src="../../../resources/javascript/lib/easytimer.js"></script>
+    <script src="../../../resources/javascript/data/lesson-list.js"></script>
+    <script src="../../../resources/javascript/kantan.js"></script>
+    <script src="../../../resources/javascript/study-tools.js"></script>
+    <script src="../../../resources/javascript/all.js"></script>
+    <style>#exercise-info { display:none; }</style>
+    <script>
+      Kantan.tools.type = 'quiz';
+      Kantan.tools.settings.restore();
+      Kantan.tools.restore();
+      Kantan.tools.finishedLoading();
+    </script>
+  </body>
+</html>
