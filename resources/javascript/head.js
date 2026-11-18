@@ -1860,9 +1860,10 @@
   // # DARK MODE #
   if (storageOK) {
     // automatically enables dark mode (once) based on the user's preferences
-    if (!localStorage.KN_DarkMode && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    // disabled since I prefer to show our light theme by default
+    /*if (!localStorage.KN_DarkMode && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       localStorage.KN_DarkMode = 'on';
-    }
+    }*/
     
     // applies the dark mode theme on page load
     if (localStorage.KN_DarkMode == 'on' && !/[a-z]+-editor/i.test(window.location.pathname)) {
