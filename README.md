@@ -5,6 +5,8 @@ Kantan Japanese is a free website/app designed to make learning or practicing th
 
 **Offline Version:** [download](https://github.com/SethClydesdale/kantan-japanese/archive/refs/heads/main.zip)
 
+**Mobile Version:** Available on the [releases page](https://github.com/SethClydesdale/kantan-japanese/releases) as Kantan_Japanese.apk
+
 -----
 
 **Quick Links**
