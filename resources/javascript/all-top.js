@@ -65,7 +65,7 @@
       msg : [
         {
           date : '11/18/26',
-          content : 'Welcome to Kantan Japanese! The website is currently under development, but we still hope that you find what\'s available useful to your Japanese studies! If you have any questions about your studies or our website, feel free to reach out to us on <a href="https://www.reddit.com/r/KantanJapanese/" target="_blank">reddit</a>!'
+          content : 'Welcome to Kantan Japanese! The website is <a href="https://ko-fi.com/post/Kantan-Japanese-is-Now-Available-O2I52AX2TN" target="_blank">currently under development</a>, but we still hope that you find what\'s available useful to your Japanese studies! If you have any questions about your studies or our website, feel free to reach out to us on <a href="https://www.reddit.com/r/KantanJapanese/" target="_blank">reddit</a>!'
         },
 
         {
