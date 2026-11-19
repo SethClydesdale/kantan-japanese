@@ -64,12 +64,12 @@
       // [NOT USED CURRENTLY; GSR remnant] edition: [OPTIONAL] restricts the announcement to a specific edition, possible values are: 3rd || 2nd, announcements are global by default
       msg : [
         {
-          date : '10/03/25',
-          content : "Welcome to Kantan Japanese! The website is under development, but we still hope that you find what's currently available useful to your Japanese studies!"
+          date : '11/18/26',
+          content : 'Welcome to Kantan Japanese! The website is currently under development, but we still hope that you find what\'s available useful to your Japanese studies! If you have any questions about your studies or our website, feel free to reach out to us on <a href="https://www.reddit.com/r/KantanJapanese/" target="_blank">reddit</a>!'
         },
 
         {
-          content : 'Want to stay up to date on the latest changes made to Kantan Japanese? You can follow updates via <a href="https://github.com/SethClydesdale/kantan-japanese/commits/main">GitHub</a>, <a href="https://twitter.com/search?q=%23KantanJapanese%20from%3Asethc1995&src=typed_query&f=live">Twitter</a>, or <a href="https://ko-fi.com/sethc95/posts">Ko-fi</a>. Feel free to also contact us on <a href="https://github.com/SethClydesdale/kantan-japanese/issues">GitHub\</a> if you have any questions or feedback.'
+          content : 'Want to stay up to date on the latest changes made to Kantan Japanese? You can follow updates via <a href="https://github.com/SethClydesdale/kantan-japanese/commits/main">GitHub</a>, <a href="https://x.com/KantanJapanese">Twitter</a>, or <a href="https://ko-fi.com/sethc95/posts">Ko-fi</a>. Feel free to also contact us on <a href="https://github.com/SethClydesdale/kantan-japanese/issues">GitHub\</a> if you have any questions or feedback.'
         },
 
         {
@@ -77,11 +77,11 @@
         },
 
         {
-          content : 'Find a bug or mistake on the site? Want to submit a suggestion or give us feedback? Check out the <a href="' + getPaths() + 'feedback/">feedback page</a> for more information. We\'d love to hear from you!'
+          content : 'Find a bug or mistake on the site? Want to submit a suggestion or give us feedback? Check out the <a href="' + getPaths() + 'contact/">contact page</a> for more information. We\'d love to hear from you!'
         },
 
         {
-          content : 'Don\'t have a network connection all the time? Kantan Japanese can be used offline as well! Head on over to the <a href="' + getPaths() + 'download/">download page</a> to get the latest release.'
+          content : 'Don\'t have a network connection all the time? Kantan Japanese can be used offline as well! Head on over to our <a href="https://github.com/SethClydesdale/kantan-japanese#kantan-japanese">GitHub</a> to get the latest release.'
         },
 
         {
