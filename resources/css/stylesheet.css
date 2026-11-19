@@ -1296,6 +1296,11 @@ a#fork-me:hover, a#fork-me:focus {
   border-color:#2A2;
 }
 
+.link-blocks a.yellow {
+  background:#C93;
+  border-color:#B82;
+}
+
 .link-blocks a.orange {
   background:#F93;
   border-color:#E82;
@@ -7626,6 +7631,8 @@ body::-webkit-scrollbar-button:single-button:horizontal:increment { background-p
 /* mobile Styles */
 .mobile-app #print-list,
 .mobile-app #vocab-anki-deck, 
-.mobile-app #vocab-spreadsheet {
-  display:none;
+.mobile-app #vocab-spreadsheet,
+.mobile-app #nav-resources,
+.mobile-app .link-blocks a[href*="learning-resources"] {
+  display:none !important;
 }
