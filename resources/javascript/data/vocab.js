@@ -182,7 +182,7 @@ Kantan.parse.vocabTags = function (word, opts) {
   // plain parsed tag list
   else if (word && opts.plain) {
     for (var tagList = word.tag.replace(/\s/g, '').split(','), i = 0, j = tagList.length; i < j; i++) {
-      tags += Kantan.vocabTagKey[tagList[i]].replace(/;.*?$|\s\(.*?\)/, '') + ', ';
+      if (Kantan.vocabTagKey[tagList[i]]) tags += Kantan.vocabTagKey[tagList[i]].replace(/;.*?$|\s\(.*?\)/, '') + ', ';
     }
   }
   

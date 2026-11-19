@@ -7291,13 +7291,13 @@
                   dataset = [
                     { value: word.kanji && !word.often_kana && furigana != '3' ? word.kanji + (furigana == '2' ? '' : '\n' + k) : k, metadata: { style: contentJP.id } },
                     { value: word.meaning, metadata: { style: content.id } },
-                    { value: (word.example_ja.replace(/<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>/g, { '1' : '$1[$2]', '2' : '$1', '3' : '$2' }[furigana]) + '\n' + word.example_en).replace(/<br>/g, '\n').replace(/<.*?>/g, ''), metadata: { style: exampleStyle.id } },
+                    { value: (word.example_ja ? word.example_ja.replace(/<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>/g, { '1' : '$1[$2]', '2' : '$1', '3' : '$2' }[furigana]) + '\n' + word.example_en : '').replace(/<br>/g, '\n').replace(/<.*?>/g, ''), metadata: { style: exampleStyle.id } },
                     { value: Kantan.parse.vocabTags(k, { plain : true, excludeTextbooks : true }), metadata: { style: content.id } }
                   ];
                   
                   // add lesson number if the sheet is for all lessons
                   if (lesson == 'all') {
-                    dataset.push({ value: typeof word.lesson == undefined ? '' : word.lesson, metadata: { style: content.id } });
+                    dataset.push({ value: typeof word.lesson == 'undefined' ? '' : word.lesson, metadata: { style: content.id } });
                   }
                   
                   data.push(dataset);
@@ -7330,7 +7330,7 @@
                 
                 // add lesson number if the sheet is for all lessons
                 if (lesson == 'all') {
-                  dataset.push({ value: typeof kanji.lesson == undefined ? '' : kanji.lesson, metadata: { style: content.id } });
+                  dataset.push({ value: typeof kanji.lesson == 'undefined' ? '' : kanji.lesson, metadata: { style: content.id } });
                 }
 
                 data.push(dataset);
