@@ -7089,6 +7089,9 @@ body::-webkit-scrollbar-button:single-button:horizontal:increment { background-p
   margin:25px 0;
 }
 
+.ad-container.ad-top { margin-top:0; }
+.ad-container.ad-bottom { margin-bottom:0; }
+
 /* RESPONSIVENESS */
 @media (max-width:1000px) {
   #content {
