@@ -6801,16 +6801,16 @@ i#kantan-chat-help:hover {
   content:"";
   height:0;
   width:0;
-  border-top:5px solid transparent;
-  border-bottom:5px solid transparent;
-  border-right:8px solid #669;
+  border-top:6px solid transparent;
+  border-bottom:6px solid transparent;
+  border-right:9px solid #669;
   position:absolute;
-  top:8px;
+  top:7px;
   left:-8px;
 }
 
 .message-box.right-side .message-row .message:before {
-  border-left:8px solid #39C;
+  border-left:9px solid #39C;
   border-right:none;
   left:auto;
   right:-8px;
@@ -7585,6 +7585,9 @@ body::-webkit-scrollbar-button:single-button:horizontal:increment { background-p
     padding-left:35px;
     border-radius:0;
   }
+  
+  #kantan-modal-buttons { height:80px; }
+  #kantan-modal-content { bottom:80px; }
   
   /* reduce fixed size of srs manager tabs */
   #review-tabs .button { width:auto; }

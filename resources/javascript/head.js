@@ -15,7 +15,7 @@
   window.KantanPlatform = /android/i.test(navigator.userAgent) ? 'android' : 'web';
   
   // detects if using the mobile version
-  window.KantanMobile = /android/i.test(navigator.userAgent) ? true : false;
+  window.KantanMobile = /android/i.test(navigator.userAgent) && window.cordova ? true : false;
   
   
   // apply class to body for OS based fixes
