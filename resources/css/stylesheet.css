@@ -4559,17 +4559,41 @@ ruby.furigana-icon rt {
   background:#39C;
   margin:0;
   padding:0 6px;
+  padding-right:50px;
   height:45px;
   line-height:45px;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space: nowrap;
   border-radius:5px 5px 0 0;
+  position:relative;
+}
+
+#kantan-modal-close-top {
+  color:#FFF;
+  font-size:24px;
+  border:none;
+  background:none;
+  display:block;
+  height:45px;
+  width:45px;
+  position:absolute;
+  top:0;
+  right:0;
+  margin:0;
+  padding:0;
+  cursor:pointer;
+  transition:200ms;
+}
+
+#kantan-modal-close-top:hover {
+  background:#F00;
 }
 
 #kantan-modal-content {
   font-size:16px;
   padding:6px;
+  padding-bottom:50px;
   position:absolute;
   top:45px;
   left:0;
@@ -7574,8 +7598,10 @@ body::-webkit-scrollbar-button:single-button:horizontal:increment { background-p
     bottom:auto !important;
     height:100% !important;
     height:100vh !important;
+    height:100dvh !important;
     width:100% !important;
     width:100vw !important;
+    width:100dvw !important;
     border-radius:0;
     border:none;
   }
@@ -7585,9 +7611,6 @@ body::-webkit-scrollbar-button:single-button:horizontal:increment { background-p
     padding-left:35px;
     border-radius:0;
   }
-  
-  #kantan-modal-buttons { height:80px; }
-  #kantan-modal-content { bottom:80px; }
   
   /* reduce fixed size of srs manager tabs */
   #review-tabs .button { width:auto; }

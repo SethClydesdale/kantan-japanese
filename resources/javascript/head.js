@@ -81,7 +81,10 @@
       modal.innerHTML = 
       '<div id="kantan-modal-overlay"' + ( o.zIndex == 'low' ? ' style="z-index:1;"' : '' ) + '></div>'+
       '<div id="kantan-modal-body"' + (o.fullscreen ? ' class="fullscreen"' : '') + ' style="' + ( o.zIndex == 'low' ? 'z-index:2;' : '' ) + ( o.customSize ? 'top:' + (o.customSize.top || 'auto') + ';right:' + (o.customSize.right || 'auto') + ';bottom:' + (o.customSize.bottom || 'auto') + ';left:' + (o.customSize.left || 'auto') + ';width:' + (o.customSize.width || 'auto') + ';max-width:' + (o.customSize.maxWidth || 'none') + ';' : '' ) + '">'+
-        '<h2 id="kantan-modal-header">' + ( o.title ? o.title : 'Popup' ) + '</h2>'+
+        '<h2 id="kantan-modal-header">'+
+          ( o.title ? o.title : 'Popup' )+
+          (o.noClose ? '' : '<button id="kantan-modal-close-top" onclick="KantanModal.close();"><i class="fa">&#xf00d;</i></button>')+
+        '</h2>'+
         '<div id="kantan-modal-content"' + (o.overflowX ? 'style="overflow-x:' + o.overflowX + ';"' : '') + '>' + ( o.content ? o.content : '' ) + '</div>'+
         '<div id="kantan-modal-buttons" class="center">'+
           (o.noClose ? '' : '<button id="kantan-modal-close" class="button' + (o.closeButtonColor ? ' ' + o.closeButtonColor : '') + '" onclick="KantanModal.close();">' + (o.closeButtonText ? o.closeButtonText : o.closeButtonHTML ? o.closeButtonHTML : '<span class="en">Close</span><span class="ja">戻る</span>') + '</button>')+

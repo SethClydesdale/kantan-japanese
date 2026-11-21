@@ -2718,7 +2718,7 @@
                 '<div class="reply-title"></div>'+
                 '<div class="input-box-info">' + reply.info + '</div>'+
                 '<div class="input-box-container">'+
-                  '<input id="kantan-chat-data_' + reply.id + '" type="text" onkeydown="/Enter| /i.test(event.key) && Kantan.chat.reply(Kantan.chat.reply_data, this); event.preventDefault();"' + ( reply.placeholder ? ' value="' + reply.placeholder + '"' : '' ) + '>'+
+                  '<input id="kantan-chat-data_' + reply.id + '" type="text" onkeydown="/Enter/i.test(event.key) && Kantan.chat.reply(Kantan.chat.reply_data, this);"' + ( reply.placeholder ? ' value="' + reply.placeholder + '"' : '' ) + '>'+
                   '<button class="button" onclick="Kantan.chat.reply(Kantan.chat.reply_data, this);"><i class="fa">&#xf1d8;</i>Send</button>'+
                 '</div>'+
               '</div>'+
