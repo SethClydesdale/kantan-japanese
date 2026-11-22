@@ -1,4 +1,4 @@
 {
-  version : '0.0.0',
-  notes : 'This is a beta release that is incomplete and may be unstable. If you encounter any bugs, please contact us!'
+  "version": "0.0.0",
+  "notes" : "This is a beta release that is incomplete and may be unstable. If you encounter any bugs, please contact us!"
 }
