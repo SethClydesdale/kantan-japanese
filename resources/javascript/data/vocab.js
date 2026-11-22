@@ -235,11 +235,11 @@ Kantan.create.vocabAudio = function (word, empty) {
 
     for (; i < j; i++) {
       if (Kantan.vocab[word[i]] && Kantan.vocab[word[i]].audio) {
-        str = '<audio id="' + word[i] + '" class="vocab-audio" style="display:none;" controls>'+
+        str = '<audio id="audio_' + word[i] + '" class="vocab-audio" style="display:none;" controls>'+
           '<source src="' + getPaths() + 'resources/audio/vocab/mp3/' + Kantan.vocab[word[i]].audio + '.mp3" type="audio/mpeg">'+
           '<source src="' + getPaths() + 'resources/audio/vocab/ogg/' + Kantan.vocab[word[i]].audio + '.ogg" type="audio/ogg">'+
         '</audio>'+
-        '<button class="button icon-only round audio" onclick="Kantan.playAudio(\'' + word[i] + '\');" title="' + (KN_Lang == 'en' ? 'Play audio' : '音声を聞く') + '"><i class="fa"></i></button>';
+        '<button class="button icon-only round audio" onclick="Kantan.playAudio(\'audio_' + word[i] + '\');" title="' + (KN_Lang == 'en' ? 'Play audio' : '音声を聞く') + '"><i class="fa"></i></button>';
         break; // break out of loop if audio file is found
       }
     }

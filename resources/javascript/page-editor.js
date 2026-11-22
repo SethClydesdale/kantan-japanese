@@ -527,14 +527,16 @@ function setupDragAndDrop(targetElement, handleFileLoadCallback) {
 function setupFullscreenLogic() {
   document.getElementById('fullscreen-btn').addEventListener('click', function() {
     for (var preview = [document.getElementById('preview'), document.getElementById('chat-preview')], i = 0, j = preview.length; i < j; i++) {
-      preview[i].classList.add('fullscreen');
+      if (preview[i]) {
+        preview[i].classList.add('fullscreen');
 
-      // add padding to the top and bottom of the preview content
-      if (preview[i].tagName == 'IFRAME') {
-        preview[i] = preview[i].contentDocument || preview[i].contentWindow.document;
-        preview[i] = preview[i].getElementById('content');
-        preview[i].style.paddingTop = '30px';
-        preview[i].style.paddingBottom = '30px';
+        // add padding to the top and bottom of the preview content
+        if (preview[i].tagName == 'IFRAME') {
+          preview[i] = preview[i].contentDocument || preview[i].contentWindow.document;
+          preview[i] = preview[i].getElementById('content');
+          preview[i].style.paddingTop = '30px';
+          preview[i].style.paddingBottom = '30px';
+        }
       }
     }
     
@@ -543,14 +545,16 @@ function setupFullscreenLogic() {
 
   document.getElementById('exit-fullscreen-btn').addEventListener('click', function() {
     for (var preview = [document.getElementById('preview'), document.getElementById('chat-preview')], i = 0, j = preview.length; i < j; i++) {
-      preview[i].classList.remove('fullscreen');
+      if (preview[i]) {
+        preview[i].classList.remove('fullscreen');
 
-      // remove padding from preview content
-      if (preview[i].tagName == 'IFRAME') {
-        preview[i] = preview[i].contentDocument || preview[i].contentWindow.document;
-        preview[i] = preview[i].getElementById('content');
-        preview[i].style.paddingTop = '0px';
-        preview[i].style.paddingBottom = '0px';
+        // remove padding from preview content
+        if (preview[i].tagName == 'IFRAME') {
+          preview[i] = preview[i].contentDocument || preview[i].contentWindow.document;
+          preview[i] = preview[i].getElementById('content');
+          preview[i].style.paddingTop = '0px';
+          preview[i].style.paddingBottom = '0px';
+        }
       }
     }
     

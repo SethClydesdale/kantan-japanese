@@ -4826,18 +4826,32 @@
       },
       
       
-      // parse word practice zones in articles to practice typing
-      wordPractice : function (doc) {
+      // parse content in articles, such as word practice zones to practice typing, audio elements, etc.
+      pageContent : function (doc) {
         doc = doc || document; // used for altering iframe content, specifically for the article editor
-        var a = doc.querySelectorAll('.word-practice'), i = 0, j = a.length
+        var a = doc.querySelectorAll('.word-practice, i[data-audio-node]'), i = 0, j = a.length, filename, folder;
         
         if (j) {
           for (; i < j; i++) {
-            a[i].innerHTML = a[i].innerHTML
-            // kanji/romaji practice
-            .replace(/\{(.*?)\|(.*?)\}/gmi, '<span class="t-25">$1</span><br><input type="text" class="full-width" data-word="$2" onkeyup="Kantan.check.word(this);">')
-            // kana practice
-            .replace(/\{(.*?)\}/gmi, '<input type="text" class="full-width" data-word="$1" onkeyup="Kantan.check.word(this);">');
+            if (/word-practice/.test(a[i].className)) {
+              a[i].innerHTML = a[i].innerHTML
+              // kanji/romaji practice
+              .replace(/\{(.*?)\|(.*?)\}/gmi, '<span class="t-25">$1</span><br><input type="text" class="full-width" data-word="$2" onkeyup="Kantan.check.word(this);">')
+              // kana practice
+              .replace(/\{(.*?)\}/gmi, '<input type="text" class="full-width" data-word="$1" onkeyup="Kantan.check.word(this);">');
+            }
+            
+            else if (a[i].dataset.audioNode) {
+              filename = sanitizeString(a[i].innerHTML);
+              folder = a[i].dataset.audioNode == 'vocab' ? 'vocab' : '';
+              a[i].innerHTML = filename ?
+                '<audio id="audio_' + filename + '" class="vocab-audio" style="display:none;" controls>'+
+                  '<source src="' + getPaths() + 'resources/audio/' + folder + '/mp3/' + filename + '.mp3" type="audio/mpeg">'+
+                  '<source src="' + getPaths() + 'resources/audio/' + folder + '/ogg/' + filename + '.ogg" type="audio/ogg">'+
+                '</audio>'+
+                '<button class="button icon-only round audio" onclick="Kantan.playAudio(\'audio_' + filename + '\');" title="' + (KN_Lang == 'en' ? 'Play audio' : '音声を聞く') + '"><i class="fa"></i></button>' :
+                '<button class="button icon-only round audio opt-off disabled" title="Sorry, audio is currently unavailable for this entry."><i class="fa"></i></button>';
+            }
           }
         }
       },
@@ -6354,7 +6368,7 @@
       }
       
       // parses word practice zones
-      Kantan.parse.wordPractice();
+      Kantan.parse.pageContent();
       
       // add mark as read button and initiate scroll listener
       if (!opts.noReadState) Kantan.check.readState(true);

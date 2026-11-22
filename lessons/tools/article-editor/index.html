@@ -83,6 +83,8 @@
           min-height:600px;
         }
       }
+      
+      .button-emote {display:none;}
     </style>
   </head>
 
@@ -198,6 +200,7 @@
         { label: 'dialogue-AB', insert: '<div class="columns-2-in">\n  <div class="example AB">\n    <div class="line">\n      <div class="name">A</div>\n      <div class="text">日本語</div>\n    </div>\n    <div class="line">\n      <div class="name">B</div>\n      <div class="text"></div>\n    </div>\n  </div>  \n\n  <div class="example AB">\n    <div class="line">\n      <div class="name">A</div>\n      <div class="text">English</div>\n    </div>\n    <div class="line">\n      <div class="name">B</div>\n      <div class="text"></div>\n    </div>\n  </div>  \n</div>' },
         { label: 'section list', insert: ['<table class="table section-jump">\n  <tr class="table-head"><td></td></tr>\n  <tr>\n    <td>\n      <ol>\n        <li><a href="#">', '</a></li>\n      </ol>\n    </td>\n  </tr>\n</table>'] },
         { label: 'grammar box', insert: '<table class="table box-color alt-cell-color grammar-box">\n  <tbody><tr>\n    <td>GRAMMAR1</td>\n    <td>GRAMMAR2</td>\n  </tr>\n</tbody></table>' },
+        { label: 'audio', insert: ['<i data-audio-node="vocab">FILENAME', '</i>'] }
       ]);
 
       // initialize CodeMirror
@@ -440,7 +443,7 @@
         }
         
         // parse word practice fields
-        Kantan.parse.wordPractice(iframeDoc);
+        Kantan.parse.pageContent(iframeDoc);
       }
 
       // standard update method
