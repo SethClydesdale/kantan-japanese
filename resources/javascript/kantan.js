@@ -7398,7 +7398,7 @@
     // status = new|up-to-date|error
     // version = latest version number from GitHub
     checkForUpdate : function (callback) {
-      Get('https://raw.githubusercontent.com/SethClydesdale/kantan-japanese/refs/heads/main/javascript/data/version-data.json', function (data) {
+      Get('https://raw.githubusercontent.com/SethClydesdale/kantan-japanese/refs/heads/main/resources/javascript/data/version.json', function (data) {
         // stop execution if an error occurred while fetching the version data
         if (data == 'error') {
           if (callback) callback('error', data);
