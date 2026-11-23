@@ -2490,6 +2490,10 @@
       });
     },
     
+    // embeds an emote from the emotes folder
+    emote : function (emote) {
+      return '<img class="emote" src="' + getPaths() + 'resources/images/kanny/emotes/' + emote + '.webp">';
+    },
     
     // functions and properties for Kantan Chat
     chat : {
@@ -6901,154 +6905,174 @@
               var order = document.getElementById('deck-order').value,
                   furigana = document.getElementById('deck-furigana'),
                   example_words = document.getElementById('deck-examples');
+              
+              // show download in progress window so the user knows that their request to download went through
+              KantanModal.open({
+                title : '<span class="en">Downloading Anki Deck</span><span class="ja">ダウンロード中</span>',
+                content : '<div class="center" style="margin-bottom:10px;"><span class="kantan-dialogue">Kan-tan will have your Anki deck ready for you in just a moment! ' + Kantan.emote('xd') + '</span></div>'+
+                '<div class="center">'+
+                  '<img src="' + getPaths() + 'resources/images/kanny/kanny_paper.webp" height="300">'+
+                '</div>',
 
-              var m = new Model({
-                id : "1767472688529",
-                name : name,
+                zIndex : 'low',
+                customSize : {
+                  top : '10%',
+                  left : '20%',
+                  bottom : '10%',
+                  right : '20%'
+                }
+              });
+              
+              // set a slight delay so the download in progress window has a chance to render
+              setTimeout(function () {
+                var m = new Model({
+                  id : "1767472688529",
+                  name : name,
 
-                flds : [
-                  { name: "Question" },
-                  { name: "Answer" }
-                ],
+                  flds : [
+                    { name: "Question" },
+                    { name: "Answer" }
+                  ],
 
-                req : [
-                  [0, "all", [0]]
-                ],
+                  req : [
+                    [0, "all", [0]]
+                  ],
 
-                tmpls : [
-                  {
-                    'name': 'Card',
-                    'qfmt': '<span class="question-side">{{Question}}</span>',
-                    'afmt': '<span class="answer-side">{{Answer}}</span>'
-                  }
-                ],
+                  tmpls : [
+                    {
+                      'name': 'Card',
+                      'qfmt': '<span class="question-side">{{Question}}</span>',
+                      'afmt': '<span class="answer-side">{{Answer}}</span>'
+                    }
+                  ],
 
-                css : 
-                (type == 'vocab' ?
-                  '.word { font-size:42px; }'+
-                  '.sentence { font-size:32px; }'+
-                  '.meaning, .sentence.meaning { font-size:26px; }'+
-                  '.main-color { color:#39C; }'+
-                  '.ul-color { border-bottom:2px solid #39C; }'+
-                  'hr { border:none; border-bottom:2px solid #999; }'+
-                  'ruby rt { color:#DDD; background:#DDD; border:1px solid #CCC; border-radius:10px;' + (furigana == '3' ? ' display:none;' : '') + ' }'+
-                  'ruby:hover rt' + (furigana == '2' ? ', ruby rt' : '') + ' { color:#333; background:none; border-color:transparent; }'+
-                  '.card { color:#333; background-color:#EEE; font-size:25px; font-family:"メイリオ", "Meiryo", "Osaka", "ＭＳ Ｐゴシック", "MS PGothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Arial, sans-serif; text-align:center; }'+
-                  '.note { font-size:16px; }'+
-                  '.note span { font-style:italic; }'+
-                  '/* Night Mode CSS */'+
-                  '.nightMode hr { border-color:#555; }'+
-                  '.nightMode ruby rt { color:#333; background:#333; border-color:#444; }'+
-                  '.nightMode ruby:hover rt' + (furigana == '2' ? ', .nightMode ruby rt' : '') + ' { color:#CCC; background:none; border-color:transparent; }'+
-                  '.nightMode.card { color:#CCC; background-color:#222; }' :
+                  css : 
+                  (type == 'vocab' ?
+                    '.word { font-size:42px; }'+
+                    '.sentence { font-size:32px; }'+
+                    '.meaning, .sentence.meaning { font-size:26px; }'+
+                    '.main-color { color:#39C; }'+
+                    '.ul-color { border-bottom:2px solid #39C; }'+
+                    'hr { border:none; border-bottom:2px solid #999; }'+
+                    'ruby rt { color:#DDD; background:#DDD; border:1px solid #CCC; border-radius:10px;' + (furigana == '3' ? ' display:none;' : '') + ' }'+
+                    'ruby:hover rt' + (furigana == '2' ? ', ruby rt' : '') + ' { color:#333; background:none; border-color:transparent; }'+
+                    '.card { color:#333; background-color:#EEE; font-size:25px; font-family:"メイリオ", "Meiryo", "Osaka", "ＭＳ Ｐゴシック", "MS PGothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Arial, sans-serif; text-align:center; }'+
+                    '.note { font-size:16px; }'+
+                    '.note span { font-style:italic; }'+
+                    '/* Night Mode CSS */'+
+                    '.nightMode hr { border-color:#555; }'+
+                    '.nightMode ruby rt { color:#333; background:#333; border-color:#444; }'+
+                    '.nightMode ruby:hover rt' + (furigana == '2' ? ', .nightMode ruby rt' : '') + ' { color:#CCC; background:none; border-color:transparent; }'+
+                    '.nightMode.card { color:#CCC; background-color:#222; }' :
 
-                 type == 'kanji' ?
-                  '.kanji { font-size:' + (order == 1 ? '100' : '50') + 'px; }'+
-                  '.header { color:#39C; font-size:18px; font-weight:bold; margin-top:10px; }'+
-                  '.reading { font-size:24px; }'+
-                  '.meaning { font-size:24px; }'+
-                  'hr { border:none; border-bottom:1px solid #999; }'+
-                  '.card { color:#333; background-color:#EEE; font-size:25px; font-family:"メイリオ", "Meiryo", "Osaka", "ＭＳ Ｐゴシック", "MS PGothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Arial, sans-serif; text-align:center; }'+
-                  '.examples ul { list-style-type:none; padding:0; margin:0; }'+
-                  '.examples ul li { font-size:18px; text-align:center; }'+
-                  /* Night Mode CSS */
-                  '.nightMode hr { border-color:#555; }'+
-                  '.nightMode.card { color:#CCC; background-color:#222; }' : ''
-                )
-              }),
+                   type == 'kanji' ?
+                    '.kanji { font-size:' + (order == 1 ? '100' : '50') + 'px; }'+
+                    '.header { color:#39C; font-size:18px; font-weight:bold; margin-top:10px; }'+
+                    '.reading { font-size:24px; }'+
+                    '.meaning { font-size:24px; }'+
+                    'hr { border:none; border-bottom:1px solid #999; }'+
+                    '.card { color:#333; background-color:#EEE; font-size:25px; font-family:"メイリオ", "Meiryo", "Osaka", "ＭＳ Ｐゴシック", "MS PGothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Arial, sans-serif; text-align:center; }'+
+                    '.examples ul { list-style-type:none; padding:0; margin:0; }'+
+                    '.examples ul li { font-size:18px; text-align:center; }'+
+                    /* Night Mode CSS */
+                    '.nightMode hr { border-color:#555; }'+
+                    '.nightMode.card { color:#CCC; background-color:#222; }' : ''
+                  )
+                }),
 
-              d = new Deck(1276438724672, name), word, kanji;
+                d = new Deck(1276438724672, name), word, kanji;
 
-              // loop through vocab data and add words related to the current lesson
-              if (Kantan.vocab && type == 'vocab') {
-                furigana = furigana.value;
+                // loop through vocab data and add words related to the current lesson
+                if (Kantan.vocab && type == 'vocab') {
+                  furigana = furigana.value;
 
-                for (var k in Kantan.vocab) {
-                  word = Kantan.vocab[k];
-                  if (lesson == 'all' || word.lesson == lesson) {
-                    d.addNote(m.note([
-                      // question side
-                      (order == 1 ?
-                        // Japanese-English
-                        '<div class="word">' + (word.kanji && !word.often_kana ? '<ruby>' + word.kanji + '<rt>' + k + '</rt></ruby>' : k) + '</div><hr>'+
-                        '<div class="sentence">' + word.example_ja + '</div>' :
+                  for (var k in Kantan.vocab) {
+                    word = Kantan.vocab[k];
+                    if (lesson == 'all' || word.lesson == lesson) {
+                      d.addNote(m.note([
+                        // question side
+                        (order == 1 ?
+                          // Japanese-English
+                          '<div class="word">' + (word.kanji && !word.often_kana ? '<ruby>' + word.kanji + '<rt>' + k + '</rt></ruby>' : k) + '</div><hr>'+
+                          '<div class="sentence">' + word.example_ja + '</div>' :
 
-                        // English-Japanese
-                        '<div class="word">' + word.meaning + '</div><hr>'+
-                        '<div class="sentence">' + word.example_en + '</div>'
-                      ),
+                          // English-Japanese
+                          '<div class="word">' + word.meaning + '</div><hr>'+
+                          '<div class="sentence">' + word.example_en + '</div>'
+                        ),
 
-                      // answer side
-                      (order == 1 ? 
-                        // Japanese-English
-                        '<div class="word">' + (word.kanji && !word.often_kana ? '<ruby>' + word.kanji + '<rt>' + k + '</rt></ruby>' : k) + '</div>'+
-                        '<div class="meaning">' + word.meaning + '</div><hr>'+
-                        '<div class="sentence">' + word.example_ja + '</div>'+
-                        '<div class="sentence meaning">' + word.example_en + '</div>'+ 
-                        (word.note ? '<hr><div class="note">※<span>' + word.note + '</span></div>' : '') :
+                        // answer side
+                        (order == 1 ? 
+                          // Japanese-English
+                          '<div class="word">' + (word.kanji && !word.often_kana ? '<ruby>' + word.kanji + '<rt>' + k + '</rt></ruby>' : k) + '</div>'+
+                          '<div class="meaning">' + word.meaning + '</div><hr>'+
+                          '<div class="sentence">' + word.example_ja + '</div>'+
+                          '<div class="sentence meaning">' + word.example_en + '</div>'+ 
+                          (word.note ? '<hr><div class="note">※<span>' + word.note + '</span></div>' : '') :
 
-                        // English-Japanese
-                        '<div class="word">' + word.meaning + '</div>'+
-                        '<div class="meaning">' + (word.kanji && !word.often_kana ? '<ruby>' + word.kanji + '<rt>' + k + '</rt></ruby>' : k) + '</div><hr>'+
-                        '<div class="sentence">' + word.example_en + '</div>'+
-                        '<div class="sentence meaning">' + word.example_ja + '</div>'+
-                        (word.note ? '<hr><div class="note">※<span>' + word.note + '</span></div>' : '')
-                      )
-                    ]));
+                          // English-Japanese
+                          '<div class="word">' + word.meaning + '</div>'+
+                          '<div class="meaning">' + (word.kanji && !word.often_kana ? '<ruby>' + word.kanji + '<rt>' + k + '</rt></ruby>' : k) + '</div><hr>'+
+                          '<div class="sentence">' + word.example_en + '</div>'+
+                          '<div class="sentence meaning">' + word.example_ja + '</div>'+
+                          (word.note ? '<hr><div class="note">※<span>' + word.note + '</span></div>' : '')
+                        )
+                      ]));
+                    }
                   }
                 }
-              }
 
-              // kanji decks
-              else if (Kantan.kanji && type == 'kanji') {
-                example_words = example_words.value;
+                // kanji decks
+                else if (Kantan.kanji && type == 'kanji') {
+                  example_words = example_words.value;
 
-                for (var k in Kantan.kanji) {
-                  kanji = Kantan.kanji[k];
-                  if (lesson == 'all' || kanji.lesson == lesson) {
-                    d.addNote(m.note([
-                      // question side
-                      (order == 1 ?
-                        // Japanese-English
-                        '<div class="kanji">' + k + '</div>' :
+                  for (var k in Kantan.kanji) {
+                    kanji = Kantan.kanji[k];
+                    if (lesson == 'all' || kanji.lesson == lesson) {
+                      d.addNote(m.note([
+                        // question side
+                        (order == 1 ?
+                          // Japanese-English
+                          '<div class="kanji">' + k + '</div>' :
 
-                        // English-Japanese
-                        '<div class="kanji">' + kanji.meaning + '</div>'
-                      ),
+                          // English-Japanese
+                          '<div class="kanji">' + kanji.meaning + '</div>'
+                        ),
 
-                      // answer side
-                      (order == 1 ? 
-                        // Japanese-English
-                        '<div class="kanji">' + k + '</div>'+
-                        '<div class="header">Meaning</div>'+
-                        '<div class="meaning">' + kanji.meaning + '</div>'+
-                        (kanji.onyomi ? '<div class="header">Onyomi</div>'+
-                        '<div class="reading">' + kanji.onyomi + '</div>' : '')+
-                        (kanji.kunyomi ? '<div class="header">Kunyomi</div>'+
-                        '<div class="reading">' + kanji.kunyomi + '</div>' : '')+
-                        (example_words == 1 ? '<div class="header">Example Words</div>'+
-                        '<div class="examples">' + Kantan.parse.exampleWords(kanji.example_words) + '</div>' : '') :
+                        // answer side
+                        (order == 1 ? 
+                          // Japanese-English
+                          '<div class="kanji">' + k + '</div>'+
+                          '<div class="header">Meaning</div>'+
+                          '<div class="meaning">' + kanji.meaning + '</div>'+
+                          (kanji.onyomi ? '<div class="header">Onyomi</div>'+
+                          '<div class="reading">' + kanji.onyomi + '</div>' : '')+
+                          (kanji.kunyomi ? '<div class="header">Kunyomi</div>'+
+                          '<div class="reading">' + kanji.kunyomi + '</div>' : '')+
+                          (example_words == 1 ? '<div class="header">Example Words</div>'+
+                          '<div class="examples">' + Kantan.parse.exampleWords(kanji.example_words) + '</div>' : '') :
 
-                        // English-Japanese
-                        '<div class="kanji">' + kanji.meaning + '</div>'+
-                        '<div class="header">Kanji</div>'+
-                        '<div class="meaning">' + k + '</div>'+
-                        (kanji.onyomi ? '<div class="header">Onyomi</div>'+
-                        '<div class="reading">' + kanji.onyomi + '</div>' : '')+
-                        (kanji.kunyomi ? '<div class="header">Kunyomi</div>'+
-                        '<div class="reading">' + kanji.kunyomi + '</div>' : '')+
-                        (example_words == 1 ? '<div class="header">Example Words</div>'+
-                        '<div class="examples">' + Kantan.parse.exampleWords(kanji.example_words) + '</div>' : '')
-                      )
-                    ]));
+                          // English-Japanese
+                          '<div class="kanji">' + kanji.meaning + '</div>'+
+                          '<div class="header">Kanji</div>'+
+                          '<div class="meaning">' + k + '</div>'+
+                          (kanji.onyomi ? '<div class="header">Onyomi</div>'+
+                          '<div class="reading">' + kanji.onyomi + '</div>' : '')+
+                          (kanji.kunyomi ? '<div class="header">Kunyomi</div>'+
+                          '<div class="reading">' + kanji.kunyomi + '</div>' : '')+
+                          (example_words == 1 ? '<div class="header">Example Words</div>'+
+                          '<div class="examples">' + Kantan.parse.exampleWords(kanji.example_words) + '</div>' : '')
+                        )
+                      ]));
+                    }
                   }
                 }
-              }
 
-              // package and save deck
-              var p = new Package()
-              p.addDeck(d)
-              p.writeToFile(name + '.apkg');
+                // package and save deck
+                var p = new Package()
+                p.addDeck(d)
+                p.writeToFile(name + '.apkg');
+              }, 100);
             }
           });
         });
@@ -7249,129 +7273,149 @@
                 ] : [],
               ];
           
-          // add example words column
-          if (type == 'kanji' && example_words && example_words.value == '1') {
-            data[0].push({ value: 'Example Words', metadata: { style: head.id } });
-          }
+          // show download in progress window so the user knows that their request to download went through
+          KantanModal.open({
+            title : '<span class="en">Downloading Spreadsheet</span><span class="ja">ダウンロード中</span>',
+            content : '<div class="center" style="margin-bottom:10px;"><span class="kantan-dialogue">Kan-tan will have your spreadsheet ready for you in just a moment! ' + Kantan.emote('xd') + '</span></div>'+
+            '<div class="center">'+
+              '<img src="' + getPaths() + 'resources/images/kanny/kanny_paper.webp" height="300">'+
+            '</div>',
+            
+            zIndex : 'low',
+            customSize : {
+              top : '10%',
+              left : '20%',
+              bottom : '10%',
+              right : '20%'
+            }
+          });
           
-          // add Lesson column to head if the sheet is for ALL lessons
-          if (lesson == 'all') {
-            data[0].push({ value: 'Lesson', metadata: { style: head.id } });
-          }
+          // set a slight delay so the download in progress window has a chance to render
+          setTimeout(function () {
+            // add example words column
+            if (type == 'kanji' && example_words && example_words.value == '1') {
+              data[0].push({ value: 'Example Words', metadata: { style: head.id } });
+            }
 
-          // vocab parsing
-          if (Kantan.vocab && type == 'vocab') {
-            furigana = furigana.value;
-            
-            var section = document.querySelectorAll('#vocab-list .section-title'), i = 0, j = section.length,
-                table = document.querySelectorAll('#vocab-list table');
-            
-            // parse tables on vocab list pages
-            if (j) {
-              for (; i < j; i++) {
-                // section title row
-                if (section) {
-                  data.push([
-                    { value: '', metadata: { style: sectionStyle.id } },
-                    { value: section[i].innerText, metadata: { style: sectionStyle.id } },
-                    { value: '', metadata: { style: sectionStyle.id } },
-                    { value: '', metadata: { style: sectionStyle.id } }
-                  ])
+            // add Lesson column to head if the sheet is for ALL lessons
+            if (lesson == 'all') {
+              data[0].push({ value: 'Lesson', metadata: { style: head.id } });
+            }
+
+            // vocab parsing
+            if (Kantan.vocab && type == 'vocab') {
+              furigana = furigana.value;
+
+              var section = document.querySelectorAll('#vocab-list .section-title'), i = 0, j = section.length,
+                  table = document.querySelectorAll('#vocab-list table');
+
+              // parse tables on vocab list pages
+              if (j) {
+                for (; i < j; i++) {
+                  // section title row
+                  if (section) {
+                    data.push([
+                      { value: '', metadata: { style: sectionStyle.id } },
+                      { value: section[i].innerText, metadata: { style: sectionStyle.id } },
+                      { value: '', metadata: { style: sectionStyle.id } },
+                      { value: '', metadata: { style: sectionStyle.id } }
+                    ])
+                  }
+
+                  // table data
+                  for (var a = table[i].querySelectorAll('[data-word]'), k = 0, l = a.length, word, key; k < l; k++) {
+                    key = a[k].dataset.word;
+                    word = Kantan.vocab[key];
+
+                    if (word) {
+                     data.push([
+                        { value: word.kanji && !word.often_kana && furigana != '3' ? word.kanji + (furigana == '2' ? '' : '\n' + key) : key, metadata: { style: contentJP.id } },
+                        { value: word.meaning, metadata: { style: content.id } },
+                        { value: (word.example_ja.replace(/<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>/g, { '1' : '$1[$2]', '2' : '$1', '3' : '$2' }[furigana]) + '\n' + word.example_en).replace(/<br>/g, '\n').replace(/<.*?>/g, ''), metadata: { style: exampleStyle.id } },
+                        { value: Kantan.parse.vocabTags(key, { plain : true, excludeTextbooks : true }), metadata: { style: content.id } }
+                      ]);
+                    }
+                  }
                 }
+              }
 
-                // table data
-                for (var a = table[i].querySelectorAll('[data-word]'), k = 0, l = a.length, word, key; k < l; k++) {
-                  key = a[k].dataset.word;
-                  word = Kantan.vocab[key];
-
-                  if (word) {
-                   data.push([
-                      { value: word.kanji && !word.often_kana && furigana != '3' ? word.kanji + (furigana == '2' ? '' : '\n' + key) : key, metadata: { style: contentJP.id } },
+              // standard parsing using vocab.js and the lesson number
+              else {
+                var word, dataset;
+                for (var k in Kantan.vocab) {
+                  word = Kantan.vocab[k];
+                  if (word && (lesson == 'all' || word.lesson == lesson)) {
+                    dataset = [
+                      { value: word.kanji && !word.often_kana && furigana != '3' ? word.kanji + (furigana == '2' ? '' : '\n' + k) : k, metadata: { style: contentJP.id } },
                       { value: word.meaning, metadata: { style: content.id } },
-                      { value: (word.example_ja.replace(/<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>/g, { '1' : '$1[$2]', '2' : '$1', '3' : '$2' }[furigana]) + '\n' + word.example_en).replace(/<br>/g, '\n').replace(/<.*?>/g, ''), metadata: { style: exampleStyle.id } },
-                      { value: Kantan.parse.vocabTags(key, { plain : true, excludeTextbooks : true }), metadata: { style: content.id } }
-                    ]);
+                      { value: (word.example_ja ? word.example_ja.replace(/<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>/g, { '1' : '$1[$2]', '2' : '$1', '3' : '$2' }[furigana]) + '\n' + word.example_en : '').replace(/<br>/g, '\n').replace(/<.*?>/g, ''), metadata: { style: exampleStyle.id } },
+                      { value: Kantan.parse.vocabTags(k, { plain : true, excludeTextbooks : true }), metadata: { style: content.id } }
+                    ];
+
+                    // add lesson number if the sheet is for all lessons
+                    if (lesson == 'all') {
+                      dataset.push({ value: typeof word.lesson == 'undefined' ? '' : word.lesson, metadata: { style: content.id } });
+                    }
+
+                    data.push(dataset);
                   }
                 }
               }
             }
 
-            // standard parsing using vocab.js and the lesson number
-            else {
-              var word, dataset;
-              for (var k in Kantan.vocab) {
-                word = Kantan.vocab[k];
-                if (word && (lesson == 'all' || word.lesson == lesson)) {
+            // kanji parsing
+            else if (Kantan.kanji && type == 'kanji') {
+              example_words = example_words.value;
+
+              var kanji, dataset;
+              for (var k in Kantan.kanji) {
+                kanji = Kantan.kanji[k];
+                if (kanji && (lesson == 'all' || kanji.lesson == lesson)) {
                   dataset = [
-                    { value: word.kanji && !word.often_kana && furigana != '3' ? word.kanji + (furigana == '2' ? '' : '\n' + k) : k, metadata: { style: contentJP.id } },
-                    { value: word.meaning, metadata: { style: content.id } },
-                    { value: (word.example_ja ? word.example_ja.replace(/<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>/g, { '1' : '$1[$2]', '2' : '$1', '3' : '$2' }[furigana]) + '\n' + word.example_en : '').replace(/<br>/g, '\n').replace(/<.*?>/g, ''), metadata: { style: exampleStyle.id } },
-                    { value: Kantan.parse.vocabTags(k, { plain : true, excludeTextbooks : true }), metadata: { style: content.id } }
+                    { value: k, metadata: { style: bigKanji.id } },
+                    { value: kanji.meaning, metadata: { style: content.id } },
+                    { value: (kanji.onyomi ? 'Onyomi: ' + kanji.onyomi : '') + (kanji.onyomi && kanji.kunyomi ? '\n' : '')+
+                             (kanji.kunyomi ? 'Kunyomi: ' + kanji.kunyomi : ''),
+                      metadata: { style: contentLeftJP.id }
+                    },
+                    { value: kanji.strokes, metadata: { style: content.id } }
                   ];
-                  
+
+                  if (example_words == '1') {
+                    dataset.push({ value: Kantan.parse.exampleWords(kanji.example_words, 'plain'), metadata: { style: contentLeftJP.id } });
+                  }
+
                   // add lesson number if the sheet is for all lessons
                   if (lesson == 'all') {
-                    dataset.push({ value: typeof word.lesson == 'undefined' ? '' : word.lesson, metadata: { style: content.id } });
+                    dataset.push({ value: typeof kanji.lesson == 'undefined' ? '' : kanji.lesson, metadata: { style: content.id } });
                   }
-                  
+
                   data.push(dataset);
                 }
               }
             }
-          }
-          
-          // kanji parsing
-          else if (Kantan.kanji && type == 'kanji') {
-            example_words = example_words.value;
-            
-            var kanji, dataset;
-            for (var k in Kantan.kanji) {
-              kanji = Kantan.kanji[k];
-              if (kanji && (lesson == 'all' || kanji.lesson == lesson)) {
-                dataset = [
-                  { value: k, metadata: { style: bigKanji.id } },
-                  { value: kanji.meaning, metadata: { style: content.id } },
-                  { value: (kanji.onyomi ? 'Onyomi: ' + kanji.onyomi : '') + (kanji.onyomi && kanji.kunyomi ? '\n' : '')+
-                           (kanji.kunyomi ? 'Kunyomi: ' + kanji.kunyomi : ''),
-                    metadata: { style: contentLeftJP.id }
-                  },
-                  { value: kanji.strokes, metadata: { style: content.id } }
-                ];
-                
-                if (example_words == '1') {
-                  dataset.push({ value: Kantan.parse.exampleWords(kanji.example_words, 'plain'), metadata: { style: contentLeftJP.id } });
-                }
-                
-                // add lesson number if the sheet is for all lessons
-                if (lesson == 'all') {
-                  dataset.push({ value: typeof kanji.lesson == 'undefined' ? '' : kanji.lesson, metadata: { style: content.id } });
-                }
 
-                data.push(dataset);
-              }
-            }
-          }
-          
-          // update sheet data
-          sheet.setRowInstructions(0, { height: 30 }); // set head size
-          sheet.setData(data); // insert data into sheet
-          
-          // freeze head row so it sticks to the top when scrolling
-          sheet.sheetView.pane.state = 'frozen';
-          sheet.sheetView.pane.freezePane(0, 1, 'A0');
-          
-          // set width for columns
-          var columns = type == 'vocab' ? [{width:50}, {width:50}, {width:60}, {width:30}] :
-                        type == 'kanji' ? [{width:20}, {width:30}, {width:30}, {width:20}] : [];
-          
-          if (example_words == '1') columns.push({width:40});
-          if (lesson == 'all') columns.push({width:15});
-          
-          sheet.setColumns(columns);
-          
-          // add sheet to the spreadsheet and download the file
-          spreadsheet.addWorksheet(sheet);
-          ExcelBuilder.downloadExcelFile(spreadsheet, name + '.xlsx');
+            // update sheet data
+            sheet.setRowInstructions(0, { height: 30 }); // set head size
+            sheet.setData(data); // insert data into sheet
+
+            // freeze head row so it sticks to the top when scrolling
+            sheet.sheetView.pane.state = 'frozen';
+            sheet.sheetView.pane.freezePane(0, 1, 'A0');
+
+            // set width for columns
+            var columns = type == 'vocab' ? [{width:50}, {width:50}, {width:60}, {width:30}] :
+                          type == 'kanji' ? [{width:20}, {width:30}, {width:30}, {width:20}] : [];
+
+            if (example_words == '1') columns.push({width:40});
+            if (lesson == 'all') columns.push({width:15});
+
+            sheet.setColumns(columns);
+
+            // add sheet to the spreadsheet and download the file
+            spreadsheet.addWorksheet(sheet);
+            ExcelBuilder.downloadExcelFile(spreadsheet, name + '.xlsx');
+          }, 100);
         }
       });
     },
