@@ -7411,24 +7411,22 @@
             v2 = data.version,
             parts1 = v1.split('.'),
             parts2 = v2.split('.'),
-            maxLength = Math.max(parts1.length, parts2.length);
+            maxLength = Math.max(parts1.length, parts2.length),
+            status = 'up-to-date';
+        
+        // check each version number if the version string is not equal
+        if (v1 != v2) {
+          for (var i = 0; i < maxLength; i++) {
+            var num1 = parseInt(parts1[i], 10) || 0,
+                num2 = parseInt(parts2[i], 10) || 0;
 
-        // check each version number
-        for (var i = 0, num1, num2; i < maxLength; i++) {
-          num1 = parseInt(parts1[i], 10) || 0;
-          num2 = parseInt(parts2[i], 10) || 0;
-
-          // up-to-date; break out and do nothing
-          if (num1 > num2) {
-            if (callback) callback('up-to-date', data);
-            break;
-          }
-
-          // new version found
-          if (num2 > num1) {
-            if (callback) callback('new', data);
+            // new version found
+            if (num2 > num1) { status = 'new'; break; }
+            if (num1 > num2) { break; }
           }
         }
+
+        if (callback) callback(status, data);
       });
     },
     
@@ -7441,7 +7439,7 @@
           '<div class="center">'+
             '<p>Below is the current version and release notes for this build of Kantan Japanese.</p>'+
             '<strong>Current Version:</strong> ' + KantanVersion + '<br>'+
-            '<a class="button purple" href="https://github.com/SethClydesdale/kantan-japanese/releases/tag/v.' + KantanVersion + '" target="_blank" style="margin-top:10px;"><i class="fa">&#xf09b;</i>View Release Notes</a>'+
+            '<a class="button purple" href="https://github.com/SethClydesdale/kantan-japanese/releases/tag/v' + KantanVersion + '" target="_blank" style="margin-top:10px;"><i class="fa">&#xf09b;</i>View Release Notes</a>'+
             '<br><hr>'+
       
             '<p>You can use the button below to check for a new release on GitHub.</p>'+
@@ -7466,8 +7464,8 @@
           if (status == 'new') {
             results.innerHTML = 
               '<p>A new version of Kantan Japanese has been found on GitHub! Click the button below to download the latest version.</p>'+
-              '<a class="button green" href="https://github.com/SethClydesdale/kantan-japanese/archive/refs/tags/v.' + data.version + '.zip"><i class="fa">&#xf019;</i>Download Version ' + data.version + '</a><br>'+
-              '<a class="button purple" href="https://github.com/SethClydesdale/kantan-japanese/releases/tag/v.' + data.version + '" target="_blank"><i class="fa">&#xf09b;</i>View Release Notes</a><br>'+
+              '<a class="button green" href="https://github.com/SethClydesdale/kantan-japanese/archive/refs/tags/v' + data.version + '.zip"><i class="fa">&#xf019;</i>Download Version ' + data.version + '</a><br>'+
+              '<a class="button purple" href="https://github.com/SethClydesdale/kantan-japanese/releases/tag/v' + data.version + '" target="_blank"><i class="fa">&#xf09b;</i>View Release Notes</a><br>'+
               '<p>'+
                 (data.notes ? data.notes : // show special update instructions from the version-data file, if any
                   'Once downloaded, simply unzip the contents and copy them to your current installation folder to update your local copy of Kantan Japanese.'
@@ -7475,7 +7473,7 @@
               '</p>';
             
           } else if (status == 'up-to-date') {
-            results.innerHTML = '<p><strong>Kantan Japanese is up-to-date!</strong></p>';
+            results.innerHTML = '<p><strong class="t-green">Kantan Japanese is up-to-date!</strong></p>';
             
           } else if (status == 'error') {
             results.innerHTML = '<p><strong class="t-red">ERROR:</strong> Could not fetch version data.</p>'

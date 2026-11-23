@@ -2017,26 +2017,33 @@
   
   // AJAX page getter
   window.Get = function (url, callback, type) {
-    var xhttp = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest(),
+        done = false;
 
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        callback(this.response); // callback on success
-      } else {
-        callback('error');
-      }
-    };
-
-    // set response type
-    if (typeof type != 'undefined') {
-      xhttp.responseType = type;
+    function finish(err, response) {
+      if (done) return;
+      if (err) response = 'error';
+      done = true;
+      callback(response, err, xhr);
     }
 
-    // open and send the request
-    xhttp.open('get', url, true);
-    xhttp.send();
+    xhr.open('GET', url, true);
+    if (type) xhr.responseType = type;
+    xhr.timeout = 30000;
 
-    return xhttp;
+    xhr.onload = function () {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        finish(null, xhr.response);
+      } else {
+        finish({ status: xhr.status, message: xhr.statusText }, null);
+      }
+    };
+    xhr.onerror = function () { finish({ status: 0, message: 'Network error' }, null); };
+    xhr.ontimeout = function () { finish({ status: 0, message: 'Timeout' }, null); };
+    xhr.onabort = function () { finish({ status: 0, message: 'Aborted' }, null); };
+
+    xhr.send();
+    return xhr;
   };
   
   
