@@ -63,6 +63,7 @@ window.KantanExercises = [
   'lesson-0/greetings-practice-2|Practice: Greetings and Everyday Expressions 2',
   'lesson-0/chat-3|Let\'s Chat with Kan-tan: Greetings',
   '#Numbers',
+  'lesson-0/article-15|Japanese Numbers and Counting',
   'lesson-0/vocab-list-2|Vocabulary List: Numbers 0-100',
   'lesson-0/vocab-5|Vocabulary Practice: Numbers 0-14',
   'lesson-0/vocab-6|Vocabulary Practice: Numbers 15-100',

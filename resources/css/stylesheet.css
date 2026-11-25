@@ -1484,6 +1484,17 @@ a#fork-me:hover, a#fork-me:focus {
   font-weight:bold;
 }
 
+.todo-list .done {
+  color:#900;
+  text-decoration:line-through;
+}
+.todo-list .doing:before {
+  content:"\f061";
+  color:#080;
+  font-family:FontAwesomeWeb, FontAwesome;
+  margin-right:3px;
+}
+
 .coming-soon { text-align:center; }
 .coming-soon:after {
   content:"More coming soon...";
@@ -3518,6 +3529,10 @@ ruby rt {
 
 #announcement ruby rt, .workbook-title ruby rt, .main-color ruby rt, .section-title ruby rt, .lesson-title ruby rt, a ruby rt, #index-list li a ruby rt, #quick-search-results ruby rt, .sub-title-color ruby rt, .title rt, .sub-title ruby rt {
   color:#17A;
+}
+
+.t-red rt, rt.t-red {
+  color:#C00;
 }
 
 ruby.standard, .underline-field > span ruby {
@@ -6500,7 +6515,7 @@ input:checked + .kantan_pseudo_checkbox:hover {
 
 
 /* printing styles */
-.printing .practice-row, .printing .list-table-buttons, .printing .button, .printing header, .printing #navbar, .printing #announcement, .printing footer, .printing #list-controls-top, .printing #list-controls-bottom, .printing .more-exercises, .printing.vocab-list table tr > td:last-child, .printing #toggle-exercises, .printing .anchor, .printing #main-title, .printing #read-progress-container, .printing #article-info, .printing #quick-jisho-toggle, .printing #quick-jisho-window {
+.printing .practice-row, .printing .list-table-buttons, .printing .button, .printing header, .printing #navbar, .printing #announcement, .printing footer, .printing #list-controls-top, .printing #list-controls-bottom, .printing .more-exercises, .printing.vocab-list table tr > td:last-child, .printing #toggle-exercises, .printing .anchor, .printing #main-title, .printing #read-progress-container, .printing #article-info, .printing #quick-jisho-toggle, .printing #quick-jisho-window, .printing .noprint {
   display:none;
 } 
 
