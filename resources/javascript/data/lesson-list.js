@@ -67,6 +67,7 @@ window.KantanExercises = [
   'lesson-0/vocab-list-2|Vocabulary List: Numbers 0-100',
   'lesson-0/vocab-5|Vocabulary Practice: Numbers 0-14',
   'lesson-0/vocab-6|Vocabulary Practice: Numbers 15-100',
+  'lesson-0/numbers-practice-1|Practice: Reading Numbers 1',
   '#Kanji',
   'lesson-0/kanji-list|Kanji List',
   'lesson-0/kanji-1|Kanji Practice: Meanings',

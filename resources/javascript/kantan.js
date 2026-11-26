@@ -3700,7 +3700,7 @@
               });
               
               // restore scroll position in article after a slight delay to compensate for sudden page jumps from images and such
-              if (results[path] != 'R') {
+              if (results[path] && results[path] != 'R') {
                 setTimeout(function () {
                   window.scrollTo({ top : results[path].split('|')[1] });
                 }, 100);
