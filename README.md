@@ -1,5 +1,7 @@
 # Kantan Japanese
-Kantan Japanese is a free website/app designed to make learning and practicing the Japanese language easy and fun!
+<img src="resources/images/kanny/sensei.webp" align="left" height="220">
+
+Kantan Japanese is a free website/app designed to make learning and practicing the Japanese language easy and fun! It can be used online or offline via the links below!
 
 **Online Version:** https://sethclydesdale.github.io/kantan-japanese/
 
