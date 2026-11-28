@@ -51,7 +51,7 @@ body, #quick-jisho-window, .strat-title, .underline-field > span, .alpha-selecti
   background-color:#161616;
 }
 
-.table td, .show-bg .problem-answer, .show-bg .secondary-answer, .pseudo-input, .question-block, #quiz-progress, .kana-quiz .quiz-column, #quiz-timer, .info-box, #quiz-result, .kantan-settings-list .desc, #quick-search-results li:nth-child(even), .random-exercise-list > div:nth-child(even), #srs-manager, .example .line:nth-child(even) {
+.table td, .show-bg .problem-answer, .show-bg .secondary-answer, .pseudo-input, .question-block, #quiz-progress, .kana-quiz .quiz-column, #quiz-timer, .info-box, #quiz-result, .kantan-settings-list .desc, #quick-search-results li:nth-child(even), .random-exercise-list > div:nth-child(even), #srs-manager, .example .line:nth-child(even), .gh-update {
   background-color:#191919;
 }
 
@@ -90,7 +90,7 @@ body, #quick-jisho-window, .strat-title, .underline-field > span, .alpha-selecti
   border-color:#1C1C1C;
 }
 
-code, input[type="text"], input[type="number"], textarea, select, .table td, .quiz-column-title, .verb-quiz .quiz-answer-zone:not(:empty), .verb-quiz.quiz-over [data-mistakes="0"], #quick-search-results, .dict-search-results, #exercise-list, #exercise-list .lesson-title, #exercise-list ul, .quiz-over [data-mistakes="0"] .quiz-item, input.writing-zone-input, .writing-quiz.quiz-over [data-mistakes="0"], .question-block, .quiz-multi-question, .quiz-multi-question .lesson-image img, .quiz-multi-answer, .text-block, .sub-section, .show-bg .problem-answer, .show-bg .secondary-answer, .kantan_pseudo_checkbox, .kantan_pseudo_radio, #quick-jisho-window, .kanji-canvas, .random-exercise-list, .alpha-selection, .pseudo-input, .kana-quiz .quiz-column, .definition, #quiz-timer, .kantan-settings-list .setting, .kantan-settings-list .desc, #quiz-result, .result-row, #quick-search-results li, .random-exercise-list > div, #kantan-modal-buttons, #kanji-list hr, #srs-manager, #review-tabs, #my-notes-container .CodeMirror, .CodeMirror, #kantan-chat, .message-image, .reply-box, .reply-choice {
+code, input[type="text"], input[type="number"], textarea, select, .table td, .quiz-column-title, .verb-quiz .quiz-answer-zone:not(:empty), .verb-quiz.quiz-over [data-mistakes="0"], #quick-search-results, .dict-search-results, #exercise-list, #exercise-list .lesson-title, #exercise-list ul, .quiz-over [data-mistakes="0"] .quiz-item, input.writing-zone-input, .writing-quiz.quiz-over [data-mistakes="0"], .question-block, .quiz-multi-question, .quiz-multi-question .lesson-image img, .quiz-multi-answer, .text-block, .sub-section, .show-bg .problem-answer, .show-bg .secondary-answer, .kantan_pseudo_checkbox, .kantan_pseudo_radio, #quick-jisho-window, .kanji-canvas, .random-exercise-list, .alpha-selection, .pseudo-input, .kana-quiz .quiz-column, .definition, #quiz-timer, .kantan-settings-list .setting, .kantan-settings-list .desc, #quiz-result, .result-row, #quick-search-results li, .random-exercise-list > div, #kantan-modal-buttons, #kanji-list hr, #srs-manager, #review-tabs, #my-notes-container .CodeMirror, .CodeMirror, #kantan-chat, .message-image, .reply-box, .reply-choice, .gh-update, .gh-update-title {
   border-color:#333;
 }
 

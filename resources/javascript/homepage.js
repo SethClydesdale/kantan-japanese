@@ -261,4 +261,87 @@
   };
   window.KN_RandomKanji();
   
+  
+  // # UPDATES WIDGET #
+  // Fetches updates from GitHub
+  // OPTIONS
+  // repo : string ('SethClydesdale/kantan-japanese') // repo to pull commits from
+  // count : number (5) // amount of commits to pull
+  // checkEvery : number (24) // checks for updates every 24 hours
+  function initGithubUpdates (options) {
+    var repo = options.repo,
+        count = options.count != undefined ? options.count : 5,
+        key = 'github-updates:' + repo + ':' + count,
+        checkEvery = options.checkEvery != undefined ? options.checkEvery : 24,
+        container = document.getElementById('github-updates');
+    
+    if (!container) return;
+    
+    // prevents HTML in commits from rendering
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function (c) {
+        return {
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c];
+      });
+    };
+
+    // renders the commit
+    function render(commits) {
+      setTimeout(function () { // delay render to have the placeholder shown for a few seconds
+        container.innerHTML = commits.map(function (c) {
+          var lines = c.commit.message.split('\n'),
+              title = escapeHtml(lines[0]),
+              body = escapeHtml(lines.slice(1).join('\n').trim()).replace(/\n/g, '<br>'),
+              author = escapeHtml(c.commit.author.name),
+              date = new Date(c.commit.author.date).toLocaleDateString(undefined, {
+                year: 'numeric', month: 'short', day: 'numeric'
+              });
+
+          return '<li class="gh-update">' +
+            '<div class="gh-update-title">'+
+              '<small class="gh-update-date">' + date + '</small>'+
+              '<a class="gh-update-link" href="' + escapeHtml(c.html_url) + '" target="_blank" rel="noopener">' + title + '</a>'+
+              '<small class="gh-update-author">by ' + author + '</small>'+
+            '</div>'+
+            '<div class="gh-update-body">' + (body ? body : '<em>No notes for this update.</em>') + '</div>'+
+          '</li>';
+        }).join('');
+      }, 1500);
+    };
+
+    // check whether to get the commits from github or the local cache
+    var cached = null;
+    try {
+      cached = JSON.parse(localStorage.getItem(key) || 'null');
+    } catch (e) {
+      cached = null;
+    }
+
+    if (cached && Date.now() - cached.time < (checkEvery * 60 * 60 * 1000)) {
+      render(cached.data);
+      return;
+    }
+    console.log('getting...');
+    
+    fetch('https://api.github.com/repos/' + repo + '/commits?per_page=' + count, {
+      headers: { Accept: 'application/vnd.github+json' }
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!Array.isArray(data)) throw new Error(data.message || 'Unexpected response');
+        localStorage.setItem(key, JSON.stringify({ time: Date.now(), data: data }));
+        render(data);
+      })
+      .catch(function (err) {
+        console.warn('GitHub updates failed:', err);
+        if (cached) render(cached.data);
+      });
+  };
+  
+  initGithubUpdates({
+    repo : 'SethClydesdale/kantan-japanese',
+    count : 10
+  });
+  
 }(window, document));

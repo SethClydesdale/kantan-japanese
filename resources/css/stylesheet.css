@@ -1426,6 +1426,71 @@ a#fork-me:hover, a#fork-me:focus {
   display:none;
 }
 
+/* updates widget */
+#github-updates {
+  padding:6px;
+  margin:0;
+  margin-bottom:5px;
+  height:500px;
+  overflow-y:auto;
+}
+
+.gh-update {
+  background:#EEE;
+  border:2px solid #CCC;
+  border-radius:6px;
+  margin-bottom:10px;
+  padding:6px;
+}
+
+.gh-update-title {
+  border-bottom:2px solid #CCC;
+  margin-bottom:5px;
+  margin-left:-6px;
+  margin-right:-6px;
+  padding:6px;
+  padding-top:0;
+}
+
+.gh-update-date {
+  color:#FFF;
+  background:#39C;
+  border:2px solid #28B;
+  border-radius:4px;
+  margin-right:3px;
+  padding:2px 3px;
+}
+
+.gh-update-link {
+  font-weight:bold;
+}
+
+.gh-update-author {
+  margin-left:3px;
+}
+
+#kanny-thinking {
+  position:relative;
+  left:0;
+  top:0;
+  animation:fidget 1000ms infinite ease-in-out;
+}
+
+@keyframes fidget {
+  0% {
+    left:-10px;
+  }
+
+  50% {
+    left:10px;
+  }
+
+  100% {
+    left:-10px;
+  }
+}
+
+
 /* content */
 #content {
   max-width:1200px;
