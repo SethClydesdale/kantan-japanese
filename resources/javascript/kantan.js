@@ -3459,7 +3459,7 @@
         
         // add silly message to popup content if there is no text in the input field
         if (!input.value && !Kantan.quizOver) {
-          result.innerHTML = '<br><p>...You\'re not trying to cheat, are you?<div class="center"><img src="' + getPaths() + 'resources/images/kanny/kanny_pout.webp" width="300"></div></p>';
+          result.innerHTML = '<br><p>...You\'re not trying to cheat, are you?<div class="center"><img src="' + getPaths() + 'resources/images/kanny/kanny_jojo.webp" width="500"></div></p>';
           result.className = '';
           return false;
         }
